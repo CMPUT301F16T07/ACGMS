@@ -15,6 +15,16 @@ public class User {
     private String phoneNumber;
     private String email;
 
+    public User(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email) {
+        // TODO: auto generate a userID for each user
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
     public String getEmail() {
         return email;
     }
