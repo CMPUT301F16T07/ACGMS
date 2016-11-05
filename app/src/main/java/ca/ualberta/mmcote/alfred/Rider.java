@@ -1,5 +1,7 @@
 package ca.ualberta.mmcote.alfred;
 
+import java.util.Date;
+
 /**
  * Created by mmcote on 2016-11-05.
  */
@@ -7,6 +9,12 @@ package ca.ualberta.mmcote.alfred;
 public class Rider extends User {
     private String creditCardNumber;
     private RequestList requests;
+
+    public Rider(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email, String creditCardNumber) {
+        super(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
+        this.creditCardNumber = creditCardNumber;
+        this.save();
+    }
 
     public String getCreditCardNumber() {
         return creditCardNumber;
@@ -18,5 +26,13 @@ public class Rider extends User {
 
     public RequestList getRequests() {
         return requests;
+    }
+
+    public void addRequest(Request newRequest) {
+        this.requests.addRequest(newRequest);
+    }
+
+    private void save() {
+        // TODO: implement save to elastic search server
     }
 }
