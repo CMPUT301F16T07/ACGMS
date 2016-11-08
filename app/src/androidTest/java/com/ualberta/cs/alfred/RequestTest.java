@@ -6,8 +6,9 @@ import java.util.Date;
 
 /**
  * Create all the test cases for Request
+ *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  * @see Request
  */
 public class RequestTest extends ActivityInstrumentationTestCase2 {
@@ -18,7 +19,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
     public RequestTest() {
         super(MainActivity.class);
     }
-
 
     /**
      * Test getRequestID.
@@ -38,9 +38,9 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
                 req1RiderID);
 
         int temp = 1;
-        assertTrue("Request ID not the same", Integer.toString(temp).equals(req1.getRequestID()));
+        String requestID = "request" + Integer.toString(temp);
+        assertTrue("Request ID not the same", requestID.equals(req1.getRequestID()));
     }
-
 
     /**
      * Test getRequestStatus.
@@ -66,7 +66,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
      * Test getSourceAddress
      */
     public void testGetSourceAddress() {
-
         /**
          * Create request #1
          */
@@ -88,7 +87,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
      * Test getDestinationAddress
      */
     public void testGetDestinationAddress() {
-
         /**
          * Create request #1
          */
@@ -105,12 +103,10 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Source Address not the same", req1DestAddr.equals(req1.getDestinationAddress()));
     }
 
-
     /**
      * Test getDistance.
      */
     public void testGetDistance() {
-
         /**
          * Create request #1
          */
@@ -127,12 +123,10 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Request cost not the same", req1Distance == req1.getDistance());
     }
 
-
     /**
      * Test getCost.
      */
     public void testGetCost() {
-
         /**
          * Create request #1
          */
@@ -148,7 +142,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
 
         assertTrue("Request cost not the same", req1Cost == req1.getCost());
     }
-
 
     /**
      * Test getDriverID.
@@ -172,7 +165,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         req1.setDriverID(driverID);
         assertTrue("Driver ID not the same", driverID.equals(req1.getDriverID()));
     }
-
 
     /**
      * Test getRiderID.
@@ -199,7 +191,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
      * Test getRequestDate.
      */
     public void testGetRequestDate() {
-
         /**
          * Create request #1
          */

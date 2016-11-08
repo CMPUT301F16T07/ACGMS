@@ -6,11 +6,12 @@ import java.util.Date;
  * Creates the Request type
  *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  */
 public class Request {
 
     // Count for IDs
+    // TODO: When elasticsearch is up and running, the count must from the MAX requestID
     private static int requestCount = 0;
 
     private String requestID;
@@ -30,7 +31,7 @@ public class Request {
         // Auto increment requestCount each time the constructor is called
         ++requestCount;
 
-        this.requestID = Integer.toString(requestCount);
+        this.requestID = "request" + Integer.toString(requestCount);
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
@@ -76,7 +77,6 @@ public class Request {
     public void setRequestStatus(String requestStatus) {
         this.requestStatus = requestStatus;
     }
-
 
     /**
      * Gets source address.
