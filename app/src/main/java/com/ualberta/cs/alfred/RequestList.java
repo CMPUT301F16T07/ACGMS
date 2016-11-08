@@ -1,23 +1,69 @@
 package com.ualberta.cs.alfred;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-/**
- * Created by mmcote on 2016-11-05.
- */
 
 public class RequestList {
-    private ArrayList<com.ualberta.cs.alfred.Request> requests;
+
+    protected List<Request> requestList;
 
     public RequestList() {
-        this.requests = new ArrayList<com.ualberta.cs.alfred.Request>();
+        this.requestList = new ArrayList<Request>();
     }
 
-    public RequestList(ArrayList<com.ualberta.cs.alfred.Request> requests) {
-        this.requests = requests;
+    public Request getRequest(int i) {
+        return requestList.get(i);
     }
 
-    public void addRequest(com.ualberta.cs.alfred.Request requestGiven) {
-        this.requests.add(requestGiven);
+    public List<Request> getRequest() {
+        return requestList;
+    }
+
+    public List<Request> getRequestOrdered() {
+
+        Collections.sort(requestList, new Comparator<Request>() {
+            public int compare(Request r1, Request r2) {
+                return r1.getRequestDate().compareTo(r2.getRequestDate());
+            }
+        });
+
+        return this.requestList;
+    }
+
+    public List<Request> getSpecificRequestList(String requestStatus) {
+
+        List specificRequestList = new ArrayList<Request>();
+
+        if (requestList != null) {
+            for (Request request : requestList) {
+                if (request.getRequestStatus() == requestStatus) {
+                    specificRequestList.add(request);
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return specificRequestList;
+    }
+
+    public Boolean hasRequest(Request request) {
+        return requestList.contains(request);
+    }
+
+    public void addRequest(Request request) {
+        requestList.add(request);
+    }
+
+
+    public void deleteRequest(Request request) {
+        requestList.remove(request);
+    }
+
+    public int getCount() {
+        return requestList.size();
     }
 }
