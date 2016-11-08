@@ -9,6 +9,8 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 
 /**
  * Created by mmcote on 2016-11-08.
@@ -41,6 +43,46 @@ public class UserElasticSearchController {
         }
     }
 
+    public static class GetRider extends AsyncTask<String, Void, Rider> {
+        @Override
+        protected Rider doInBackground(String... search_parameters) {
+            verifySettings();
+
+            Rider rider = new Rider();
+
+            String query = "{\n" +
+                    "    \"query\": {\n" +
+                    "        \"match\" : {\n" +
+                    "            \"userName\" : \n" +
+                    "                \""+search_parameters[0]+"\"\n" +
+                    "            }\n" +
+                    "    }\n" +
+                    "}";
+
+            System.out.println(query);
+
+            // assume that search_parameters[0] is the only search term we are interested in using
+            Search search = new Search.Builder(query)
+                    .addIndex("riderlist")
+                    .addType("rider")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    rider = result.getSourceAsObject(Rider.class);
+                }
+                else {
+                    Log.i("Error", "The search query failed to find the rider that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return rider;
+        }
+    }
 
     private static void verifySettings() {
         // if the client hasn't been initialized then we should make it!

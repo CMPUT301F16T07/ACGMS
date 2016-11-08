@@ -15,6 +15,10 @@ public class User {
     private String phoneNumber;
     private String email;
 
+    public User() {
+        this.userName = null;
+    }
+
     public User(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email) {
         // TODO: auto generate a userID for each user
         this.userName = userName;
