@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Create all the test cases for Request
  * @author ookmm
- * @version 1
+ * @version 1.1
  * @see Request
  */
 public class RequestTest extends ActivityInstrumentationTestCase2 {
@@ -28,14 +28,17 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
-        Integer temp = 1;
-        assertTrue("Request ID not the same", temp.toString().equals(req1.getRequestID()));
+        int temp = 1;
+        assertTrue("Request ID not the same", Integer.toString(temp).equals(req1.getRequestID()));
     }
 
 
@@ -47,13 +50,81 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
         assertTrue("Request Status not equal", req1Status.equals(req1.getRequestStatus()));
+    }
+
+    /**
+     * Test getSourceAddress
+     */
+    public void testGetSourceAddress() {
+
+        /**
+         * Create request #1
+         */
+        String req1Status = "Pending";
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
+        String req1RiderID = "rider001";
+
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
+
+        assertTrue("Source Address not the same", req1SrcAddr.equals(req1.getSourceAddress()));
+    }
+
+
+    /**
+     * Test getDestinationAddress
+     */
+    public void testGetDestinationAddress() {
+
+        /**
+         * Create request #1
+         */
+        String req1Status = "Pending";
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
+        String req1RiderID = "rider001";
+
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
+
+        assertTrue("Source Address not the same", req1DestAddr.equals(req1.getDestinationAddress()));
+    }
+
+
+    /**
+     * Test getDistance.
+     */
+    public void testGetDistance() {
+
+        /**
+         * Create request #1
+         */
+        String req1Status = "Pending";
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
+        String req1RiderID = "rider001";
+
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
+
+        assertTrue("Request cost not the same", req1Distance == req1.getDistance());
     }
 
 
@@ -66,30 +137,16 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
-        assertTrue("Request cost not the same", req1Cost.equals(req1.getCost()));
-    }
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
-
-    /**
-     * Test getCost.
-     */
-    public void testGetDistance() {
-
-        /**
-         * Create request #1
-         */
-        String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
-        String req1RiderID = "rider001";
-
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
-        assertTrue("Request distance not the same", req1Distance.equals(req1.getDistance()));
+        assertTrue("Request cost not the same", req1Cost == req1.getCost());
     }
 
 
@@ -101,11 +158,14 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
         // Set Driver ID
         String driverID = "driver001";
@@ -122,11 +182,14 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
         assertTrue("Driver ID not the same", req1RiderID.equals(req1.getRiderID()));
     }
@@ -141,11 +204,14 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
          * Create request #1
          */
         String req1Status = "Pending";
-        Double req1Cost = 12.30;
-        Double req1Distance = 4.5;
+        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
+        double req1Cost = 12.30;
+        double req1Distance = 4.5;
         String req1RiderID = "rider001";
 
-        Request req1 = new Request(req1Status, req1Cost, req1Distance, req1RiderID);
+        Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
+                req1RiderID);
 
         Date enteredDate = req1.getRequestDate();
         Date testDate = new Date();

@@ -5,44 +5,44 @@ package com.ualberta.cs.alfred;
  */
 
 public class Address {
-    private String Location;
-    private double Latitude;
-    private double Longitude;
+    private String location;
+    private double latitude;
+    private double longitude;
 
     public Address(){
-        this.Location = null;
-        this.Latitude = 0;
-        this.Longitude = 0;
+        this.location = null;
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     // Constructor for testing
     public Address(String location,double latitude,double longitude){
-        this.Location = location;
-        this.Latitude = latitude;
-        this.Longitude = longitude;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        location = location;
     }
 
     public double getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(double latitude) {
-        Latitude = latitude;
+        latitude = latitude;
     }
 
     public double getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
     public void setLongitude(double longitude) {
-        Longitude = longitude;
+        longitude = longitude;
     }
 }
