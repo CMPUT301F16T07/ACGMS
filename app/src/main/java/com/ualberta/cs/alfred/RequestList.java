@@ -7,17 +7,17 @@ import java.util.ArrayList;
  */
 
 public class RequestList {
-    private ArrayList<com.ualberta.cs.alfred.Request> requests;
+    private ArrayList<Request> requests;
 
     public RequestList() {
-        this.requests = new ArrayList<com.ualberta.cs.alfred.Request>();
+        this.requests = new ArrayList<>();
     }
 
-    public RequestList(ArrayList<com.ualberta.cs.alfred.Request> requests) {
+    public RequestList(ArrayList<Request> requests) {
         this.requests = requests;
     }
 
-    public void addRequest(com.ualberta.cs.alfred.Request requestGiven) {
+    public void addRequest(Request requestGiven) {
         this.requests.add(requestGiven);
     }
 }
