@@ -19,7 +19,6 @@ public class UserElasticSearchController {
 
 
     public static class AddRider extends AsyncTask<Rider, Void, Void> {
-
         @Override
         // one or more Riders given, can be an array of Riders without specifying an array
         protected Void doInBackground(Rider... riders) {
@@ -31,10 +30,10 @@ public class UserElasticSearchController {
                 try {
                     DocumentResult result = client.execute(index);
                     if (!result.isSucceeded()) {
-                        Log.i("Error", "Elastic search was not able to add the tweet.");
+                        Log.i("Error", "Elastic search was not able to add the rider.");
                     }
                 } catch (Exception e) {
-                    Log.i("Uhoh", "We failed to add a tweet to elastic search!");
+                    Log.i("Uh-Oh", "We failed to add a rider to elastic search!");
                     e.printStackTrace();
                 }
             }
