@@ -10,6 +10,10 @@ public class Rider extends User {
     private String creditCardNumber;
     private com.ualberta.cs.alfred.RequestList requests;
 
+    public Rider() {
+        super();
+    }
+
     public Rider(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email, String creditCardNumber) {
         super(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.creditCardNumber = creditCardNumber;
