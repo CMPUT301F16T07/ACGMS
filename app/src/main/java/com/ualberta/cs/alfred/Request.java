@@ -4,42 +4,38 @@ import java.util.Date;
 
 /**
  * Creates the Request type
+ *
  * @author ookmm
- * @version 1
+ * @version 1.1
  */
 public class Request {
 
     // Count for IDs
-    private static Integer requestCount = 0;
+    private static int requestCount = 0;
 
     private String requestID;
     private String requestStatus;
-    //private Address sourceAddress; // TODO: Uncomment this after Address Class implemented
-    //private Address destinationAddress; // TODO: Uncomment this after Address Class implemented
-    private Double cost;
-    private Double distance;
+    private Address sourceAddress;
+    private Address destinationAddress;
+    private double cost;
+    private double distance;
     private String driverID;
     private String riderID;
     private Date requestDate;
 
 
-    /**
-     * Instantiates a new Request.
-     *
-     * @param requestStatus the request status
-     * @param cost          the cost
-     * @param distance      the distance
-     * @param riderID       the rider id
-     */
-    public Request(String requestStatus, Double cost, Double distance, String riderID) {
+    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
+                   double distance, double cost, String riderID) {
 
         // Auto increment requestCount each time the constructor is called
         ++requestCount;
 
-        this.requestID = requestCount.toString();
+        this.requestID = Integer.toString(requestCount);
         this.requestStatus = requestStatus;
-        this.cost = cost;
+        this.sourceAddress = sourceAddress;
+        this.destinationAddress = destinationAddress;
         this.distance = distance;
+        this.cost = cost;
         this.driverID = null;
         this.riderID = riderID;
         this.requestDate = new Date();
@@ -81,22 +77,41 @@ public class Request {
         this.requestStatus = requestStatus;
     }
 
+
     /**
-     * Gets cost.
+     * Gets source address.
      *
-     * @return the cost
+     * @return the source address
      */
-    public Double getCost() {
-        return cost;
+    public Address getSourceAddress() {
+        return sourceAddress;
     }
 
     /**
-     * Sets cost.
+     * Sets source address.
      *
-     * @param cost the cost
+     * @param sourceAddress the source address
      */
-    public void setCost(Double cost) {
-        this.cost = cost;
+    public void setSourceAddress(Address sourceAddress) {
+        this.sourceAddress = sourceAddress;
+    }
+
+    /**
+     * Gets destination address.
+     *
+     * @return the destination address
+     */
+    public Address getDestinationAddress() {
+        return destinationAddress;
+    }
+
+    /**
+     * Sets destination address.
+     *
+     * @param destinationAddress the destination address
+     */
+    public void setDestinationAddress(Address destinationAddress) {
+        this.destinationAddress = destinationAddress;
     }
 
     /**
@@ -104,7 +119,7 @@ public class Request {
      *
      * @return the distance
      */
-    public Double getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -115,6 +130,24 @@ public class Request {
      */
     public void setDistance(Double distance) {
         this.distance = distance;
+    }
+
+    /**
+     * Gets cost.
+     *
+     * @return the cost
+     */
+    public double getCost() {
+        return cost;
+    }
+
+    /**
+     * Sets cost.
+     *
+     * @param cost the cost
+     */
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     /**
