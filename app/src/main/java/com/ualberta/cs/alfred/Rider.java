@@ -33,6 +33,7 @@ public class Rider extends User {
     }
 
     private void save() {
-        // TODO: implement save to elastic search server
+        UserElasticSearchController.AddRider addRider = new UserElasticSearchController.AddRider();
+        addRider.execute(this);
     }
 }
