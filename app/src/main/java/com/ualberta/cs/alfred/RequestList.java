@@ -8,6 +8,7 @@ import java.util.List;
 
 public class RequestList {
 
+
     protected List<Request> requestList;
 
     public RequestList() {
