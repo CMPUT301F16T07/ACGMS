@@ -10,5 +10,9 @@
     <string name="main_mode2">Rider Mode</string>
     <string name="main_button">LOGIN</string>
 
+    
+    <string name="list_requested">REQUESTED</string>
+    <string name="list_pending">PENDING</string>
+    <string name="list_accepted">ACCEPTED</string>
 
 </resources>
