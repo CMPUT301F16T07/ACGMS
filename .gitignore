@@ -89,7 +89,6 @@ Temporary Items
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
-.idea/misc.xml
 .idea/vcs.xml
 .idea/modules.xml
 
@@ -124,7 +123,7 @@ fabric.properties
 
 # *.iml
 # modules.xml
-# .idea/misc.xml
+.idea/misc.xml
 # *.ipr
 
 
