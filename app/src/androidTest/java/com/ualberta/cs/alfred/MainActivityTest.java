@@ -2,6 +2,8 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.ualberta.cs.alfred.activities.MainActivity;
+
 
 /**
  * Created by mmcote on 2016-10-09.
