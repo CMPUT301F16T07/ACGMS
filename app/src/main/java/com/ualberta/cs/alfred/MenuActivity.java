@@ -1,4 +1,4 @@
-package com.ualberta.cs.alfred.activities;
+package com.ualberta.cs.alfred;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
