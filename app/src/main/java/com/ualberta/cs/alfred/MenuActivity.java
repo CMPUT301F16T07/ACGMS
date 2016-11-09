@@ -7,7 +7,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarFragment;
 import com.roughike.bottombar.OnTabSelectedListener;
 import com.ualberta.cs.alfred.fragments.HomeFragment;
-import com.ualberta.cs.alfred.R;
+// import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
