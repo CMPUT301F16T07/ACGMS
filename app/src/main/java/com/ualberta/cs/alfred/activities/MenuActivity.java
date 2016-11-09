@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.BottomBarFragment;
 import com.roughike.bottombar.OnTabSelectedListener;
 import com.ualberta.cs.alfred.fragments.HomeFragment;
@@ -43,6 +44,16 @@ public class MenuActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+        BottomBarBadge unreadMessages = bottomBar.makeBadgeForTabAt(1, "#E91E63", 4);
 
+        // Control the badge's visibility
+        unreadMessages.show();
+        //unreadMessages.hide();
+
+        // Change the displayed count for this badge.
+        //unreadMessages.setCount(4);
+
+        // Change the show / hide animation duration.
+        unreadMessages.setAnimationDuration(200);
     }
 }
