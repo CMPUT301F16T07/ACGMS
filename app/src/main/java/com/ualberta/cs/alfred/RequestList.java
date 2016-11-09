@@ -42,14 +42,14 @@ public class RequestList {
         return this.requestList;
     }
 
-    public RequestList getSpecificRequestList(String requestStatus) {
+    public List<Request> getSpecificRequestList(String requestStatus) {
 
-        RequestList specificRequestList = new RequestList();
+        List<Request> specificRequestList = new ArrayList<Request>();
 
         if (requestList != null) {
             for (Request r : requestList) {
                 if (r.getRequestStatus().equals(requestStatus)) {
-                    specificRequestList.addRequest(r);
+                    specificRequestList.add(r);
                 }
             }
         }
