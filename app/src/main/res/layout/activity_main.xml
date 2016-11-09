@@ -8,64 +8,114 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ualberta.cs.alfred.MainActivity">
+    tools:context="com.ualberta.cs.alfred.activities.MainActivity">
+
+
+    <TextView
+        android:text="@string/main_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/username_text"
+        android:textSize="@dimen/main_text"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#000000" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/motto"
-        android:layout_alignEnd="@+id/motto"
-        android:layout_marginTop="91dp"
+        android:layout_height="25dp"
+        android:inputType="textPersonName"
+        android:background="@color/colorHighlight"
         android:id="@+id/username_input"
-        android:hint="Enter username" />
+        android:textSize="@dimen/main_text"
+        android:layout_below="@+id/username_text"
+        android:layout_alignStart="@+id/username_text"
+        android:layout_alignEnd="@+id/username_text"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:text="@string/main_password"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/motto"
-        android:id="@+id/motto"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/password_text"
+        android:textSize="@dimen/main_text"
+        android:layout_below="@+id/username_input"
+        android:layout_alignEnd="@+id/username_input"
+        android:layout_alignStart="@+id/username_input"
+        android:layout_marginBottom="5dp"
+        android:textColor="#000000"/>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:inputType="textPassword"
+        android:background="@color/colorHighlight"
+        android:id="@+id/password_input"
+        android:textSize="@dimen/main_text"
+        android:layout_below="@+id/password_text"
+        android:layout_alignStart="@+id/password_text"
+        android:layout_alignEnd="@+id/password_text"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
-
+    <TextView
+        android:text="@string/main_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/info_text"
+        android:textSize="@dimen/main_text"
+        android:layout_below="@+id/password_input"
+        android:layout_alignStart="@+id/password_input"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignEnd="@+id/password_input"
+        android:textColor="#000000"/>
 
     <RadioGroup
-        android:id="@+id/radioSex"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_text"
+        android:id="@+id/radioGroup"
+        android:layout_alignStart="@+id/info_text"
+        android:layout_alignEnd="@+id/info_text">
 
         <RadioButton
-            android:text="Rider"
-            android:layout_width="wrap_content"
+            android:text="@string/main_mode1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/riderRadio"
-            android:layout_marginEnd="21dp"
-            android:layout_below="@+id/driverRadio"
-            android:layout_alignEnd="@+id/radioSex" />
+            android:id="@+id/mode1_button"
+            android:textSize="@dimen/main_text" />
 
         <RadioButton
-            android:text="Driver"
-            android:layout_width="wrap_content"
+            android:text="@string/main_mode2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/driverRadio"
-            android:layout_below="@+id/username_input"
-            android:layout_toEndOf="@+id/riderRadio"
-            android:layout_marginTop="63dp" />
-
+            android:id="@+id/mode2_button"
+            android:textSize="@dimen/main_text"
+            android:layout_alignEnd="@+id/mode1_button"
+            android:layout_below="@+id/mode1_button"
+            android:layout_alignStart="@+id/mode1_button" />
     </RadioGroup>
 
     <Button
-        android:text="Log In"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="127dp"
-        android:id="@+id/loginButton"
-        android:layout_below="@+id/username_input"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="97dp" />
-
-
+        android:text="@string/main_button"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/main_button"
+        android:background="@color/colorGreen"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/radioGroup"
+        android:layout_alignStart="@+id/password_input"
+        android:layout_alignEnd="@+id/password_input"
+        android:textStyle="bold"
+        android:textColor="#ffffff" />
 
 
 </RelativeLayout>

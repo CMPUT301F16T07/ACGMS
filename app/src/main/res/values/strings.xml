@@ -2,4 +2,13 @@
     <string name="app_name">Alfred</string>
     <string name="motto">Alfred, taking you places</string>
     <string name="title_activity_main_screen">MainScreen</string>
+
+    <string name="main_username">Username:</string>
+    <string name="main_password">Password:</string>
+    <string name="main_info">Start in</string>
+    <string name="main_mode1">Driver Mode</string>
+    <string name="main_mode2">Rider Mode</string>
+    <string name="main_button">LOGIN</string>
+
+
 </resources>
