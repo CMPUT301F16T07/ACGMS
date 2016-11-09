@@ -30,7 +30,7 @@ public class UserCacheController {
         this.userCache = userLoggedIn();
     }
 
-    private void keepLoggedIn(User user) {
+    public void keepLoggedIn(User user) {
         try {
             FileOutputStream fos = startUpContext.openFileOutput(USERFILE, 0);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
@@ -47,7 +47,7 @@ public class UserCacheController {
         }
     }
 
-    private UserCache userLoggedIn() {
+    public UserCache userLoggedIn() {
         try {
             FileInputStream fis = this.startUpContext.openFileInput(USERFILE);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -57,7 +57,7 @@ public class UserCacheController {
 
             return gson.fromJson(in, userCache);
         } catch (FileNotFoundException e) {
-            return new UserCache();
+            return null;
         } catch (IOException e) {
             throw new RuntimeException();
         }
