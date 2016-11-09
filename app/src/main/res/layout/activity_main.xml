@@ -10,8 +10,58 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ualberta.cs.alfred.MainActivity">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/motto"
+        android:layout_alignEnd="@+id/motto"
+        android:layout_marginTop="91dp"
+        android:id="@+id/username_input"
+        android:hint="Enter username" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="@string/motto"
+        android:id="@+id/motto"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+
+
+
+    <RadioGroup
+        android:id="@+id/radioSex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+    </RadioGroup>
+
+    <Button
+        android:text="Log In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="127dp"
+        android:id="@+id/loginButton"
+        android:layout_below="@+id/username_input"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="97dp" />
+
+    <RadioButton
+        android:text="Rider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/riderRadio"
+        android:layout_marginEnd="21dp"
+        android:layout_below="@+id/driverRadio"
+        android:layout_alignEnd="@+id/radioSex" />
+
+    <RadioButton
+        android:text="Driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/driverRadio"
+        android:layout_below="@+id/username_input"
+        android:layout_toEndOf="@+id/riderRadio"
+        android:layout_marginTop="63dp" />
 </RelativeLayout>
