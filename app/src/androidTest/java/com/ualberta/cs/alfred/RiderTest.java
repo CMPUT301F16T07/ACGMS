@@ -2,6 +2,8 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.ualberta.cs.alfred.MainActivity;
+
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
