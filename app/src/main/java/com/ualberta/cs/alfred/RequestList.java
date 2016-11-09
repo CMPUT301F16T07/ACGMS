@@ -15,12 +15,20 @@ public class RequestList {
         this.requestList = new ArrayList<Request>();
     }
 
-    public Request getRequest(int i) {
-        return requestList.get(i);
+    public List<Request> getRequestList() {
+        return requestList;
     }
 
-    public List<Request> getRequest() {
-        return requestList;
+    public Request getRequest(String requestID) {
+
+        Request aRequest = null;
+        for (Request r : requestList) {
+            if (requestID.equals(r.getRequestID())) {
+                aRequest = r;
+                break;
+            }
+        }
+        return aRequest;
     }
 
     public List<Request> getRequestOrdered() {
@@ -34,16 +42,14 @@ public class RequestList {
         return this.requestList;
     }
 
-    public List<Request> getSpecificRequestList(String requestStatus) {
+    public RequestList getSpecificRequestList(String requestStatus) {
 
-        List specificRequestList = new ArrayList<Request>();
+        RequestList specificRequestList = new RequestList();
 
         if (requestList != null) {
-            for (Request request : requestList) {
-                if (request.getRequestStatus() == requestStatus) {
-                    specificRequestList.add(request);
-                } else {
-                    return null;
+            for (Request r : requestList) {
+                if (r.getRequestStatus().equals(requestStatus)) {
+                    specificRequestList.addRequest(r);
                 }
             }
         }
