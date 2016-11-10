@@ -1,10 +1,13 @@
 package com.ualberta.cs.alfred;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -21,76 +24,23 @@ public class LoginController {
     private String requestedStatus;
 
     public LoginController(String userName, String driverRider) {
-        this.client = new BuildClient().getClient();
+        BuildClient bC = new BuildClient();
+        this.client = bC.getClient();
         this.userName = userName;
         this.requestedStatus = driverRider;
     }
 
-    public boolean check() {
-        if (requestedStatus.contentEquals("Driver")) {
-            return checkDrivers();
+    public Boolean check() throws ExecutionException, InterruptedException {
+        User user;
+        if (requestedStatus.contentEquals("Driver Mode")) {
+            return Boolean.FALSE;
         } else {
-            return checkRiders();
-        }
-    }
-
-    public String createQuery() {
-        return "{\n" +
-                "    \"query\": {\n" +
-                "        \"match\" : {\n" +
-                "            \"userName\" : \n" +
-                "                \"" + this.userName + "\"\n" +
-                "            }\n" +
-                "    }\n" +
-                "}";
-    }
-
-    private boolean checkRiders() {
-        Rider rider = new Rider();
-        Search search = new Search.Builder(createQuery())
-                .addIndex("riderlist")
-                .addType("rider")
-                .build();
-
-        try {
-            SearchResult result = client.execute(search);
-            if (result.isSucceeded()) {
-                rider = result.getSourceAsObject(Rider.class);
-                if (rider.getUserName().equals(userName)) {
-                    return true;
-                }
-            } else {
-                Log.i("Error", "The search query failed to find the rider that matched.");
-                return false;
+            UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
+            user = (User) retrievedRider.execute(this.userName).get();
+            if (user != null && user.getUserName().contentEquals(this.userName)) {
+                return Boolean.TRUE;
             }
-        } catch (Exception e) {
-            Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            return Boolean.FALSE;
         }
-        return false;
     }
-
-    private boolean checkDrivers() {
-        Driver driver = new Driver();
-        Search search = new Search.Builder(createQuery())
-                .addIndex("driverlist")
-                .addType("driver")
-                .build();
-
-        try {
-            SearchResult result = client.execute(search);
-            if (result.isSucceeded()) {
-                driver = result.getSourceAsObject(Driver.class);
-                if (driver.getUserName().equals(userName)) {
-                    return true;
-                }
-            } else {
-                Log.i("Error", "The search query failed to find the driver that matched.");
-                return false;
-            }
-        } catch (Exception e) {
-            Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-        }
-        return false;
-    }
-
 }

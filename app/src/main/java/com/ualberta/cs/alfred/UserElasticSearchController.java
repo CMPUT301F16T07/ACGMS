@@ -59,9 +59,6 @@ public class UserElasticSearchController {
                     "    }\n" +
                     "}";
 
-            System.out.println(query);
-
-            // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(query)
                     .addIndex("riderlist")
                     .addType("rider")

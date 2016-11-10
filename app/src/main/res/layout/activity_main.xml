@@ -100,7 +100,8 @@
             android:textSize="@dimen/main_text"
             android:layout_alignEnd="@+id/mode1_button"
             android:layout_below="@+id/mode1_button"
-            android:layout_alignStart="@+id/mode1_button" />
+            android:layout_alignStart="@+id/mode1_button"
+            android:checked="true"/>
     </RadioGroup>
 
     <Button

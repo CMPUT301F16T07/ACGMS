@@ -9,22 +9,19 @@ import com.searchly.jestdroid.JestDroidClient;
  */
 
 public class BuildClient {
-    JestDroidClient client;
+    private static JestDroidClient client;
     public BuildClient() {
-        this.client = verifySettings(new JestDroidClient());
+        setClient();
     }
 
-    private static JestDroidClient verifySettings(JestDroidClient client) {
+    private void setClient() {
         // if the client hasn't been initialized then we should make it!
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
-            DroidClientConfig config = builder.build();
+        DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
+        DroidClientConfig config = builder.build();
 
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
-        }
-        return client;
+        JestClientFactory factory = new JestClientFactory();
+        factory.setDroidClientConfig(config);
+        this.client = (JestDroidClient) factory.getObject();
     }
 
     public JestDroidClient getClient() {
