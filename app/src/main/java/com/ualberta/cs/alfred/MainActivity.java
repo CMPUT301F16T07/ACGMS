@@ -102,11 +102,13 @@ public class MainActivity extends AppCompatActivity {
                                 finish();
                             } else if (userExist == Boolean.FALSE) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                Boolean isRider = Boolean.FALSE;
                                 try {
                                     if (mode.contentEquals("Driver Mode") && loginController.checkRider()) {
                                         builder.setMessage("No driver was found under the username of "+userName.getText().toString()+
                                                 ". Although a rider profile was found." + " Would you like to add additional driver info?");
                                         builder.setTitle("Driver not found");
+                                        isRider = Boolean.TRUE;
                                     } else {
                                         builder.setMessage("No profile was found under the username of "+userName.getText().toString()+
                                         " Would you like to create a new profile?");
@@ -118,11 +120,14 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 builder.setCancelable(Boolean.FALSE);
+                                final Boolean finalIsRider = isRider;
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                                        intent.putExtra("USERNAME", userName.getText().toString());
                                         intent.putExtra("MODE", mode);
+                                        intent.putExtra("ISRIDER", finalIsRider.toString());
                                         startActivity(intent);
                                         finish();
                                     }
@@ -143,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Toast connectionErrorToast = Toast.makeText(MainActivity.this, "Please check your network connection before attempting to log in again.", Toast.LENGTH_LONG);
                         }
-
                     }
                 }
         );

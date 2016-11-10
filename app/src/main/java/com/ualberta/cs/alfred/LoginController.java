@@ -42,7 +42,7 @@ public class LoginController {
     public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
         DriverInfo driverInfo = (DriverInfo) retrievedDriverInfo.execute(this.userName).get();
-        if (driverInfo.getUserName() != null && driverInfo.getUserName().contentEquals(this.userName)) {
+        if (driverInfo != null && driverInfo.getUserName().contentEquals(this.userName)) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;

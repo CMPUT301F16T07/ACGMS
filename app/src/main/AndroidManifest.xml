@@ -3,17 +3,12 @@
     package="com.ualberta.cs.alfred">
 
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-=======
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
->>>>>>> 8076de91af880fac7eea3432554f75b004668fa3
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -40,8 +35,8 @@
             android:name=".MainScreen"
             android:label="@string/title_activity_main_screen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MenuActivity"></activity>
-
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>
