@@ -20,13 +20,7 @@ public class User {
      * their account.
      */
     private String userName;
-    /**
-     * The First name.
-     */
     public String firstName;
-    /**
-     * The Last name.
-     */
     public String lastName;
     private Date dateOfBirth;
     private String phoneNumber;
@@ -49,7 +43,8 @@ public class User {
      * @param phoneNumber the phone number
      * @param email       the email
      */
-    public User(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email) {
+    public User(String firstName, String lastName, String userName, Date dateOfBirth,
+                String phoneNumber, String email) {
         // TODO: auto generate a userID for each user
         this.userName = userName;
         this.firstName = firstName;

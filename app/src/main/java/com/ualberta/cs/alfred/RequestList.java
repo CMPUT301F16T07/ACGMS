@@ -6,19 +6,41 @@ import java.util.Comparator;
 import java.util.List;
 
 
+/**
+ * Creates the type RequestList.
+ *
+ * @author ookmm
+ * @version 1.2
+ */
 public class RequestList {
 
-
+    /**
+     * The Request list.
+     */
     protected List<Request> requestList;
 
+    /**
+     * Instantiates a new Request list.
+     */
     public RequestList() {
         this.requestList = new ArrayList<Request>();
     }
 
+    /**
+     * Gets request list.
+     *
+     * @return the request list
+     */
     public List<Request> getRequestList() {
         return requestList;
     }
 
+    /**
+     * Gets request.
+     *
+     * @param requestID the request id
+     * @return the request
+     */
     public Request getRequest(String requestID) {
 
         Request aRequest = null;
@@ -31,7 +53,12 @@ public class RequestList {
         return aRequest;
     }
 
-    public List<Request> getRequestOrdered() {
+    /**
+     * Gets request list ordered by date.
+     *
+     * @return the request ordered list
+     */
+    public List<Request> getRequestOrderedList() {
 
         Collections.sort(requestList, new Comparator<Request>() {
             public int compare(Request r1, Request r2) {
@@ -42,6 +69,12 @@ public class RequestList {
         return this.requestList;
     }
 
+    /**
+     * Gets specific request list.
+     *
+     * @param requestStatus the request status
+     * @return the specific request list
+     */
     public List<Request> getSpecificRequestList(String requestStatus) {
 
         List<Request> specificRequestList = new ArrayList<Request>();
@@ -57,19 +90,40 @@ public class RequestList {
         return specificRequestList;
     }
 
+    /**
+     * Has request boolean.
+     *
+     * @param request the request
+     * @return the boolean
+     */
     public Boolean hasRequest(Request request) {
         return requestList.contains(request);
     }
 
+    /**
+     * Add request.
+     *
+     * @param request the request
+     */
     public void addRequest(Request request) {
         requestList.add(request);
     }
 
 
+    /**
+     * Delete request.
+     *
+     * @param request the request
+     */
     public void deleteRequest(Request request) {
         requestList.remove(request);
     }
 
+    /**
+     * Gets count.
+     *
+     * @return the count
+     */
     public int getCount() {
         return requestList.size();
     }

@@ -5,20 +5,35 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-
+/**
+ * Creates all the test cases for type RequestList.
+ *
+ * @author ookmm
+ * @version 1.2
+ * @see RequestList
+ */
 public class RequestListTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new Request list test.
+     */
     public RequestListTest() {
 
         super(MainActivity.class);
     }
 
+    /**
+     * Test empty request list.
+     */
     public void testEmptyRequestList() {
         RequestList requestList = new RequestList();
         List<Request> aList = requestList.getRequestList();
         assertTrue("Request List is empty", aList.size() == 0);
     }
 
+    /**
+     * Test get request.
+     */
     public void testGetRequest() {
 
         RequestList aList = new RequestList();
@@ -73,7 +88,10 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Request 2 from list not the same", req2.equals(aList.getRequest(req2IDFromList)));
     }
 
-    public void testGetRequestOrdered() {
+    /**
+     * Test get request ordered list.
+     */
+    public void testGetRequestOrderedList() {
 
         RequestList aList = new RequestList();
 
@@ -132,7 +150,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         aList.addRequest(req3);
         aList.addRequest(req2);
 
-        List<Request> orderedReqList = aList.getRequestOrdered();
+        List<Request> orderedReqList = aList.getRequestOrderedList();
 
         assertTrue("Not the same", orderedReqList.get(0).equals(req1));
         assertTrue("Not the same", orderedReqList.get(1).equals(req2));
@@ -140,6 +158,9 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
 
     }
 
+    /**
+     * Test get specific request list.
+     */
     public void testGetSpecificRequestList() {
 
         RequestList aList = new RequestList();
@@ -189,6 +210,9 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         }
     }
 
+    /**
+     * Test has request.
+     */
     public void testHasRequest() {
 
         RequestList aList = new RequestList();
@@ -209,6 +233,9 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         assertTrue(aList.hasRequest(req1));
     }
 
+    /**
+     * Test delete request.
+     */
     public void testDeleteRequest() {
 
         RequestList aList = new RequestList();

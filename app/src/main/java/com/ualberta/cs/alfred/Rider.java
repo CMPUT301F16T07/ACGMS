@@ -7,14 +7,17 @@ import java.util.Date;
  */
 
 public class Rider extends User {
+
     private String creditCardNumber;
-    private com.ualberta.cs.alfred.RequestList requests;
+    private RequestList requests;
 
     public Rider() {
         super();
     }
 
-    public Rider(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email, String creditCardNumber) {
+    public Rider(String firstName, String lastName, String userName, Date dateOfBirth,
+                 String phoneNumber, String email, String creditCardNumber) {
+
         super(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.creditCardNumber = creditCardNumber;
         this.save();
@@ -28,11 +31,11 @@ public class Rider extends User {
         this.creditCardNumber = creditCardNumber;
     }
 
-    public com.ualberta.cs.alfred.RequestList getRequests() {
+    public RequestList getRequests() {
         return requests;
     }
 
-    public void addRequest(com.ualberta.cs.alfred.Request newRequest) {
+    public void addRequest(Request newRequest) {
         this.requests.addRequest(newRequest);
     }
 
