@@ -27,8 +27,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:design:24.1.1'
     compile 'com.roughike:bottom-bar:1.2.1'
     testCompile 'junit:junit:4.12'
+    compile 'org.osmdroid:osmdroid-android:5.5:release@aar'
 }

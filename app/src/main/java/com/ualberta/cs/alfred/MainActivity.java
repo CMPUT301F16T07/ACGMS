@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 
 /**
  *
@@ -146,5 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
     }
 }
