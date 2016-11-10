@@ -30,6 +30,9 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
 
         try {
             Rider rider = retrievedRider.get();
+            System.out.println("++++++++++++++++++++++++");
+            System.out.println("FIRSTNAME: " + rider.getFirstName());
+            System.out.println("++++++++++++++++++++++++");
             assert(true);
             Rider jimbo = new Rider();
         } catch (InterruptedException e) {

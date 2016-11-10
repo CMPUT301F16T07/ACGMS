@@ -8,15 +8,14 @@ public class DriverInfo {
     private String userName;
     private String licenceNumber;
     private String plateNumber;
-    private RequestList bidList;
 
     public DriverInfo() {
     }
 
-    public DriverInfo(String licenceNumber, String plateNumber) {
+    public DriverInfo(String userName, String licenceNumber, String plateNumber) {
+        this.userName = userName;
         this.licenceNumber = licenceNumber;
         this.plateNumber = plateNumber;
-        this.bidList = new RequestList();
         this.save();
     }
 
