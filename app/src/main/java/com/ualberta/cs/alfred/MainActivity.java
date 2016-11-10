@@ -1,10 +1,21 @@
 package com.ualberta.cs.alfred;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -21,30 +32,118 @@ import org.osmdroid.views.MapView;
  * Created by carlcastello on 08/11/16.
  */
 public class MainActivity extends AppCompatActivity {
+    Button loginButton;
+    EditText userName;
+    EditText password;
+    RadioGroup driverRider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loginButton = (Button) findViewById(R.id.main_button);
+        userName = (EditText) findViewById(R.id.username_input);
+        password = (EditText) findViewById(R.id.password_input);
+        driverRider = (RadioGroup) findViewById(R.id.radioGroup);
+
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-        // This is where you check all input
-
-
-
-
-
-        Button login_button = (Button) findViewById(R.id.main_button);
-        login_button.setOnClickListener(
+        loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        // Launch MenuActivity where the buttom navbar is located.
-                        Intent intent= new Intent(MainActivity.this, MenuActivity.class);
-                        startActivity(intent);
+                        // first check if the user is even connected to the internet. if the user
+                        // is not connected to the internet then the user will not be able to log
+                        // in and access the app. From this screen the only way to have some
+                        // functionality within the app is to signup a new account.
+
+                        // This line creates a connectivity manager which queries for information on
+                        // the connectivity status of the device
+                        ConnectivityManager cm = (ConnectivityManager) MainActivity.this.getSystemService(MainActivity.this.CONNECTIVITY_SERVICE);
+
+                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+                            // grab the corresponding user information based on a query using the
+                            // username to check if the user even exists
+                            int selected = driverRider.getCheckedRadioButtonId();
+
+                            // if no choice was selected for either driver or rider mode then rider will
+                            // be selected by default, by UI design this is automatically picked already
+                            if (selected == -1) {
+                                selected = findViewById(R.id.mode2_button).getId();
+                            }
+                            final RadioButton radioButtonSelected = (RadioButton) findViewById(selected);
+                            final String mode = radioButtonSelected.getText().toString();
+
+                            // check if the username exists in the current elastic search server
+                            LoginController loginController = new LoginController(userName.getText().toString(), mode);
+                            Boolean userExist = null;
+                            try {
+                                if (mode.contentEquals("Driver Mode")) {
+                                    userExist = loginController.checkDriverInfo();
+                                } else {
+                                    userExist = loginController.checkRider();
+                                }
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (userExist == Boolean.TRUE) {
+                                // Launch MenuActivity where the buttom navbar is located.
+                                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                                intent.putExtra("MODE", mode);
+                                startActivity(intent);
+                                finish();
+                            } else if (userExist == Boolean.FALSE) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                try {
+                                    if (mode.contentEquals("Driver Mode") && loginController.checkRider()) {
+                                        builder.setMessage("No driver was found under the username of "+userName.getText().toString()+
+                                                ". Although a rider profile was found." + " Would you like to add additional driver info?");
+                                        builder.setTitle("Driver not found");
+                                    } else {
+                                        builder.setMessage("No profile was found under the username of "+userName.getText().toString()+
+                                        " Would you like to create a new profile?");
+                                        builder.setTitle("User not found");
+                                    }
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                builder.setCancelable(Boolean.FALSE);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                                        intent.putExtra("MODE", mode);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        password.setText("");
+                                        userName.setText("");
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } else {
+                                // This scenerio covers the event where the device is connected to the internet but had an error occur with the ES server
+                                Toast.makeText(MainActivity.this, "Sorry there was a connection error with the server, please try again.", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast connectionErrorToast = Toast.makeText(MainActivity.this, "Please check your network connection before attempting to log in again.", Toast.LENGTH_LONG);
+                        }
+
                     }
                 }
         );
