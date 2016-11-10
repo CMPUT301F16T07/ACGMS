@@ -72,12 +72,17 @@ public class MainActivity extends AppCompatActivity {
                                 selected = findViewById(R.id.mode2_button).getId();
                             }
                             final RadioButton radioButtonSelected = (RadioButton) findViewById(selected);
+                            final String mode = radioButtonSelected.getText().toString();
 
                             // check if the username exists in the current elastic search server
-                            LoginController loginController = new LoginController(userName.getText().toString(), radioButtonSelected.getText().toString());
+                            LoginController loginController = new LoginController(userName.getText().toString(), mode);
                             Boolean userExist = null;
                             try {
-                                userExist = loginController.check();
+                                if (mode.contentEquals("Driver Mode")) {
+                                    userExist = loginController.checkDriverInfo();
+                                } else {
+                                    userExist = loginController.checkRider();
+                                }
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
@@ -87,19 +92,32 @@ public class MainActivity extends AppCompatActivity {
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                                intent.putExtra("MODE", radioButtonSelected.getText().toString());
+                                intent.putExtra("MODE", mode);
                                 startActivity(intent);
                                 finish();
                             } else if (userExist == Boolean.FALSE) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setMessage("No user under the username of "+userName.getText().toString()+". Would you like to create a new profile?");
-                                builder.setTitle("User not found");
+                                try {
+                                    if (mode.contentEquals("Driver Mode") && loginController.checkRider()) {
+                                        builder.setMessage("No driver was found under the username of "+userName.getText().toString()+
+                                                ". Although a rider profile was found." + " Would you like to add additional driver info?");
+                                        builder.setTitle("Driver not found");
+                                    } else {
+                                        builder.setMessage("No profile was found under the username of "+userName.getText().toString()+
+                                        " Would you like to create a new profile?");
+                                        builder.setTitle("User not found");
+                                    }
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 builder.setCancelable(Boolean.FALSE);
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                                        intent.putExtra("MODE", radioButtonSelected.getText().toString());
+                                        intent.putExtra("MODE", mode);
                                         startActivity(intent);
                                         finish();
                                     }

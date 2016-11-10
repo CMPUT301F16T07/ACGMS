@@ -81,6 +81,67 @@ public class UserElasticSearchController {
         }
     }
 
+    public static class AddDriverInfo extends AsyncTask<DriverInfo, Void, Void> {
+        @Override
+        // one or more Riders given, can be an array of Riders without specifying an array
+        protected Void doInBackground(DriverInfo... driversInfo) {
+            verifySettings();
+
+            for (DriverInfo driverInfo : driversInfo) {
+                Index index = new Index.Builder(driverInfo).index("driverinfolist").type("driverinfo").build();
+
+                try {
+                    DocumentResult result = client.execute(index);
+                    if (!result.isSucceeded()) {
+                        Log.i("Error", "Elastic search was not able to add the driver info.");
+                    }
+                } catch (Exception e) {
+                    Log.i("Uh-Oh", "We failed to add a driver to elastic search!");
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class GetDriverInfo extends AsyncTask<String, Void, DriverInfo> {
+        @Override
+        protected DriverInfo doInBackground(String... search_parameters) {
+            verifySettings();
+
+            DriverInfo driverInfo = new DriverInfo();
+
+            String query = "{\n" +
+                    "    \"query\": {\n" +
+                    "        \"match\" : {\n" +
+                    "            \"userName\" : \n" +
+                    "                \""+search_parameters[0]+"\"\n" +
+                    "            }\n" +
+                    "    }\n" +
+                    "}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex("driverinfolist")
+                    .addType("driverinfo")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    driverInfo = result.getSourceAsObject(DriverInfo.class);
+                }
+                else {
+                    Log.i("Error", "The search query failed to find the driver info that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return driverInfo;
+        }
+    }
+
     private static void verifySettings() {
         // if the client hasn't been initialized then we should make it!
         if (client == null) {
