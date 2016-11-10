@@ -7,7 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+
 public class MainScreen extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +23,8 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

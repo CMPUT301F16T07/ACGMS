@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 
 /**
  *
@@ -43,5 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
     }
 }

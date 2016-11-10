@@ -12,6 +12,11 @@ import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 public class MenuActivity extends AppCompatActivity {
     private BottomBar bottomBar;
 
