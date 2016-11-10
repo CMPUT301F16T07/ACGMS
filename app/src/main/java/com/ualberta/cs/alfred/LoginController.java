@@ -30,17 +30,21 @@ public class LoginController {
         this.requestedStatus = driverRider;
     }
 
-    public Boolean check() throws ExecutionException, InterruptedException {
-        User user;
-        if (requestedStatus.contentEquals("Driver Mode")) {
-            return Boolean.FALSE;
-        } else {
-            UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
-            user = (User) retrievedRider.execute(this.userName).get();
-            if (user != null && user.getUserName().contentEquals(this.userName)) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
+    public Boolean checkRider() throws ExecutionException, InterruptedException {
+        UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
+        Rider rider = retrievedRider.execute(this.userName).get();
+        if (rider != null && rider.getUserName().contentEquals(this.userName)) {
+            return Boolean.TRUE;
         }
+        return Boolean.FALSE;
+    }
+
+    public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
+        UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
+        DriverInfo driverInfo = (DriverInfo) retrievedDriverInfo.execute(this.userName).get();
+        if (driverInfo.getUserName() != null && driverInfo.getUserName().contentEquals(this.userName)) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

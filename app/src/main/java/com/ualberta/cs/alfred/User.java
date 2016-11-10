@@ -36,7 +36,7 @@ public class User {
      * Instantiates a new User. This will only be used when representing a non-existant user.
      */
     public User() {
-        this.userName = null;
+
     }
 
     /**
