@@ -214,4 +214,8 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Day not the same", enteredDate.getDay() == testDate.getDay());
     }
 
+    public void getRequestMaxIdFromES() {
+
+    }
+
 }

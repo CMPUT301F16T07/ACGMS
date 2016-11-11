@@ -72,19 +72,19 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Request List has 2 requests", aList.getCount() == 2);
 
         // Test request #1
-        String testReq1ID = req1.getRequestID();
+        Long testReq1ID = req1.getRequestID();
         assertTrue("Request 1 is not the same", req1.equals(aList.getRequest(testReq1ID)));
 
         Request req1FromList = aList.getRequest(testReq1ID);
-        String req1IDFromList = req1FromList.getRequestID();
+        Long req1IDFromList = req1FromList.getRequestID();
         assertTrue("Request 1 from list not the same", req1.equals(aList.getRequest(req1IDFromList)));
 
         // Test request #2
-        String testReq2ID = req2.getRequestID();
+        Long testReq2ID = req2.getRequestID();
         assertTrue("Request 2 is not the same", req2.equals(aList.getRequest(testReq2ID)));
 
         Request req2FromList = aList.getRequest(testReq2ID);
-        String req2IDFromList = req2FromList.getRequestID();
+        Long req2IDFromList = req2FromList.getRequestID();
         assertTrue("Request 2 from list not the same", req2.equals(aList.getRequest(req2IDFromList)));
     }
 
@@ -275,11 +275,11 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Request List has 2 requests", aList.getCount() == 1);
 
         // Check if the element left is req2
-        String testReq2ID = req2.getRequestID();
+        Long testReq2ID = req2.getRequestID();
         assertTrue("Request 2 is not the same", req2.equals(aList.getRequest(testReq2ID)));
 
         Request req2FromList = aList.getRequest(testReq2ID);
-        String req2IDFromList = req2FromList.getRequestID();
+        Long req2IDFromList = req2FromList.getRequestID();
         assertTrue("Request 2 from list not the same", req2.equals(aList.getRequest(req2IDFromList)));
     }
 }

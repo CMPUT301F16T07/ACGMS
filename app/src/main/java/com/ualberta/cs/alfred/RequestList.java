@@ -41,11 +41,11 @@ public class RequestList {
      * @param requestID the request id
      * @return the request
      */
-    public Request getRequest(String requestID) {
+    public Request getRequest(Long requestID) {
 
         Request aRequest = null;
         for (Request r : requestList) {
-            if (requestID.equals(r.getRequestID())) {
+            if (requestID == r.getRequestID()) {
                 aRequest = r;
                 break;
             }
