@@ -7,14 +7,15 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.BottomBarFragment;
 import com.roughike.bottombar.OnTabSelectedListener;
+
 import com.ualberta.cs.alfred.fragments.HomeFragment;
-// import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
 
 public class MenuActivity extends AppCompatActivity {
-    private BottomBar bottomBar;
+    public static BottomBar bottomBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +24,15 @@ public class MenuActivity extends AppCompatActivity {
 
         bottomBar = BottomBar.attach(this, savedInstanceState);
 
+
         bottomBar.setFragmentItems(getSupportFragmentManager(), R.id.menu_fragment_container,
                 new BottomBarFragment(HomeFragment.newInstance(), R.drawable.ic_home_white_24dp, "Home"),
-                new BottomBarFragment(ListFragment.newInstance(), R.drawable.ic_view_list_white_24dp, "List"),
+                new BottomBarFragment(ListFragment.newInstance(3), R.drawable.ic_view_list_white_24dp, "List"),
                 new BottomBarFragment(UserFragment.newInstance(), R.drawable.ic_person_white_24dp, "User"),
                 new BottomBarFragment(SettingsFragment.newInstance(), R.drawable.ic_settings_white_24dp, "Settings")
         );
+
+
 
 //        bottomBar.mapColorForTab(0, "#3B494C");
 //        bottomBar.mapColorForTab(1, "#00796B");
@@ -56,4 +60,5 @@ public class MenuActivity extends AppCompatActivity {
         // Change the show / hide animation duration.
         unreadMessages.setAnimationDuration(200);
     }
+
 }

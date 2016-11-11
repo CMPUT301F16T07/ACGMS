@@ -49,23 +49,23 @@ public class MainActivity extends AppCompatActivity {
                         // username to check if the user even exists
                         int selected = driverRider.getCheckedRadioButtonId();
                         RadioButton radioButtonSelected = (RadioButton) findViewById(selected);
+                        Intent intent= new Intent(MainActivity.this, MenuActivity.class);
+                        startActivity(intent);
 
-
-
-                        LoginController loginController = new LoginController(userName.getText().toString(), radioButtonSelected.getText().toString());
-                        if (loginController.check()) {
-                            // Launch MenuActivity where the buttom navbar is located.
-                            Intent intent= new Intent(MainActivity.this, MenuActivity.class);
-                            if (radioButtonSelected.getText().toString().contentEquals("Driver")) {
-                                intent.putExtra("MODE", "DRIVER");
-                            } else {
-                                intent.putExtra("MODE", "RIDER");
-                            }
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // TODO: HANDLE UNABLE TO LOG IN AND UNABLE TO CONNECT
-                        }
+//                        LoginController loginController = new LoginController(userName.getText().toString(), radioButtonSelected.getText().toString());
+//                        if (loginController.check()) {
+//                            // Launch MenuActivity where the buttom navbar is located.
+//                            Intent intent= new Intent(MainActivity.this, MenuActivity.class);
+//                            if (radioButtonSelected.getText().toString().contentEquals("Driver")) {
+//                                intent.putExtra("MODE", "DRIVER");
+//                            } else {
+//                                intent.putExtra("MODE", "RIDER");
+//                            }
+//                            startActivity(intent);
+//                            finish();
+//                        } else {
+//                            // TODO: HANDLE UNABLE TO LOG IN AND UNABLE TO CONNECT
+//                        }
 
                     }
                 }

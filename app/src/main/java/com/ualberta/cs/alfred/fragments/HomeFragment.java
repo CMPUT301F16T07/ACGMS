@@ -3,17 +3,20 @@ package com.ualberta.cs.alfred.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 
 /**
  * Created by carlcastello on 08/11/16.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public HomeFragment() {
     }
@@ -29,6 +32,56 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
+
+        Button pendingButton = (Button) view.findViewById(R.id.button_pending);
+        Button requestedButton = (Button) view.findViewById(R.id.button_requested);
+        Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
+
+        Button requestButton = (Button) view.findViewById(R.id.request_button);
+
+        pendingButton.setOnClickListener(this);
+        requestedButton.setOnClickListener(this);
+        acceptedButton.setOnClickListener(this);
+        requestButton.setOnClickListener(this);
+
         return view;
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = null;
+        switch (v.getId()) {
+            case R.id.button_pending:
+                fragment = new ListFragment().newInstance(1);
+                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                replaceFragment(fragment);
+                break;
+
+            case R.id.button_requested:
+                fragment = new ListFragment().newInstance(0);
+                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                replaceFragment(fragment);
+                break;
+
+            case R.id.button_accepted:
+                fragment = new ListFragment().newInstance(2);
+                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                replaceFragment(fragment);
+                break;
+            case R.id.request_button:
+                fragment = new RequestFragment().newInstance();
+                replaceFragment(fragment);
+                break;
+        }
+
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.menu_fragment_container, fragment);
+        transaction.commit();
     }
 }

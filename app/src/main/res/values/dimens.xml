@@ -5,6 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="main_text">15dp</dimen>
+    <dimen name="home_text">30dp</dimen>
     <dimen name="user_text">15dp</dimen>
     <dimen name="user_dynamic_text">20dp</dimen>
     <dimen name="input_box">25dp</dimen>
@@ -13,4 +14,5 @@
 
 
     <dimen name="list_type_button">100dp</dimen>
+
 </resources>
