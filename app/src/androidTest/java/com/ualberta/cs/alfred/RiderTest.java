@@ -19,7 +19,8 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void test() {
-        Rider rider = new Rider("Michael", "Cote", "mmcote", new Date(), "787398247", "mmcote@ualberta.ca", "34902845854");
+        Rider rider = new Rider("Michael", "Cote", "mmcote", new Date(), "787398247",
+                "mmcote@ualberta.ca", "34902845854");
         assertTrue(true);
     }
 
@@ -29,6 +30,9 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
 
         try {
             Rider rider = retrievedRider.get();
+            System.out.println("++++++++++++++++++++++++");
+            System.out.println("FIRSTNAME: " + rider.getFirstName());
+            System.out.println("++++++++++++++++++++++++");
             assert(true);
             Rider jimbo = new Rider();
         } catch (InterruptedException e) {

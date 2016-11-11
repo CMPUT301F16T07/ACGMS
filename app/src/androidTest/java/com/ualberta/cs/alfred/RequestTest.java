@@ -7,7 +7,7 @@ import com.ualberta.cs.alfred.MainActivity;
 import java.util.Date;
 
 /**
- * Create all the test cases for Request
+ * Creates all the test cases for Request
  *
  * @author ookmm
  * @version 1.2

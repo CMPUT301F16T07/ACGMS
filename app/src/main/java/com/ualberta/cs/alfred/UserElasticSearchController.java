@@ -13,18 +13,24 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Created by mmcote on 2016-11-08.
+ * This controller holds the functionality to add and get users from
+ * the elastic search server.
+ *
+ * @author mmcote
+ * @version 1.0
+ * @see Rider
+ * @see Driver
  */
-
 public class UserElasticSearchController {
-    private static JestDroidClient client;
-
-
+    /**
+     * This class is used to run an AsyncTask in the background to add a rider to the
+     * elastic search server.
+     */
     public static class AddRider extends AsyncTask<Rider, Void, Void> {
         @Override
         // one or more Riders given, can be an array of Riders without specifying an array
         protected Void doInBackground(Rider... riders) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             for (Rider rider : riders) {
                 Index index = new Index.Builder(rider).index("riderlist").type("rider").build();
@@ -43,10 +49,14 @@ public class UserElasticSearchController {
         }
     }
 
+    /**
+     * This class is used to run an AsyncTask in the background to get a rider from the
+     * elastic search server.
+     */
     public static class GetRider extends AsyncTask<String, Void, Rider> {
         @Override
         protected Rider doInBackground(String... search_parameters) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             Rider rider = new Rider();
 
@@ -59,9 +69,6 @@ public class UserElasticSearchController {
                     "    }\n" +
                     "}";
 
-            System.out.println(query);
-
-            // assume that search_parameters[0] is the only search term we are interested in using
             Search search = new Search.Builder(query)
                     .addIndex("riderlist")
                     .addType("rider")
@@ -84,15 +91,72 @@ public class UserElasticSearchController {
         }
     }
 
-    private static void verifySettings() {
-        // if the client hasn't been initialized then we should make it!
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
-            DroidClientConfig config = builder.build();
+    /**
+     * * This class is used to run an AsyncTask in the background to add driver info to the
+     * elastic search server.
+     */
+    public static class AddDriverInfo extends AsyncTask<DriverInfo, Void, Void> {
+        @Override
+        // one or more Riders given, can be an array of Riders without specifying an array
+        protected Void doInBackground(DriverInfo... driversInfo) {
+            JestDroidClient client = new BuildClient().getClient();
 
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
+            for (DriverInfo driverInfo : driversInfo) {
+                Index index = new Index.Builder(driverInfo).index("driverinfolist").type("driverinfo").build();
+
+                try {
+                    DocumentResult result = client.execute(index);
+                    if (!result.isSucceeded()) {
+                        Log.i("Error", "Elastic search was not able to add the driver info.");
+                    }
+                } catch (Exception e) {
+                    Log.i("Uh-Oh", "We failed to add a driver to elastic search!");
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * This class is used to run an AsyncTask in the background to get driver info of a user
+     * from the elastic search server.
+     */
+    public static class GetDriverInfo extends AsyncTask<String, Void, DriverInfo> {
+        @Override
+        protected DriverInfo doInBackground(String... search_parameters) {
+            JestDroidClient client = new BuildClient().getClient();
+
+            DriverInfo driverInfo = new DriverInfo();
+
+            String query = "{\n" +
+                    "    \"query\": {\n" +
+                    "        \"match\" : {\n" +
+                    "            \"userName\" : \n" +
+                    "                \""+search_parameters[0]+"\"\n" +
+                    "            }\n" +
+                    "    }\n" +
+                    "}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex("driverinfolist")
+                    .addType("driverinfo")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    driverInfo = result.getSourceAsObject(DriverInfo.class);
+                }
+                else {
+                    Log.i("Error", "The search query failed to find the driver info that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return driverInfo;
         }
     }
 }

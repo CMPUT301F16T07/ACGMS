@@ -1,121 +1,122 @@
 package com.ualberta.cs.alfred;
 
-import junit.framework.TestCase;
+import android.test.ActivityInstrumentationTestCase2;
+
 
 /**
- * Created by carlcastello on 07/11/16.
+ * Creates the type Address test.
+ *
+ * @author carlcastello on 07/11/16.
+ * @version 1.1
+ * @see Address
  */
+public class AddressTest extends ActivityInstrumentationTestCase2 {
 
-public class AddressTest extends TestCase {
     /**
-     *  Test getLocation()
+     * Instantiates a new Address test.
      */
-    public void testGetLocation(){
-        // Initializing all necessary variable for testing.
-        Address address;
-        String Location = "116 Knottwood Road NW";
-        double Latitude = 40.741895;
-        double Longtitude = -73.989308;
-        address = new Address(Location,Latitude,Longtitude);
+    public AddressTest() {
 
-        // This will pass the test
-        assertTrue("getLocation Failed!",Location.equals(address.getLocation()));
-        // This will fail the test
-        //assertFalse("getLocation Failed!",Location.equals(address.getLocation()));
+        super(MainActivity.class);
     }
 
     /**
-     *  Test getLatitude()
+     * Test get location.
      */
-    public void testGetLatitude(){
+    public void testGetLocation() {
         // Initializing all necessary variable for testing.
         Address address;
-        String Location = "116 Knottwood Road NW";
-        double Latitude = 40.741895;
-        double Longitude = -73.989308;
-        address = new Address(Location,Latitude,Longitude);
+        String location = "116 Knottwood Road NW";
+        double latitude = 40.741895;
+        double longtitude = -73.989308;
+        address = new Address(location, latitude, longtitude);
 
-        // This will pass the test
-        assertTrue("getLatitude Failed!",Latitude == address.getLatitude());
-        // This will fail the test
-        //assertFalse("getLatitude Failed!",Location == address.getLatitude());
+        assertTrue("getLocation Failed!", location.equals(address.getLocation()));
     }
 
     /**
-     *  Test getLongitude()
+     * Test get latitude.
+     */
+    public void testGetLatitude() {
+        // Initializing all necessary variable for testing.
+        Address address;
+        String location = "116 Knottwood Road NW";
+        double latitude = 40.741895;
+        double longitude = -73.989308;
+        address = new Address(location, latitude, longitude);
+
+        assertTrue("getLatitude Failed!", latitude == address.getLatitude());
+    }
+
+    /**
+     * Test get longitude.
      */
     public void testGetLongitude(){
         // Initializing all necessary variable for testing.
         Address address;
-        String Location = "116 Knottwood Road NW";
-        double Latitude = 40.741895;
-        double Longitude = -73.989308;
-        address = new Address(Location,Latitude,Longitude);
+        String location = "116 Knottwood Road NW";
+        double latitude = 40.741895;
+        double longitude = -73.989308;
+        address = new Address(location, latitude, longitude);
 
-        // This will pass the test
-        assertTrue("getLongitude Failed!",Longitude == address.getLongitude());
-        // This will fail the test
-        //assertFalse("getLongitude Failed!",Location == address.getLongitude());
+        assertTrue("getLongitude Failed!", longitude == address.getLongitude());
     }
 
     /**
-     *  Test setLocation()
+     * Test set location.
      */
-    public void testSetLocation(){
+    public void testSetLocation() {
         // Initializing all necessary variable for testing.
         Address address;
-        String Location1 = "116 Knottwood Road NW";
-        String Location2 = "7632 23 Ave NW";
-        double Latitude = 40.741895;
-        double Longitude = -73.989308;
-        address = new Address(Location1,Latitude,Longitude);
+        String location1 = "116 Knottwood Road NW";
+        String location2 = "7632 23 Ave NW";
+        double latitude = 40.741895;
+        double longitude = -73.989308;
+        address = new Address(location1, latitude, longitude);
 
-        address.setLocation(Location2);
+        address.setLocation(location2);
 
-        // This will pass the test
-        assertFalse("setLocation Failed!",Location1.equals(address.getLocation()));
-        // This will fail the test
-        //assertTrue("setLocation Failed!",Location1.equals(address.getLocation()));
+        assertFalse("setLocation Failed!", location1.equals(address.getLocation()));
+
+        assertTrue("setLocation Failed!", location2.equals(address.getLocation()));
     }
 
     /**
-     *  Test setLatitude()
+     * Test set latitude.
      */
     public void testSetLatitude(){
         // Initializing all necessary variable for testing.
         Address address;
-        String Location1 = "116 Knottwood Road NW";
-        double Latitude1 = 40.741895;
-        double Latitude2 = 43.231312;
-        double Longitude = -73.989308;
-        address = new Address(Location1,Latitude1,Longitude);
+        String location1 = "116 Knottwood Road NW";
+        double latitude1 = 40.741895;
+        double latitude2 = 43.231312;
+        double longitude = -73.989308;
+        address = new Address(location1, latitude1, longitude);
 
-        address.setLatitude(Latitude2);
+        address.setLatitude(latitude2);
 
-        // This will pass the test
-        assertFalse("setLatitude Failed!",Latitude1 == address.getLatitude());
-        // This will fail the test
-        //assertTrue("setLatitude Pass",Latitude1 == address.getLatitude());
+        assertFalse("setLatitude Failed!", latitude1 == address.getLatitude());
+
+        assertTrue("setLatitude Failed!", latitude2 == address.getLatitude());
     }
 
     /**
-     *  Test setLongitude()
+     * Test set longitude.
      */
-    public void testsetLongitude(){
+    public void testSetLongitude() {
         // Initializing all necessary variable for testing.
         Address address;
-        String Location1 = "116 Knottwood Road NW";
-        double Latitude = 40.741895;
-        double Longitude1 = -73.989308;
-        double Longitude2 = -77.201313;
-        address = new Address(Location1,Latitude,Longitude1);
+        String location1 = "116 Knottwood Road NW";
+        double latitude = 40.741895;
+        double longitude1 = -73.989308;
+        double longitude2 = -77.201313;
+        address = new Address(location1, latitude, longitude1);
 
-        address.setLongitude(Longitude1);
+        address.setLongitude(longitude1);
 
-        // This will pass the test
-        assertFalse("setLongitude Failed!",Longitude2 == address.getLongitude());
-        // This will fail the test
-        //assertTrue("Location not properly inserted",Location1.equals(address.getLocation()));
+        assertFalse("setLongitude Failed!", longitude2 == address.getLongitude());
+
+        assertTrue("setLongitude Failed!", longitude1 == address.getLongitude());
     }
 }
 

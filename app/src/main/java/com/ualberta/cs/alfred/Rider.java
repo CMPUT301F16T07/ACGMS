@@ -3,36 +3,80 @@ package com.ualberta.cs.alfred;
 import java.util.Date;
 
 /**
- * Created by mmcote on 2016-11-05.
+ * This class is used to create and initialize a rider to be used in
+ * Rider Mode, this is a subclass of User, with it's opposite being
+ * a Driver.
+ *
+ * @author mmcote
+ * @version 1.2
+ * @see User
+ * @see Driver
  */
 
 public class Rider extends User {
-    private String creditCardNumber;
-    private com.ualberta.cs.alfred.RequestList requests;
 
+    private String creditCardNumber;
+    private RequestList requests;
+
+    /**
+     * Instantiates a new null Rider.
+     */
     public Rider() {
         super();
     }
 
-    public Rider(String firstName, String lastName, String userName, Date dateOfBirth, String phoneNumber, String email, String creditCardNumber) {
+    /**
+     * Instantiates a new Rider.
+     *
+     * @param firstName        the first name
+     * @param lastName         the last name
+     * @param userName         the user name
+     * @param dateOfBirth      the date of birth
+     * @param phoneNumber      the phone number
+     * @param email            the email
+     * @param creditCardNumber the credit card number
+     */
+    public Rider(String firstName, String lastName, String userName, Date dateOfBirth,
+                 String phoneNumber, String email, String creditCardNumber) {
+
         super(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.creditCardNumber = creditCardNumber;
         this.save();
     }
 
+    /**
+     * Gets credit card number.
+     *
+     * @return the credit card number
+     */
     public String getCreditCardNumber() {
         return creditCardNumber;
     }
 
+    /**
+     * Sets credit card number.
+     *
+     * @param creditCardNumber the credit card number
+     */
     public void setCreditCardNumber(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
     }
 
-    public com.ualberta.cs.alfred.RequestList getRequests() {
+    /**
+     * Gets requests.
+     *
+     * @return the requests
+     */
+    public RequestList getRequests() {
         return requests;
     }
 
-    public void addRequest(com.ualberta.cs.alfred.Request newRequest) {
+    /**
+     * Add request.
+     *
+     * @param newRequest the new request
+     */
+    public void addRequest(Request newRequest) {
         this.requests.addRequest(newRequest);
     }
 

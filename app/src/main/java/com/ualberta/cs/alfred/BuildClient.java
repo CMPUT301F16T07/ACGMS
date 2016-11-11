@@ -5,28 +5,39 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 /**
- * Created by mmcote on 2016-11-09.
+ * This class is used to create and initialize a client to connect to the elastic search
+ * server used for Alfred.
+ *
+ * @author mmcote
+ * @version 1.0
  */
 
 public class BuildClient {
-    JestDroidClient client;
+    private static JestDroidClient client;
+
+    /**
+     * Instantiates a new client with the default settings.
+     */
     public BuildClient() {
-        this.client = verifySettings(new JestDroidClient());
+        setClient();
     }
 
-    private static JestDroidClient verifySettings(JestDroidClient client) {
+    private void setClient() {
         // if the client hasn't been initialized then we should make it!
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
-            DroidClientConfig config = builder.build();
+        DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
+        DroidClientConfig config = builder.build();
 
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
-        }
-        return client;
+        JestClientFactory factory = new JestClientFactory();
+        factory.setDroidClientConfig(config);
+        this.client = (JestDroidClient) factory.getObject();
     }
 
+    /**
+     * Returns the client that has been initiated with the proper elastic search server
+     * settings.
+     *
+     * @return the client
+     */
     public JestDroidClient getClient() {
         return client;
     }
