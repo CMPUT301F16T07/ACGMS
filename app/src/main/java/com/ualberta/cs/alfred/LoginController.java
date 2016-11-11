@@ -15,14 +15,23 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Created by mmcote on 2016-11-09.
+ * This class is used to check whether a user a user exists and is able to log in
+ * under the specified domain which they are requesting.
+ *
+ * @author mmcote
+ * @version 1.0
  */
-
 public class LoginController {
     private static JestDroidClient client;
     private String userName;
     private String requestedStatus;
 
+    /**
+     * Instantiates a new Login controller.
+     *
+     * @param userName    the user name
+     * @param driverRider the driver rider
+     */
     public LoginController(String userName, String driverRider) {
         BuildClient bC = new BuildClient();
         this.client = bC.getClient();
@@ -30,6 +39,13 @@ public class LoginController {
         this.requestedStatus = driverRider;
     }
 
+    /**
+     * Check rider exists.
+     *
+     * @return the boolean
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
     public Boolean checkRider() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
         Rider rider = retrievedRider.execute(this.userName).get();
@@ -39,6 +55,13 @@ public class LoginController {
         return Boolean.FALSE;
     }
 
+    /**
+     * Check driver exists.
+     *
+     * @return the boolean
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
     public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
         DriverInfo driverInfo = (DriverInfo) retrievedDriverInfo.execute(this.userName).get();

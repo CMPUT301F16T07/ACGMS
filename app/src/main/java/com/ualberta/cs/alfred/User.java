@@ -6,8 +6,12 @@ import java.util.Date;
  * The user class holds all of the common data needed as both a rider and a driver.
  * All users will be contained on the Elastic Search server where they will pulled
  * when a user logs in to the local device.
+ *
  * @author mmcote
- * @version 1
+ * @version 1.0
+ *
+ * @see Rider
+ * @see Driver
  */
 public class User {
     /** userID is the most consistent piece of data for a user profile. It will remain
@@ -20,8 +24,8 @@ public class User {
      * their account.
      */
     private String userName;
-    public String firstName;
-    public String lastName;
+    private String firstName;
+    private String lastName;
     private Date dateOfBirth;
     private String phoneNumber;
     private String email;

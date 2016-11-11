@@ -3,7 +3,11 @@ package com.ualberta.cs.alfred;
 import java.util.Date;
 
 /**
- * Created by mmcote on 2016-11-09.
+ * This class is used to create and initialize a driver that will be used to
+ * represent a user in Driver Mode.
+ *
+ * @author mmcote
+ * @version 1.0
  */
 public class Driver extends User{
     private String licenceNumber;
