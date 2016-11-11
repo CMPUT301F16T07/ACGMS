@@ -16,7 +16,8 @@ public class Request {
     // Count for IDs
     //private int requestCount = 4;
     @JestId
-    private Long requestID;
+    private String requestID;
+
     private String requestStatus;
     private Address sourceAddress;
     private Address destinationAddress;
@@ -46,6 +47,7 @@ public class Request {
         this.driverID = null;
         this.riderID = riderID;
         this.requestDate = new Date();
+        this.save();
     }
 
     /**
@@ -53,7 +55,7 @@ public class Request {
      *
      * @return the request id
      */
-    public Long getRequestID() {
+    public String getRequestID() {
         return requestID;
     }
 
@@ -62,7 +64,7 @@ public class Request {
      *
      * @param requestID the request id
      */
-    public void setRequestID(Long requestID) {
+    public void setRequestID(String requestID) {
         this.requestID = requestID;
     }
 
@@ -210,22 +212,10 @@ public class Request {
         this.requestDate = requestDate;
     }
 
-    /*
-    public int getRequestMaxIdFromES() {
-        RequestElasticSearchController.GetRequestMaxIdTask retrievedRequest = new RequestElasticSearchController.GetRequestMaxIdTask();
-        retrievedRequest.execute("requestID");
+    private void save() {
 
-        int maxID = 0;
-
-        try {
-            maxID = retrievedRequest.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return maxID;
-    }*/
+        RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
+        addRequestsTask.execute(this);
+    }
 
 }

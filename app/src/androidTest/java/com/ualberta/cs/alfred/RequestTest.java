@@ -5,6 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.ualberta.cs.alfred.MainActivity;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Creates all the test cases for Request
@@ -29,19 +30,36 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
-        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        String req1Status = "Accepted";
+        Address req1SrcAddr = new Address("North side", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
-        double req1Cost = 12.30;
+        double req1Cost = 45.30;
         double req1Distance = 4.5;
-        String req1RiderID = "rider001";
+        String req1RiderID = "rider002";
 
         Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
                 req1RiderID);
 
-        int temp = 1;
-        String requestID = "request" + Integer.toString(temp);
-        assertTrue("Request ID not the same", requestID.equals(req1.getRequestID()));
+        RequestElasticSearchController.GetRequestByIdTask retrievedRequest = new RequestElasticSearchController.GetRequestByIdTask();
+        retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");
+
+        /*
+        try {
+            Request request = retrievedRequest.get();
+            System.out.println("====================");
+            System.out.println("Request cost is: " + req1.getRequestStatus());
+            System.out.println("====================");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        */
+
+        //int temp = 1;
+        //String requestID = "request" + Integer.toString(temp);
+        //assertTrue("Request ID not the same", requestID.equals(req1.getRequestID()));
+        System.out.println("Request Id is: " + req1.getRequestID());
     }
 
     /**
@@ -212,10 +230,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Year not the same", enteredDate.getYear() == testDate.getYear());
         assertTrue("Month not the same", enteredDate.getMonth() == testDate.getMonth());
         assertTrue("Day not the same", enteredDate.getDay() == testDate.getDay());
-    }
-
-    public void getRequestMaxIdFromES() {
-
     }
 
 }

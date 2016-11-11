@@ -41,7 +41,7 @@ public class RequestList {
      * @param requestID the request id
      * @return the request
      */
-    public Request getRequest(Long requestID) {
+    public Request getRequest(String requestID) {
 
         Request aRequest = null;
         for (Request r : requestList) {

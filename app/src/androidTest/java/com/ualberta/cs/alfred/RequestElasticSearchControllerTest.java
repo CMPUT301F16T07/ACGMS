@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -15,63 +16,62 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
         super(MainActivity.class);
     }
 
-    /*
-    NormalTweet newTweet = new NormalTweet(text);
-    tweetList.add(newTweet);
-    adapter.notifyDataSetChanged();
-    // saveInFile(); // TODO replace this with elastic search
-    ElasticsearchTweetController.AddTweetsTask addTweetsTask = new ElasticsearchTweetController.AddTweetsTask();
-    addTweetsTask.execute(newTweet);
-    */
-
+    /**
+     * Test add request task
+     */
     public void testAddRequestTask() {
-
-        RequestList aList = new RequestList();
 
         // Create request #1
         String req1Status = "Pending";
-        Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
+        Address req1SrcAddr = new Address("South side", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);
-        double req1Cost = 12.30;
+        double req1Cost = 90.30;
         double req1Distance = 4.5;
-        String req1RiderID = "rider001";
+        String req1RiderID = "rider011";
 
         Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
                 req1RiderID);
-
-        //aList.addRequest(req1);
-
-        //RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
-        //addRequestsTask.execute(req1);
+        assert(true);
 
         // Create request #2
         String req2Status = "Accepted";
-        Address req2SrcAddr = new Address("West Ed", 51.56777, 30.34555);
+        Address req2SrcAddr = new Address("Airport", 51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
         double req2Cost = 30.30;
         double req2Distance = 21.5;
-        String req2RiderID = "rider001";
+        String req2RiderID = "rider013";
 
         Request req2 = new Request(req2Status, req2SrcAddr, req2DestAddr, req2Distance, req2Cost,
                 req2RiderID);
-
-        RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
-        addRequestsTask.execute(req2);
+        assert(true);
 
     }
 
+    /**
+     * Test get request task
+     *
+     * @Note: need to provide the search parameters
+     */
     public void testGetRequestTask() {
 
         RequestElasticSearchController.GetRequestTask retrievedRequest = new RequestElasticSearchController.GetRequestTask();
-        retrievedRequest.execute("1");
+
+        // Find all requests where riderID is rider002
+        retrievedRequest.execute("riderID", "rider002");
 
         try {
-            Request request = retrievedRequest.get();
-            System.out.println("====================");
-            System.out.println("Request cost is: " + request.getCost());
-            System.out.println("====================");
-            assert(true);
-            //Rider jimbo = new Rider();
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Request ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -79,22 +79,48 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
         }
     }
 
-    public void testGetRequestMaxIdTask() {
-        RequestElasticSearchController.GetRequestMaxIdTask retrievedRequest = new RequestElasticSearchController.GetRequestMaxIdTask();
-        retrievedRequest.execute("requestID");
+    /**
+     * Test get request by id task
+     *
+     * @Note: need to know the request ID.
+     */
+    public void testGetRequestByIdTask() {
+
+        RequestElasticSearchController.GetRequestByIdTask retrievedRequest = new RequestElasticSearchController.GetRequestByIdTask();
+
+        // Find the request with this id
+        retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");
 
         try {
-            Long maxID = retrievedRequest.get();
+            Request request = retrievedRequest.get();
+
             System.out.println("====================");
-            System.out.println("Request ID is: " + maxID);
+            System.out.println("Request ID: " + request.getRequestID());
+            System.out.println("Request Distance: " + request.getDistance());
+            System.out.println("Request Cost: " + request.getCost());
+            System.out.println("Request Status: " + request.getRequestStatus());
+
             System.out.println("====================");
-            assert(true);
-            //Rider jimbo = new Rider();
+            assert (true);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Delete request by id task
+     *
+     * @Note: need to know the request ID.
+     */
+    public void testDeleteRequestTask() {
+
+        RequestElasticSearchController.DeleteRequestTask deleteRequest = new RequestElasticSearchController.DeleteRequestTask();
+
+        // Delete the request with this id
+        deleteRequest.execute("AVhVAmNqFLrhMuj9wTtN");
+        assert (true);
     }
 
 }
