@@ -19,18 +19,26 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- *
- * MainActivity Class
- * This is where the app starts
- * and it prompts user to log-in
- *
+ * MainActivity is the first activity which the user sees
+ * if there is no user currently logged in in the cache.
+ * <p>
+ * This activity handles the users requests to log in either
+ * the rider or driver domain. This activity uses the LoginController
+ * to check whether the user exists under the domain, and if they do
+ * not what next they will have to enter in order to become part of
+ * the requested domain.
+ * <p>
  * Created by carlcastello on 08/11/16.
+ * Completed by mmcote on 08/09/16.
+ *
+ * @author mmcote
+ * @version 1.1
  */
 public class MainActivity extends AppCompatActivity {
-    Button loginButton;
-    EditText userName;
-    EditText password;
-    RadioGroup driverRider;
+    private Button loginButton;
+    private EditText userName;
+    private EditText password;
+    private RadioGroup driverRider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

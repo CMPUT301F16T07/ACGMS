@@ -16,7 +16,11 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 
 /**
- * Created by mmcote on 2016-11-08.
+ * This user cache is used to store the user cache generated from the last
+ * use of the application.
+ *
+ * @author mmcote
+ * @version 1.0
  */
 
 public class UserCacheController {

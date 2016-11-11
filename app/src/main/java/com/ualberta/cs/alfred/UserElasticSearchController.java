@@ -13,18 +13,24 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Created by mmcote on 2016-11-08.
+ * This controller holds the functionality to add and get users from
+ * the elastic search server.
+ *
+ * @author mmcote
+ * @version 1.0
+ * @see Rider
+ * @see Driver
  */
-
 public class UserElasticSearchController {
-    private static JestDroidClient client;
-
-
+    /**
+     * This class is used to run an AsyncTask in the background to add a rider to the
+     * elastic search server.
+     */
     public static class AddRider extends AsyncTask<Rider, Void, Void> {
         @Override
         // one or more Riders given, can be an array of Riders without specifying an array
         protected Void doInBackground(Rider... riders) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             for (Rider rider : riders) {
                 Index index = new Index.Builder(rider).index("riderlist").type("rider").build();
@@ -43,10 +49,14 @@ public class UserElasticSearchController {
         }
     }
 
+    /**
+     * This class is used to run an AsyncTask in the background to get a rider from the
+     * elastic search server.
+     */
     public static class GetRider extends AsyncTask<String, Void, Rider> {
         @Override
         protected Rider doInBackground(String... search_parameters) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             Rider rider = new Rider();
 
@@ -81,11 +91,15 @@ public class UserElasticSearchController {
         }
     }
 
+    /**
+     * * This class is used to run an AsyncTask in the background to add driver info to the
+     * elastic search server.
+     */
     public static class AddDriverInfo extends AsyncTask<DriverInfo, Void, Void> {
         @Override
         // one or more Riders given, can be an array of Riders without specifying an array
         protected Void doInBackground(DriverInfo... driversInfo) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             for (DriverInfo driverInfo : driversInfo) {
                 Index index = new Index.Builder(driverInfo).index("driverinfolist").type("driverinfo").build();
@@ -104,10 +118,14 @@ public class UserElasticSearchController {
         }
     }
 
+    /**
+     * This class is used to run an AsyncTask in the background to get driver info of a user
+     * from the elastic search server.
+     */
     public static class GetDriverInfo extends AsyncTask<String, Void, DriverInfo> {
         @Override
         protected DriverInfo doInBackground(String... search_parameters) {
-            verifySettings();
+            JestDroidClient client = new BuildClient().getClient();
 
             DriverInfo driverInfo = new DriverInfo();
 
@@ -139,18 +157,6 @@ public class UserElasticSearchController {
             }
 
             return driverInfo;
-        }
-    }
-
-    private static void verifySettings() {
-        // if the client hasn't been initialized then we should make it!
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://ela1.ookoo.co:9200");
-            DroidClientConfig config = builder.build();
-
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
         }
     }
 }
