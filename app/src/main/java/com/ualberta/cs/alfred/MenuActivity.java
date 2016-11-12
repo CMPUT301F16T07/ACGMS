@@ -1,7 +1,10 @@
 package com.ualberta.cs.alfred;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarFragment;
@@ -12,13 +15,11 @@ import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
+
 
 public class MenuActivity extends AppCompatActivity {
     private BottomBar bottomBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class MenuActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
+
 
     }
 }

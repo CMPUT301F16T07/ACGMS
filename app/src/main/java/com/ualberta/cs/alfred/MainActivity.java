@@ -1,16 +1,13 @@
 package com.ualberta.cs.alfred;
 
+
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-
 
 /**
  *
@@ -29,13 +26,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
         // This is where you check all input
-
-
-
 
 
         Button login_button = (Button) findViewById(R.id.main_button);
@@ -43,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         // Launch MenuActivity where the buttom navbar is located.
-                        Intent intent= new Intent(MainActivity.this, MenuActivity.class);
+                        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                         startActivity(intent);
                     }
                 }
