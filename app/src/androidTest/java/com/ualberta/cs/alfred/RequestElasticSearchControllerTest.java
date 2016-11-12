@@ -5,12 +5,15 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by grandmanitou on 2016-11-10.
- */
 
+/**
+ * The type Request elastic search controller test.
+ */
 public class RequestElasticSearchControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new Request elastic search controller test.
+     */
     public RequestElasticSearchControllerTest() {
 
         super(MainActivity.class);

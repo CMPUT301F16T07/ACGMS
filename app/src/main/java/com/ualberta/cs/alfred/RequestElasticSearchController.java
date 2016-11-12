@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.CountResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
