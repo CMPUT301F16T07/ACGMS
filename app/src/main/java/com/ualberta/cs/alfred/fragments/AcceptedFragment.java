@@ -10,13 +10,24 @@ import android.view.ViewGroup;
 import com.ualberta.cs.alfred.R;
 
 /**
- * Created by carlcastello on 09/11/16.
+ * AcceptedFragment is a fragment that displays a list of accepted request.
+ * All entities on the list view is taken from the elastic search server
+ * indexed by the user.
+ * @author ccastell
+ * @version 1.0
+ *
  */
 
 public class AcceptedFragment extends Fragment {
+    /**
+     * Creates an empty object of AcceptedFragment
+     */
     public AcceptedFragment() {
     }
 
+    /**
+     * Creates an instance of AcceptedFragment
+     */
     public static AcceptedFragment newInstance() {
         Bundle args = new Bundle();
         AcceptedFragment acceptedFragment = new AcceptedFragment();

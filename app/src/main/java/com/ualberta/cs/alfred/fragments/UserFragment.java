@@ -8,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.User;
 
 /**
  * Created by carlcastello on 08/11/16.
  */
 
 public class UserFragment extends Fragment {
-
+    /**
+     *
+     *
+     */
     public UserFragment() {
     }
 
