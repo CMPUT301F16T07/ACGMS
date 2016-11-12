@@ -2,6 +2,8 @@ package com.ualberta.cs.alfred;
 
 import java.util.Date;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * The user class holds all of the common data needed as both a rider and a driver.
  * All users will be contained on the Elastic Search server where they will pulled
@@ -18,6 +20,7 @@ public class User {
      * the same for the lifetime of the user. Whereas all other attributes are visible
      * and able to be changed by the user.
      */
+    @JestId
     private String userID;
     /**
      * userName is a shorthand named picked by the user, that will be used to access
@@ -48,7 +51,7 @@ public class User {
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email) {
-        // TODO: auto generate a userID for each user
+        this.userID = null;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;

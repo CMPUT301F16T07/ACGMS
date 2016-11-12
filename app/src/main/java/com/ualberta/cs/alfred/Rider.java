@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class is used to create and initialize a rider to be used in
@@ -81,7 +82,15 @@ public class Rider extends User {
     }
 
     private void save() {
-        UserElasticSearchController.AddRider addRider = new UserElasticSearchController.AddRider();
+        UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
         addRider.execute(this);
+        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
+        try {
+            this.setUserID(getRider.execute(this.getUserName()).get().getUserID());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -49,7 +49,7 @@ public class LoginController {
     public Boolean checkRider() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
         Rider rider = retrievedRider.execute(this.userName).get();
-        if (rider != null && rider.getUserName().contentEquals(this.userName)) {
+        if (rider.getUserName() != null && rider.getUserName().contentEquals(this.userName)) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -64,7 +64,7 @@ public class LoginController {
      */
     public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
-        DriverInfo driverInfo = (DriverInfo) retrievedDriverInfo.execute(this.userName).get();
+        DriverInfo driverInfo = retrievedDriverInfo.execute(this.userName).get();
         if (driverInfo != null && driverInfo.getUserName().contentEquals(this.userName)) {
             return Boolean.TRUE;
         }
