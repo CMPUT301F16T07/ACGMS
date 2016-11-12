@@ -45,7 +45,7 @@ public class RequestList {
 
         Request aRequest = null;
         for (Request r : requestList) {
-            if (requestID.equals(r.getRequestID())) {
+            if (requestID == r.getRequestID()) {
                 aRequest = r;
                 break;
             }

@@ -1,6 +1,9 @@
 package com.ualberta.cs.alfred;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
+import io.searchbox.annotations.JestId;
 
 /**
  * Creates the Request type
@@ -11,10 +14,10 @@ import java.util.Date;
 public class Request {
 
     // Count for IDs
-    // TODO: When elasticsearch is up and running, the count must from the MAX requestID
-    private static int requestCount = 0;
-
+    //private int requestCount = 4;
+    @JestId
     private String requestID;
+
     private String requestStatus;
     private Address sourceAddress;
     private Address destinationAddress;
@@ -24,14 +27,18 @@ public class Request {
     private String riderID;
     private Date requestDate;
 
+    public Request() {
+
+    }
 
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
 
         // Auto increment requestCount each time the constructor is called
-        ++requestCount;
+        //++requestCount;
 
-        this.requestID = "request" + Integer.toString(requestCount);
+        //this.requestID = requestCount;
+        this.requestID = null;
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
@@ -40,6 +47,7 @@ public class Request {
         this.driverID = null;
         this.riderID = riderID;
         this.requestDate = new Date();
+        this.save();
     }
 
     /**
@@ -202,6 +210,12 @@ public class Request {
      */
     public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
+    }
+
+    private void save() {
+
+        RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
+        addRequestsTask.execute(this);
     }
 
 }
