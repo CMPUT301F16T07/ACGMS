@@ -30,18 +30,35 @@ public class RequestDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request_details);
 
+        //pass in a request (need to uncomment mock request in MainActivity to test this)
+        //Intent intent = getIntent();
+        //Request r = (Request) intent.getSerializableExtra("passedRequest");
+
+        //Mock request for testing
+        Address start = new Address("loc1",53.5,-113.1);
+        Address end = new Address("loc2", 53.0, -113.0);
+        Request r = new Request("Accepted",start, end, 500.00, 23.09, "rider124");
+
+        showDetails(r);
+
+    }
+
+    public void showDetails(Request request){
         TextView requestID = (TextView) findViewById(R.id.request_ID);
+        TextView status = (TextView) findViewById(R.id.status);
         TextView estPrice = (TextView) findViewById(R.id.est_price);
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView startLoc = (TextView) findViewById(R.id.start_loc);
         TextView endLoc = (TextView) findViewById(R.id.end_loc);
 
-        //pass in a request
-        Intent intent = getIntent();
-        Request request = (Request) intent.getSerializableExtra("habit");
-
-        //get and display request ID
+        // get and display request ID
         requestID.setText(request.getRequestID());
+        //get and display request status
+        status.setText(request.getRequestStatus());
+        if (request.getRequestStatus()== "Accepted"){
+            status.setTextColor(0xff008000);
+        }
+        else status.setTextColor(0xffff0000);
         //get and display estimated price
         estPrice.setText(Double.toString(request.getCost()));
         //get and display distance
@@ -83,7 +100,6 @@ public class RequestDetails extends AppCompatActivity {
         endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         endMarker.setSnippet("End");
         requestMap.getOverlays().add(endMarker);
-
     }
 
 

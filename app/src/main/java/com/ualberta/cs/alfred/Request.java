@@ -1,5 +1,8 @@
 package com.ualberta.cs.alfred;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +11,10 @@ import java.util.Date;
  * @author ookmm
  * @version 1.2
  */
-public class Request {
+public class Request implements Serializable{
+
+    //code from https://www.youtube.com/watch?v=Gi46yco8OJg
+    private static final long serialVersionUID = 1L;
 
     // Count for IDs
     // TODO: When elasticsearch is up and running, the count must from the MAX requestID

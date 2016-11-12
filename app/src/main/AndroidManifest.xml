@@ -37,6 +37,10 @@
             android:label="@string/title_activity_main_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".MockRequestDetails"
+            android:label="Mock Request Details"></activity>
+        <activity android:name=".RequestDetails"
+            android:label="Request Details"></activity>
 
     </application>
 
