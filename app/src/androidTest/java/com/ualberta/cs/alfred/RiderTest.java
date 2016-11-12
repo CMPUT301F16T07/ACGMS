@@ -19,14 +19,14 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void test() {
-        Rider rider = new Rider("Michael", "Cote", "mmcote", new Date(), "787398247",
-                "mmcote@ualberta.ca", "34902845854");
+        Rider rider = new Rider("Jimbo", "Clown", "jimbo", new Date(), "12345678",
+                "jimbo@ualberta.ca", "34903845854");
         assertTrue(true);
     }
 
     public void testGetRider() {
         UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
-        retrievedRider.execute("mmcote");
+        retrievedRider.execute("jimbo");
 
         try {
             Rider rider = retrievedRider.get();
@@ -34,7 +34,6 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
             System.out.println("FIRSTNAME: " + rider.getFirstName());
             System.out.println("++++++++++++++++++++++++");
             assert(true);
-            Rider jimbo = new Rider();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

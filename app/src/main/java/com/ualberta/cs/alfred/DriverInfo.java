@@ -37,7 +37,7 @@ public class DriverInfo {
     }
 
     private void save() {
-        UserElasticSearchController.AddDriverInfo addDriverInfo = new UserElasticSearchController.AddDriverInfo();
+        UserElasticSearchController.AddUser<DriverInfo> addDriverInfo = new UserElasticSearchController.AddUser<DriverInfo>();
         addDriverInfo.execute(this);
     }
 

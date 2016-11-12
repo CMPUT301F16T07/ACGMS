@@ -3,10 +3,16 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.util.List;
+import java.util.Map;
+
+import io.searchbox.client.JestResult;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -22,26 +28,31 @@ import io.searchbox.core.SearchResult;
  * @see Driver
  */
 public class UserElasticSearchController {
-    /**
-     * This class is used to run an AsyncTask in the background to add a rider to the
-     * elastic search server.
-     */
-    public static class AddRider extends AsyncTask<Rider, Void, Void> {
+
+    public static class AddUser<T> extends AsyncTask<T, Void, Void> {
         @Override
-        // one or more Riders given, can be an array of Riders without specifying an array
-        protected Void doInBackground(Rider... riders) {
+        // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array
+        protected Void doInBackground(T... objects) {
+            String esIndex = "alfred";
+            String esType;
+
             JestDroidClient client = new BuildClient().getClient();
 
-            for (Rider rider : riders) {
-                Index index = new Index.Builder(rider).index("riderlist").type("rider").build();
+            for (T object : objects) {
+                if (object instanceof Rider) {
+                    esType = "rider";
+                } else {
+                    esType = "driverinfo";
+                }
+                Index index = new Index.Builder(object).index(esIndex).type(esType).build();
 
                 try {
                     DocumentResult result = client.execute(index);
                     if (!result.isSucceeded()) {
-                        Log.i("Error", "Elastic search was not able to add the rider.");
+                        Log.i("Error", "Elastic search was not able to add the "+esType+".");
                     }
                 } catch (Exception e) {
-                    Log.i("Uh-Oh", "We failed to add a rider to elastic search!");
+                    Log.i("Uh-Oh", "We failed to add a "+esType+ "to elastic search!");
                     e.printStackTrace();
                 }
             }
@@ -70,14 +81,19 @@ public class UserElasticSearchController {
                     "}";
 
             Search search = new Search.Builder(query)
-                    .addIndex("riderlist")
+                    .addIndex("alfred")
                     .addType("rider")
                     .build();
 
             try {
                 SearchResult result = client.execute(search);
+                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
+                SearchResult.Hit hit = hits.get(0);
+                Map source = (Map)hit.source;
+                String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
                     rider = result.getSourceAsObject(Rider.class);
+                    rider.setUserID(id);
                 }
                 else {
                     Log.i("Error", "The search query failed to find the rider that matched.");
@@ -88,33 +104,6 @@ public class UserElasticSearchController {
             }
 
             return rider;
-        }
-    }
-
-    /**
-     * * This class is used to run an AsyncTask in the background to add driver info to the
-     * elastic search server.
-     */
-    public static class AddDriverInfo extends AsyncTask<DriverInfo, Void, Void> {
-        @Override
-        // one or more Riders given, can be an array of Riders without specifying an array
-        protected Void doInBackground(DriverInfo... driversInfo) {
-            JestDroidClient client = new BuildClient().getClient();
-
-            for (DriverInfo driverInfo : driversInfo) {
-                Index index = new Index.Builder(driverInfo).index("driverinfolist").type("driverinfo").build();
-
-                try {
-                    DocumentResult result = client.execute(index);
-                    if (!result.isSucceeded()) {
-                        Log.i("Error", "Elastic search was not able to add the driver info.");
-                    }
-                } catch (Exception e) {
-                    Log.i("Uh-Oh", "We failed to add a driver to elastic search!");
-                    e.printStackTrace();
-                }
-            }
-            return null;
         }
     }
 
@@ -139,7 +128,7 @@ public class UserElasticSearchController {
                     "}";
 
             Search search = new Search.Builder(query)
-                    .addIndex("driverinfolist")
+                    .addIndex("alfred")
                     .addType("driverinfo")
                     .build();
 
