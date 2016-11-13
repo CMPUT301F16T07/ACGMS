@@ -1,13 +1,18 @@
 package com.ualberta.cs.alfred;
 
 
+import java.io.Serializable;
+
 /**
  * Create the type Address.
  *
  * @author carlcastello on 07/11/16.
  * @version 1.1
  */
-public class Address {
+public class Address implements Serializable{
+
+    //code from https://www.youtube.com/watch?v=Gi46yco8OJg
+    private static final long serialVersionUID = 1L;
 
     private String location;
     private double latitude;

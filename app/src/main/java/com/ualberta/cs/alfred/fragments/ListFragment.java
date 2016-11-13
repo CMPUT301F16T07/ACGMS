@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.ualberta.cs.alfred.R;
 
@@ -35,11 +34,11 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list,container,false);
         Fragment fragment;
+        Bundle bundle = this.getArguments();
 
         fragment = new RequestedFragment().newInstance();
         replaceFragment(fragment);
 
-        Bundle bundle = this.getArguments();
         if (bundle != null) {
             int position = bundle.getInt("index",0);
             //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
@@ -72,6 +71,8 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Bundle bundle = this.getArguments();
+
         Fragment fragment = null;
         switch (v.getId()) {
             case R.id.button_pending:
