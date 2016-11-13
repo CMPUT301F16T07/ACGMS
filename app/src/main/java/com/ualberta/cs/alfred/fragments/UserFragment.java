@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Rider;
-import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserElasticSearchController;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 08/11/16.
@@ -21,6 +22,7 @@ import com.ualberta.cs.alfred.UserElasticSearchController;
 
 public class UserFragment extends Fragment {
 
+    Rider rider;
     private TextView textView;
     private String userName;
     private String fullName;
@@ -40,13 +42,24 @@ public class UserFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user,container,false);
+        View view = inflater.inflate(R.layout.fragment_user, container, false);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userName = preferences.getString("USERNAME", null);
 
-        //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
-        //Rider rider = getRider.execute(userName).get();
+        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
+
+        try {
+            rider = getRider.execute(userName).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        fullName = rider.getFirstName() + " " + rider.getLastName();
+        emailAddress = rider.getEmail();
+        phoneNumber= rider.getPhoneNumber();
 
         textView = (TextView) view.findViewById(R.id.textView2);
         textView.setText(userName);
