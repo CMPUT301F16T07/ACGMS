@@ -94,8 +94,8 @@ public class PendingFragment extends Fragment {
         ArrayList<Request> pendingList = null;
 
         try {
-//            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-            getRequestTask.execute("riderID", "rider011");
+            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
+//            getRequestTask.execute("riderID", "rider011");
 
             pendingList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Pending");
         } catch (InterruptedException e) {
