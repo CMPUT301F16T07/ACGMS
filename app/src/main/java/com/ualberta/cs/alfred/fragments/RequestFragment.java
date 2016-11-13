@@ -67,7 +67,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.request_done_button:
                 // Initialize request status
-                Status = "Pending";
+                Status = "Requested";
                 // Get user id from the user who requested a ride
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 userName = preferences.getString("USERNAME", null);

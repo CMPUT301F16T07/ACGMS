@@ -18,6 +18,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,7 +54,11 @@ public class RequestDetails extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getString("MODE", null).contentEquals("Rider Mode") &&
                 (r.getRequestStatus().contentEquals("Pending") || r.getRequestStatus().contentEquals("Accepted"))) {
-            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
+            ArrayList<String> fakeDrivers = new ArrayList<>();
+            fakeDrivers.add("BILL");
+            fakeDrivers.add("BOB");
+//            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
+            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, fakeDrivers);
             biddingDriversListView.setAdapter(biddingDriversAdapter);
 
             // This will show all the possible drivers but we still need to be able to select a driver, and be able to view
