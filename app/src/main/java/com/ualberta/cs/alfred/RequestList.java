@@ -19,6 +19,10 @@ public class RequestList {
      */
     protected List<Request> requestList;
 
+    public ArrayList<Request> returnArrayList() {
+        return (ArrayList<Request>) requestList;
+    };
+
     /**
      * Instantiates a new Request list.
      */
@@ -96,6 +100,25 @@ public class RequestList {
         return specificRequestList;
     }
 
+    public RequestList removeDriver(String userName) {
+        for (Request request : requestList) {
+            if (request.getBiddingDrivers().contains(userName)) {
+                requestList.remove(request);
+            }
+        }
+        return new RequestList((ArrayList<Request>) requestList);
+    }
+
+    public RequestList getWithDriver(String userName) {
+        for (Request request : requestList) {
+            if (!request.getBiddingDrivers().contains(userName)) {
+                requestList.remove(request);
+            }
+        }
+        return new RequestList((ArrayList<Request>) requestList);
+    }
+
+
     /**
      * Has request boolean.
      *
@@ -113,6 +136,10 @@ public class RequestList {
      */
     public void addRequest(Request request) {
         requestList.add(request);
+    }
+
+    public void addMultipleRequest(List<Request> requests) {
+        requestList.addAll(requests);
     }
 
 
