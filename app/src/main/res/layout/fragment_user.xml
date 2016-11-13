@@ -13,36 +13,21 @@
         android:layout_height="150dp"
         app:srcCompat="@drawable/ic_person_black_36dp"
         android:layout_alignParentStart="true"
-        android:id="@+id/imageView2"/>
+        android:id="@+id/user_image"/>
 
     <TextView
         android:text="@string/user_username_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imageView2"
+        android:layout_toEndOf="@+id/user_image"
         android:layout_marginTop="35dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView6"
+        android:id="@+id/textView1"
         android:textSize="@dimen/user_text"
         android:textColor="#000000" />
-
-    <TextView
-        android:text="@string/user_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="1dp"
-        android:paddingLeft="5dp"
-        android:id="@+id/textView3"
-        android:textSize="@dimen/user_dynamic_text"
-        android:textColor="#000000"
-        android:layout_below="@+id/textView6"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/imageView2" />
 
     <TextView
         android:text="@string/user_name_text"
@@ -51,12 +36,12 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView7"
+        android:id="@+id/textView3"
         android:textSize="@dimen/user_text"
         android:textColor="#000000"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/imageView2" />
+        android:layout_toEndOf="@+id/user_image" />
 
     <TextView
         android:text="@string/user_name"
@@ -66,20 +51,20 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="1dp"
         android:paddingLeft="5dp"
-        android:id="@+id/textView8"
+        android:id="@+id/textView4"
         android:textSize="@dimen/user_dynamic_text"
         android:textColor="#000000"
-        android:layout_below="@+id/textView7"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/imageView2" />
+        android:layout_toEndOf="@+id/user_image" />
 
     <TextView
         android:text="@string/user_email_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView2"
+        android:layout_below="@+id/user_image"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView10"
+        android:id="@+id/textView5"
         android:textSize="@dimen/user_text"
         android:textColor="#000000"
         android:layout_marginTop="20dp"
@@ -91,11 +76,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView9"
+        android:id="@+id/textView6"
         android:textSize="@dimen/user_dynamic_text"
         android:paddingLeft="5dp"
         android:textColor="#000000"
-        android:layout_below="@+id/textView10"
+        android:layout_below="@+id/textView5"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -103,10 +88,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView11"
+        android:id="@+id/textView7"
         android:textSize="@dimen/user_text"
         android:textColor="#000000"
-        android:layout_below="@+id/textView9"
+        android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -114,10 +99,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:id="@+id/textView12"
+        android:id="@+id/textView8"
         android:textSize="@dimen/user_dynamic_text"
         android:paddingLeft="5dp"
         android:textColor="#000000"
-        android:layout_below="@+id/textView11"
+        android:layout_below="@+id/textView7"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/user_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingLeft="5dp"
+        android:id="@+id/textView2"
+        android:textSize="@dimen/user_dynamic_text"
+        android:textColor="#000000"
+        android:layout_below="@+id/textView1"
+        android:layout_alignStart="@+id/textView1" />
 </RelativeLayout>

@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     RoadManager roadManager;
     ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
+   private FragmentTransaction transaction;
 
     public HomeFragment() {
     }
@@ -134,30 +135,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.button_pending:
                 fragment = new ListFragment().newInstance(1);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_requested:
                 fragment = new ListFragment().newInstance(0);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_accepted:
                 fragment = new ListFragment().newInstance(2);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
             case R.id.request_button:
                 fragment = new RequestFragment().newInstance();
-                replaceFragment(fragment);
+                replaceFragmentwithStack(fragment);
                 break;
         }
 
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+    private void replaceFragmentwithoutStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.menu_fragment_container, fragment);
+        transaction.commit();
+    }
+
+    private void replaceFragmentwithStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
         transaction.replace(R.id.menu_fragment_container, fragment);
         transaction.commit();
     }
