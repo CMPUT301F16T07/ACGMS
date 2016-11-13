@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,15 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.BuildConfig;
+import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
+
+import java.util.ArrayList;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
@@ -26,11 +33,17 @@ import org.osmdroid.views.overlay.Marker;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     MapView map;
+    GeoPoint defaultLocation;
+
+
     GeoPoint startPoint;
     GeoPoint destinationPoint;
     Marker startMarker;
     Marker endMarker;
     IMapController mapController;
+    RoadManager roadManager;
+    ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+
 
     public HomeFragment() {
     }
@@ -46,6 +59,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
+
+
+        // disable the StrictMode policy in onCreate. Needed for routing
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
@@ -65,12 +85,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+
+        defaultLocation = new GeoPoint(53.5444,-113.4909);
         startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
         destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
 
         mapController = map.getController();
-        mapController.setZoom(16);
-        mapController.setCenter(startPoint);
+        mapController.setZoom(11);
+        mapController.setCenter(defaultLocation);
 
         startMarker = new Marker(map);
         startMarker.setPosition(startPoint);
@@ -83,6 +105,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         endMarker.setSnippet("End");
         map.getOverlays().add(endMarker);
+
+        RoadManager roadManager = new OSRMRoadManager(getActivity());
+        //Set-up your start and end points:
+        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+        waypoints.add(startPoint);
+        waypoints.add(destinationPoint);
+        //retreive the road between those points
+        Road road = roadManager.getRoad(waypoints);
+        //build a Polyline with the route shape:
+        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+        //Add this Polyline to the overlays of your map
+        map.getOverlays().add(roadOverlay);
+
 
         //save & display changes
         map.invalidate();
