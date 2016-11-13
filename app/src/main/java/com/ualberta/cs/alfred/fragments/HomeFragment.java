@@ -65,11 +65,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-        startPoint = new GeoPoint(48.13, -1.63);
-        destinationPoint = new GeoPoint(48.4, -1.9);
+        startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
+        destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
 
         mapController = map.getController();
-        mapController.setZoom(9);
+        mapController.setZoom(16);
         mapController.setCenter(startPoint);
 
         startMarker = new Marker(map);
