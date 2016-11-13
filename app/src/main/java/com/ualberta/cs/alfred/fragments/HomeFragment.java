@@ -69,9 +69,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
+        pendingButton.setBackgroundColor(0xfffffd00);
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
+        requestedButton.setBackgroundColor(0xfff08080);
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
-
+        acceptedButton.setBackgroundColor(0xff90ee90);
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
         pendingButton.setOnClickListener(this);

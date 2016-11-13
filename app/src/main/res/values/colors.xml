@@ -6,4 +6,7 @@
     <color name="colorGray">#444440</color>
     <color name="colorHighlight">#d6d6c2</color>
     <color name="colorGreen">#40ff00</color>
+    <color name="requested">#fff08080</color>
+    <color name="pending">#fffffd00</color>
+    <color name="accepted">#ff90ee90</color>
 </resources>
