@@ -21,6 +21,7 @@ import com.ualberta.cs.alfred.RequestDetails;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -30,8 +31,8 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class RequestedFragment extends Fragment {
-
-
+    private ArrayAdapter<Request> requestAdapter;
+    private ListView requestedListView;
     public RequestedFragment() {
     }
 
@@ -42,6 +43,20 @@ public class RequestedFragment extends Fragment {
         return requestedFragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestAdapter.clear();
+        requestAdapter.addAll(getRequestList());
+        requestAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("In onPause");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,28 +64,10 @@ public class RequestedFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
-        final ListView requestedListView = (ListView) view.findViewById(R.id.requestedListView);
+        requestedListView = (ListView) view.findViewById(R.id.requestedListView);
+        ArrayList<Request> openRequestList = getRequestList();
 
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
-        ArrayList<Request> openRequestList = null;
-
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-
-        try {
-            getRequestTask.execute("riderID", "rider002");
-            openRequestList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    /*    ArrayList<String> openRequests = new ArrayList<String>();
-        String temp;
-        for (Request request : openRequestList) {
-            openRequests.add(request.getRequestID());
-        }*/
-
-        ArrayAdapter<Request> requestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, openRequestList);
+        requestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, openRequestList);
         requestedListView.setAdapter(requestAdapter);
 
         requestedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,8 +80,25 @@ public class RequestedFragment extends Fragment {
             }
         });
 
-
         return view;
+    }
+
+
+    private ArrayList<Request> getRequestList() {
+        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        ArrayList<Request> openRequestList = null;
+
+//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        try {
+            getRequestTask.execute("riderID", "rider013");
+            openRequestList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return openRequestList;
     }
 
 }

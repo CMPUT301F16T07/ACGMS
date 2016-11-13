@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.Double2;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -11,6 +13,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Shelley on 2016-11-11.
@@ -25,19 +29,38 @@ public class RequestDetails extends AppCompatActivity {
     private Marker endMarker;
     private IMapController requestMapController;
 
+    private Button cancelButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request_details);
 
+        cancelButton = (Button) findViewById(R.id.cancel_request_button);
+
         //pass in a request (need to uncomment mock request in MainActivity to test this)
         Intent intent = getIntent();
-        Request r = (Request) intent.getSerializableExtra("passedRequest");
+        final Request r = (Request) intent.getSerializableExtra("passedRequest");
 
         //Mock request for testing
         /*Address start = new Address("loc1",53.5,-113.1);
         Address end = new Address("loc2", 53.0, -113.0);
         Request r = new Request("Accepted",start, end, 500.00, 23.09, "rider124");*/
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestElasticSearchController.DeleteRequestTask deleteRequestTask =
+                        new RequestElasticSearchController.DeleteRequestTask();
+                deleteRequestTask.execute(r.getRequestID());
+                try {
+                    TimeUnit.MILLISECONDS.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                finish();
+            }
+        });
 
         showDetails(r);
 
@@ -104,7 +127,4 @@ public class RequestDetails extends AppCompatActivity {
         endMarker.setSnippet("End");
         requestMap.getOverlays().add(endMarker);
     }
-
-
-
 }
