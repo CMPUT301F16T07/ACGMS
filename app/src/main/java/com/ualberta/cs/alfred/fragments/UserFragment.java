@@ -47,8 +47,9 @@ public class UserFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userName = preferences.getString("USERNAME", null);
 
-        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
 
+        //retrieving rider's informatino from elasticsearch
+        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
         try {
             rider = getRider.execute(userName).get();
         } catch (InterruptedException e) {
@@ -61,6 +62,8 @@ public class UserFragment extends Fragment {
         emailAddress = rider.getEmail();
         phoneNumber= rider.getPhoneNumber();
 
+
+        //setting the textviews to what we want to show
         textView = (TextView) view.findViewById(R.id.textView2);
         textView.setText(userName);
 
