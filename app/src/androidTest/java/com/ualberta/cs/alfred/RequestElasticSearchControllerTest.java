@@ -48,6 +48,17 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
                 req2RiderID);
         assert(true);
 
+        // Create request #3
+        String req3Status = "Pending";
+        Address req3SrcAddr = new Address("Airport", 51.56777, 30.34555);
+        Address req3DestAddr = new Address("South Campus", 51.56500, 30.56888);;
+        double req3Cost = 30.30;
+        double req3Distance = 21.5;
+        String req3DriverID = "driver001";
+
+        Request req3 = new Request(req3Status, req3SrcAddr, req3DestAddr, req3Distance, req3Cost,
+                req3DriverID);
+        assert(true);
     }
 
     /**
