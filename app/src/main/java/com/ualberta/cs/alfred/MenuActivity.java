@@ -21,11 +21,12 @@ import org.osmdroid.views.MapView;
 public class MenuActivity extends AppCompatActivity {
     public static BottomBar bottomBar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        Bundle extras = getIntent().getExtras();
 
         bottomBar = BottomBar.attach(this, savedInstanceState);
 

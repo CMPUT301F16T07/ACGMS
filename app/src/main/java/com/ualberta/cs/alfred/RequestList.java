@@ -27,6 +27,12 @@ public class RequestList {
     }
 
     /**
+     * Instantiates a new Request list (Assignment Operator)
+     */
+    public RequestList(ArrayList<Request> requestList) {
+        this.requestList = requestList;
+    }
+    /**
      * Gets request list.
      *
      * @return the request list
