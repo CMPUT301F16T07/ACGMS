@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ualberta.cs.alfred.Address;
+import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
@@ -33,6 +36,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
     private Double rideDistance;
 
     private RequestList requestList;
+
 
     public RequestFragment() {
     }
@@ -75,15 +79,20 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 // Get the values on the edit text view and use them to create and address instance
                 String start = startPoint.getText().toString();
                 String end = endPoint.getText().toString();
-                String[] startCoor = start.split(",");
-                String[] endCoor = end.split(",");
-                // Code for Geolocation
-                Double x1 = Double.parseDouble(startCoor[0]);
-                Double y1 = Double.parseDouble(startCoor[1]);
-                Double x2 = Double.parseDouble(endCoor[0]);
-                Double y2 = Double.parseDouble(endCoor[1]);
-                startAddress = new Address("",x1,y1);
-                endAddress = new Address("",x2,y2);
+                try {
+                    String[] startCoor = start.split(",");
+                    String[] endCoor = end.split(",");
+                    // Code for Geolocation
+                    Double x1 = Double.parseDouble(startCoor[0]);
+                    Double y1 = Double.parseDouble(startCoor[1]);
+                    Double x2 = Double.parseDouble(endCoor[0]);
+                    Double y2 = Double.parseDouble(endCoor[1]);
+                    startAddress = new Address("", x1, y1);
+                    endAddress = new Address("", x2, y2);
+                } catch (NumberFormatException exception) {
+                    exception.printStackTrace();
+                }
+
 
 //                public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
 //                double distance, double cost, String riderID)
@@ -93,6 +102,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 // Connect this to elastic search.
                 RequestElasticSearchController.AddRequestTask requestTask = new RequestElasticSearchController.AddRequestTask();
                 requestTask.execute(request);
+
+                // Notify save
+                Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+
+                // go to list
+                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+
 
                 break;
             //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
