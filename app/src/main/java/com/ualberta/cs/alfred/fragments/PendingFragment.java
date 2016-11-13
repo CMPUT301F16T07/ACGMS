@@ -58,11 +58,7 @@ public class PendingFragment extends Fragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-    /*    ArrayList<String> openRequests = new ArrayList<String>();
-        String temp;
-        for (Request request : openRequestList) {
-            openRequests.add(request.getRequestID());
-        }*/
+
 
         ArrayAdapter<Request> requestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, openPendingList);
         pendingListView.setAdapter(requestAdapter);
