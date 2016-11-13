@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.concurrent.ExecutionException;
 public class RequestedFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
     private ListView requestedListView;
+    private SharedPreferences preferences;
     public RequestedFragment() {
     }
 
@@ -47,14 +49,12 @@ public class RequestedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         requestAdapter.clear();
-        requestAdapter.addAll(getRequestList());
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            requestAdapter.addAll(getDriverRequestedList());
+        } else {
+            requestAdapter.addAll(getRiderRequestedList());
+        }
         requestAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        System.out.println("In onPause");
     }
 
     @Nullable
@@ -62,13 +62,20 @@ public class RequestedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_requested,container,false);
 
-        Bundle bundle = this.getArguments();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        ArrayList<Request> requestedList;
+
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            requestedList = getDriverRequestedList();
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+        } else {
+            requestedList = getRiderRequestedList();
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+        }
 
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
-        ArrayList<Request> openRequestList = getRequestList();
-
-        requestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, openRequestList);
         requestedListView.setAdapter(requestAdapter);
+
 
         requestedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,22 +90,39 @@ public class RequestedFragment extends Fragment {
         return view;
     }
 
-
-    private ArrayList<Request> getRequestList() {
+    private ArrayList<Request> getRiderRequestedList() {
         RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
-        ArrayList<Request> openRequestList = null;
-
-//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        ArrayList<Request> requestedList = null;
 
         try {
-            getRequestTask.execute("riderID", "rider013");
-            openRequestList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
+            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
+            requestedList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Requested");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return openRequestList;
+        return requestedList;
+    }
+
+    private ArrayList<Request> getDriverRequestedList() {
+        /* The request that should be retrieved are all requests that are currently with a requested status and those that
+        are pending that do not include the driver on the bidlist of the request.
+         */
+        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestList requestedList = null;
+
+        try {
+            getRequestTask.execute("requestStatus", "Pending");
+            requestedList = new RequestList(getRequestTask.get()).removeDriver(preferences.getString("USERNAME", null));
+            getRequestTask.execute("requestStatus", "Requested");
+            requestedList.addMultipleRequest(getRequestTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return requestedList.returnArrayList();
     }
 
 }

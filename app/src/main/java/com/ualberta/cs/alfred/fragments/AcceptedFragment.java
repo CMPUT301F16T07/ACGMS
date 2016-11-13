@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +28,10 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class AcceptedFragment extends Fragment {
+    private ArrayAdapter<Request> requestAdapter;
+    private ListView pendingListView;
+    private SharedPreferences preferences;
+
     public AcceptedFragment() {
     }
 
@@ -37,34 +42,38 @@ public class AcceptedFragment extends Fragment {
         return acceptedFragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestAdapter.clear();
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            requestAdapter.addAll(getDriverAcceptedList());
+        } else {
+            requestAdapter.addAll(getRiderAcceptedList());
+        }
+        requestAdapter.notifyDataSetChanged();
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accepted,container,false);
-        Bundle bundle = this.getArguments();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         final ListView acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
 
+
         RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
-        ArrayList<Request> openAcceptedList = null;
+        ArrayList<Request> acceptedList = null;
 
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-
-        try {
-            getRequestTask.execute("riderID", "rider002");
-            openAcceptedList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            acceptedList = getDriverAcceptedList();
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedList);
+        } else {
+            acceptedList = getRiderAcceptedList();
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedList);
         }
-    /*    ArrayList<String> openRequests = new ArrayList<String>();
-        String temp;
-        for (Request request : openRequestList) {
-            openRequests.add(request.getRequestID());
-        }*/
-
-        ArrayAdapter<Request> requestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, openAcceptedList);
         acceptedListView.setAdapter(requestAdapter);
 
         acceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,8 +86,39 @@ public class AcceptedFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
+
+    private ArrayList<Request> getRiderAcceptedList() {
+        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        ArrayList<Request> acceptedList = null;
+
+        try {
+            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
+            acceptedList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return acceptedList;
+    }
+
+    private ArrayList<Request> getDriverAcceptedList() {
+        /* The request that should be selected is the requests that are accepted with only the driver left in the bidList
+         */
+        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestList acceptedList = null;
+
+        try {
+            getRequestTask.execute("requestStatus", "Accepted");
+            acceptedList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return acceptedList.returnArrayList();
+    }
 }
