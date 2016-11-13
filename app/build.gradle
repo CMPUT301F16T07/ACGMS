@@ -32,4 +32,8 @@ dependencies {
     compile 'com.roughike:bottom-bar:1.2.1'
     testCompile 'junit:junit:4.12'
     compile 'org.osmdroid:osmdroid-android:5.5:release@aar'
+
+
+    compile 'com.github.MKergall:osmbonuspack:6.0'
+
 }
