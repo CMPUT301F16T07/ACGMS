@@ -1,11 +1,15 @@
 package com.ualberta.cs.alfred;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.renderscript.Double2;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.osmdroid.api.IMapController;
@@ -14,6 +18,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,6 +35,8 @@ public class RequestDetails extends AppCompatActivity {
     private IMapController requestMapController;
 
     private Button cancelButton;
+    private ListView biddingDriversListView;
+    private ArrayAdapter<String> biddingDriversAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +44,21 @@ public class RequestDetails extends AppCompatActivity {
         setContentView(R.layout.request_details);
 
         cancelButton = (Button) findViewById(R.id.cancel_request_button);
+        biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
 
         //pass in a request (need to uncomment mock request in MainActivity to test this)
         Intent intent = getIntent();
         final Request r = (Request) intent.getSerializableExtra("passedRequest");
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getString("MODE", null).contentEquals("Rider Mode") &&
+                (r.getRequestStatus().contentEquals("Pending") || r.getRequestStatus().contentEquals("Accepted"))) {
+            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
+            biddingDriversListView.setAdapter(biddingDriversAdapter);
+
+            // This will show all the possible drivers but we still need to be able to select a driver, and be able to view
+            // his profile
+        }
 
         //Mock request for testing
         /*Address start = new Address("loc1",53.5,-113.1);
@@ -61,6 +79,7 @@ public class RequestDetails extends AppCompatActivity {
                 finish();
             }
         });
+
 
         showDetails(r);
 

@@ -1,19 +1,31 @@
 package com.ualberta.cs.alfred.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.Rider;
+import com.ualberta.cs.alfred.User;
+import com.ualberta.cs.alfred.UserElasticSearchController;
 
 /**
  * Created by carlcastello on 08/11/16.
  */
 
 public class UserFragment extends Fragment {
+
+    private TextView textView;
+    private String userName;
+    private String fullName;
+    private String emailAddress;
+    private String phoneNumber;
 
     public UserFragment() {
     }
@@ -29,6 +41,26 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user,container,false);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userName = preferences.getString("USERNAME", null);
+
+        //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
+        //Rider rider = getRider.execute(userName).get();
+
+        textView = (TextView) view.findViewById(R.id.textView2);
+        textView.setText(userName);
+
+        textView = (TextView) view.findViewById(R.id.textView4);
+        textView.setText(fullName);
+
+        textView = (TextView) view.findViewById(R.id.textView6);
+        textView.setText(emailAddress);
+
+        textView = (TextView) view.findViewById(R.id.textView8);
+        textView.setText(phoneNumber);
+
+
         return view;
     }
 }

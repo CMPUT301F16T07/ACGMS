@@ -2,6 +2,8 @@ package com.ualberta.cs.alfred;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
@@ -42,9 +45,11 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        this.userName = preferences.getString("USERNAME", null);
+        this.Mode = preferences.getString("MODE", null);
+
         Bundle extras = getIntent().getExtras();
-        this.userName = extras.getString("USERNAME");
-        this.Mode = extras.getString("MODE");
         this.isRider = extras.getString("ISRIDER");
         submitButton = (Button) findViewById(R.id.submitButton);
 
@@ -127,8 +132,11 @@ public class SignUpActivity extends AppCompatActivity {
                             licenseNumberEditText.getText().toString(), plateNumberEditText.getText().toString());
                 }
                 Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
-                intent.putExtra("USERNAME", userNameEditText.getText().toString());
-                intent.putExtra("MODE", Mode);
+                SharedPreferences preferences =
+                        PreferenceManager.getDefaultSharedPreferences(SignUpActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("USERNAME", userNameEditText.getText().toString());
+                editor.commit();
                 startActivity(intent);
                 finish();
             }

@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -28,12 +29,14 @@ public class Request implements Serializable{
     private double cost;
     private double distance;
     private String driverID;
+    private ArrayList<String> biddingDrivers;
     private String riderID;
     private Date requestDate;
 
     public Request() {
 
     }
+
 
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
@@ -51,6 +54,7 @@ public class Request implements Serializable{
         this.driverID = null;
         this.riderID = riderID;
         this.requestDate = new Date();
+        this.biddingDrivers = new ArrayList<>();
         this.save();
     }
 
@@ -226,5 +230,9 @@ public class Request implements Serializable{
     public String toString(){
         return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
                 this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
+    }
+
+    public ArrayList<String> getBiddingDrivers() {
+        return biddingDrivers;
     }
 }
