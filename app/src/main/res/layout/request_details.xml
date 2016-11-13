@@ -120,17 +120,21 @@
         <!--MAP-->
         <org.osmdroid.views.MapView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:id="@+id/request_map"
             android:layout_marginBottom="2dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <Button
+            android:layout_centerVertical="false"
+            android:layout_centerHorizontal="false" />
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OK"
-            android:id="@+id/details_ok"
-            android:layout_gravity="center_horizontal" />
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:id="@+id/cancel_request_button"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
