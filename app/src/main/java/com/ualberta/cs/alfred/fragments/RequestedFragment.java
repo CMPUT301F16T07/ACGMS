@@ -109,14 +109,15 @@ public class RequestedFragment extends Fragment {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
         are pending that do not include the driver on the bidlist of the request.
          */
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestElasticSearchController.GetRequestTask getPending = new RequestElasticSearchController.GetRequestTask();
+        RequestElasticSearchController.GetRequestTask getRequested = new RequestElasticSearchController.GetRequestTask();
         RequestList requestedList = null;
 
         try {
-            getRequestTask.execute("requestStatus", "Pending");
-            requestedList = new RequestList(getRequestTask.get()).removeDriver(preferences.getString("USERNAME", null));
-            getRequestTask.execute("requestStatus", "Requested");
-            requestedList.addMultipleRequest(getRequestTask.get());
+            getPending.execute("requestStatus", "Pending");
+            requestedList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
+            getRequested.execute("requestStatus", "Requested");
+            requestedList.addMultipleRequest(getRequested.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
