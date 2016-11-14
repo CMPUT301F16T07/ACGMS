@@ -6,17 +6,12 @@ import android.os.Bundle;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.BottomBarFragment;
-import com.roughike.bottombar.OnTabSelectedListener;
 
 import com.ualberta.cs.alfred.fragments.HomeFragment;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
+import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 public class MenuActivity extends AppCompatActivity {
     public static BottomBar bottomBar;

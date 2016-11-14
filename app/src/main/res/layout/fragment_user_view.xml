@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relative_layout"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="30dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_person_black_36dp"
+            android:id="@+id/user_image2"
+            android:layout_weight="1"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:text="@string/user_username_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_image2"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview1"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_username"
+            android:id="@+id/textview2"
+            android:layout_below="@+id/textview1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <TextView
+            android:text="@string/user_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview3"
+            android:layout_below="@+id/textview2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_name"
+            android:layout_below="@+id/textview3"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview4"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <TextView
+            android:text="@string/user_email_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview4"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview5"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_email"
+            android:layout_below="@+id/textview5"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview6"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <TextView
+            android:text="@string/user_phone_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview6"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview7"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_phone"
+            android:layout_below="@+id/textview7"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textview8"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+    </RelativeLayout>
+
+    <Button
+        android:text="Edit User"
+        android:layout_width="match_parent"
+        android:id="@+id/edit_user_button"
+        android:textSize="@dimen/button_text"
+        android:layout_height="73dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
