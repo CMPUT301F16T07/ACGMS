@@ -2,7 +2,6 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;

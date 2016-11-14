@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 import io.searchbox.annotations.JestId;
 
 /**
- * Creates the Request type
+ * Holds information related to requests
  *
  * @author ookmm
  * @version 1.2
