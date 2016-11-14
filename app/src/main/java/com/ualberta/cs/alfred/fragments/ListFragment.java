@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.ualberta.cs.alfred.R;
 
@@ -17,6 +16,10 @@ import com.ualberta.cs.alfred.R;
  */
 
 public class ListFragment extends Fragment implements View.OnClickListener {
+
+    private FragmentTransaction transaction;
+
+
     public ListFragment() {
     }
 
@@ -35,33 +38,38 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list,container,false);
         Fragment fragment;
+        Bundle bundle = this.getArguments();
 
         fragment = new RequestedFragment().newInstance();
-        replaceFragment(fragment);
+        replaceFragmentwithoutStack(fragment);
 
-        Bundle bundle = this.getArguments();
         if (bundle != null) {
             int position = bundle.getInt("index",0);
             //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
             switch (position) {
                 case 0:
                     fragment = new RequestedFragment().newInstance();
-                    replaceFragment(fragment);
+                    replaceFragmentwithoutStack(fragment);
                     break;
                 case 1:
                     fragment = new PendingFragment().newInstance();
-                    replaceFragment(fragment);
+                    replaceFragmentwithoutStack(fragment);
                     break;
                 case 2:
                     fragment = new AcceptedFragment().newInstance();
-                    replaceFragment(fragment);
+                    replaceFragmentwithoutStack(fragment);
                     break;
             }
         }
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
+        pendingButton.setText("PENDING\n"+Integer.toString(HomeFragment.pendingCount));
+
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
+        requestedButton.setText("PENDING\n"+Integer.toString(HomeFragment.requestedCount));
+
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
+        acceptedButton.setText("PENDING\n"+Integer.toString(HomeFragment.acceptedCount));
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);
@@ -72,27 +80,29 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Bundle bundle = this.getArguments();
+
         Fragment fragment = null;
         switch (v.getId()) {
             case R.id.button_pending:
                 fragment = new PendingFragment().newInstance();
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_requested:
                 fragment = new RequestedFragment().newInstance();
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_accepted:
                 fragment = new AcceptedFragment().newInstance();
-                replaceFragment(fragment);
+                replaceFragmentwithoutStack(fragment);
                 break;
         }
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+    private void replaceFragmentwithoutStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.list_container, fragment);
         transaction.commit();
     }

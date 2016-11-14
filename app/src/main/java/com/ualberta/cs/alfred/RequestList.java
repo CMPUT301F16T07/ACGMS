@@ -19,6 +19,10 @@ public class RequestList {
      */
     protected List<Request> requestList;
 
+    public ArrayList<Request> returnArrayList() {
+        return (ArrayList<Request>) requestList;
+    };
+
     /**
      * Instantiates a new Request list.
      */
@@ -26,6 +30,12 @@ public class RequestList {
         this.requestList = new ArrayList<Request>();
     }
 
+    /**
+     * Instantiates a new Request list (Assignment Operator)
+     */
+    public RequestList(ArrayList<Request> requestList) {
+        this.requestList = requestList;
+    }
     /**
      * Gets request list.
      *
@@ -90,6 +100,39 @@ public class RequestList {
         return specificRequestList;
     }
 
+    public RequestList removeDriver(String userName) {
+        ArrayList<Request> tempRequestList = new ArrayList<>();
+        for (Request request : requestList) {
+            if (request.getDriverIDList() != null) {
+                if (!request.getDriverIDList().contains(userName)) {
+                    tempRequestList.add(request);
+                }
+            }
+        }
+        if (requestList != null) {
+            return new RequestList(tempRequestList);
+        } else {
+            return new RequestList();
+        }
+    }
+
+    public RequestList getWithDriver(String userName) {
+        ArrayList<Request> tempRequestList = new ArrayList<>();
+        for (Request request : requestList) {
+            if (request.getDriverIDList() != null) {
+                if (request.getDriverIDList().contains(userName)) {
+                    tempRequestList.add(request);
+                }
+            }
+        }
+        if (requestList != null) {
+            return new RequestList(tempRequestList);
+        } else {
+            return new RequestList();
+        }
+    }
+
+
     /**
      * Has request boolean.
      *
@@ -107,6 +150,10 @@ public class RequestList {
      */
     public void addRequest(Request request) {
         requestList.add(request);
+    }
+
+    public void addMultipleRequest(List<Request> requests) {
+        requestList.addAll(requests);
     }
 
 

@@ -1,9 +1,12 @@
 package com.ualberta.cs.alfred;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             if (selected == -1) {
                                 selected = findViewById(R.id.mode2_button).getId();
                             }
+
                             final RadioButton radioButtonSelected = (RadioButton) findViewById(selected);
                             final String mode = radioButtonSelected.getText().toString();
 
@@ -102,10 +106,21 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+                            // Access the default SharedPreferences
+                            SharedPreferences preferences =
+                                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            // The SharedPreferences editor - must use commit() to submit changes
+                            SharedPreferences.Editor editor = preferences.edit();
+
+                            // Edit the saved preferences
+                            editor.putString("USERNAME", userName.getText().toString());
+                            editor.putString("MODE", mode);
+                            editor.commit();
+
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                                intent.putExtra("MODE", mode);
+//                                intent.putExtra("MODE", mode);
                                 startActivity(intent);
                                 finish();
                             } else if (userExist == Boolean.FALSE) {
@@ -127,14 +142,14 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                builder.setCancelable(Boolean.FALSE);
+
                                 final Boolean finalIsRider = isRider;
+
+                                builder.setCancelable(Boolean.FALSE);
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                                        intent.putExtra("USERNAME", userName.getText().toString());
-                                        intent.putExtra("MODE", mode);
                                         intent.putExtra("ISRIDER", finalIsRider.toString());
                                         startActivity(intent);
                                         finish();
@@ -147,8 +162,10 @@ public class MainActivity extends AppCompatActivity {
                                         userName.setText("");
                                     }
                                 });
+
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
+
                             } else {
                                 // This scenerio covers the event where the device is connected to the internet but had an error occur with the ES server
                                 Toast.makeText(MainActivity.this, "Sorry there was a connection error with the server, please try again.", Toast.LENGTH_LONG).show();

@@ -12,6 +12,7 @@
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
+            android:background="@color/requested"
             android:id="@+id/button_requested" />
 
         <Button
@@ -19,6 +20,7 @@
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
+            android:background="@color/pending"
             android:id="@+id/button_pending" />
 
         <Button
@@ -26,6 +28,7 @@
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
+            android:background="@color/accepted"
             android:id="@+id/button_accepted" />
     </LinearLayout>
     <FrameLayout

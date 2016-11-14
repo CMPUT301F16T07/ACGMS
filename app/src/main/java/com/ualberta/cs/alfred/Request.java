@@ -1,5 +1,7 @@
 package com.ualberta.cs.alfred;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -12,7 +14,10 @@ import io.searchbox.annotations.JestId;
  * @author ookmm
  * @version 1.2
  */
-public class Request {
+public class Request implements Serializable{
+
+    //code from https://www.youtube.com/watch?v=Gi46yco8OJg
+    private static final long serialVersionUID = 1L;
 
     // Count for IDs
     //private int requestCount = 4;
@@ -28,10 +33,12 @@ public class Request {
     private ArrayList<String> driverIDList;
     private String riderID;
     private Date requestDate;
+    private DecimalFormat df = new DecimalFormat("0.00");
 
     public Request() {
 
     }
+
 
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
@@ -40,6 +47,7 @@ public class Request {
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
+
         this.distance = distance;
         this.cost = cost;
         this.driverID = null;
@@ -225,4 +233,11 @@ public class Request {
         addRequestsTask.execute(this);
     }
 
+    @Override
+    public String toString(){
+        //return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
+        //        this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
+        return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
+                this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
+    }
 }
