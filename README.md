@@ -19,7 +19,7 @@ Github repository: https://github.com/searchbox-io/Jest
 
 <br><br>
 ##LICENSE
-Copyright (c) 2016 GroupHurryCane (aka CMPUT301 Fall 2016 Team 7)
+Copyright (c) 2016 CMPUT301 Fall 2016 Team 07 (ACGMS)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
