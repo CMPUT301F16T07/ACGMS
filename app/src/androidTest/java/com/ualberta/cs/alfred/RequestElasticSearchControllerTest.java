@@ -183,6 +183,22 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
     }
 
 
+    public void testDeleteItemFromListTask() {
+
+        String requestID = "AVhdOt-dtmmsbsUPVvpZ";
+        String requestProperty = "driverIDList";
+        String requestValueType = "string";
+        String requestValue = "driver890";
+
+        RequestElasticSearchController.DeleteItemFromListTask deleteItemFromListTask =
+                new RequestElasticSearchController.DeleteItemFromListTask();
+
+        deleteItemFromListTask.execute(requestID, requestProperty, requestValueType, requestValue);
+        assert (true);
+
+    }
+
+
     public void testSetPropertyValueTask() {
 
         String requestID = "AVhdOt-dtmmsbsUPVvpZ";
