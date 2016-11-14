@@ -183,6 +183,22 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
     }
 
 
+    public void testDeleteItemFromListTask() {
+
+        String requestID = "AVhdOt-dtmmsbsUPVvpZ";
+        String requestProperty = "driverIDList";
+        String requestValueType = "string";
+        String requestValue = "driver890";
+
+        RequestElasticSearchController.DeleteItemFromListTask deleteItemFromListTask =
+                new RequestElasticSearchController.DeleteItemFromListTask();
+
+        deleteItemFromListTask.execute(requestID, requestProperty, requestValueType, requestValue);
+        assert (true);
+
+    }
+
+
     public void testSetPropertyValueTask() {
 
         String requestID = "AVhdOt-dtmmsbsUPVvpZ";
@@ -221,7 +237,7 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
         String nestedObject2Value = "90.45";
         String nestedObject3Property = "longitude";
         String nestedObject3PropertyType = "double";
-        String nestedObject3Value = "-30.45";
+        String nestedObject3Value = "-50.45";
 
         RequestElasticSearchController.SetNestedObjectPropertyValueTask setNestedObjectPropertyValueTask =
                 new RequestElasticSearchController.SetNestedObjectPropertyValueTask();
