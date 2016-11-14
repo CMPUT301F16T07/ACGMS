@@ -1,16 +1,14 @@
 package com.ualberta.cs.alfred;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,11 +17,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
 
 
 /**
@@ -60,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Determines whether a driver or rider is trying to log in and shows the appropriate screens
+     *
+     *
+     */
     @Override
     protected void onResume(){
         super.onResume();

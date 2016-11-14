@@ -3,23 +3,25 @@ package com.ualberta.cs.alfred;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Activity responsible for allowing users to sign up
+ *
+ *
+ */
 public class SignUpActivity extends AppCompatActivity {
     private SimpleDateFormat formatter;
     private Date inputDate;

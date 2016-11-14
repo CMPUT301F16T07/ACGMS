@@ -11,6 +11,12 @@ import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
 
+
+/**
+ * sets the bottom bar for app navigation
+ *
+ *
+ */
 public class MenuActivity extends AppCompatActivity {
     public static BottomBar bottomBar;
 

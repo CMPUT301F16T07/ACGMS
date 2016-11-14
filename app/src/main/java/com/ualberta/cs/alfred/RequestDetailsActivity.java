@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Shelley on 2016-11-11.
+ * activity for the request details
  */
 public class RequestDetailsActivity extends AppCompatActivity {
 
