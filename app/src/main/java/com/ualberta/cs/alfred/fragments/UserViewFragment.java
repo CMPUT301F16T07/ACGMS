@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
-import com.ualberta.cs.alfred.Rider;
+import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserElasticSearchController;
 
 import java.util.concurrent.ExecutionException;
@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
-    Rider rider;
+    User user;
     private TextView textView;
     private String userName;
     private String fullName;
@@ -55,26 +55,26 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         //retrieving rider's informatino from elasticsearch
         UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
         try {
-            rider = getRider.execute(userName).get();
+            user = getRider.execute(userName).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        fullName = rider.getFirstName() + " " + rider.getLastName();
-        emailAddress = rider.getEmail();
-        phoneNumber= rider.getPhoneNumber();
+        fullName = user.getFirstName() + " " + user.getLastName();
+        emailAddress = user.getEmail();
+        phoneNumber= user.getPhoneNumber();
 
 
         //setting the textviews to what we want to show
-        textView = (TextView) view.findViewById(R.id.textview2);
+        textView = (TextView) view.findViewById(R.id.edit_username_input);
         textView.setText(userName);
 
-        textView = (TextView) view.findViewById(R.id.textview4);
+        textView = (TextView) view.findViewById(R.id.edit_firstname_input);
         textView.setText(fullName);
 
-        textView = (TextView) view.findViewById(R.id.textview6);
+        textView = (TextView) view.findViewById(R.id.edit_email_input);
         textView.setText(emailAddress);
 
         textView = (TextView) view.findViewById(R.id.textview8);
