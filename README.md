@@ -6,6 +6,15 @@ Alfred is an uber-like ride-sharing app that allows riders to request rides and 
 CMPUT301 final project, the University of Alberta, Fall 2016.
 
 
+##CODE REUSE
+####OSMBonusPack
+Github repository: https://github.com/MKergall/osmbonuspack
+<br><br>
+####Elasticsearch Java Rest Client
+Github repository: https://github.com/searchbox-io/Jest
+
+
+
 
 
 ##LICENSE
