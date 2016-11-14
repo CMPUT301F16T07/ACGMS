@@ -73,6 +73,9 @@ public class RequestedFragment extends Fragment {
             requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
         }
 
+        //update requested request count
+        HomeFragment.requestedCount=requestedList.size();
+
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
         requestedListView.setAdapter(requestAdapter);
 

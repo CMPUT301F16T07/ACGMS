@@ -74,6 +74,10 @@ public class AcceptedFragment extends Fragment {
             acceptedList = getRiderAcceptedList();
             requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedList);
         }
+
+        //update accepted request count
+        HomeFragment.acceptedCount=acceptedList.size();
+
         acceptedListView.setAdapter(requestAdapter);
 
         acceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

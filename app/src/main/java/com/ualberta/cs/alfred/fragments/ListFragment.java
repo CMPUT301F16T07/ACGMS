@@ -19,6 +19,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
 
+
     public ListFragment() {
     }
 
@@ -62,8 +63,13 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         }
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
+        pendingButton.setText("PENDING\n"+Integer.toString(HomeFragment.pendingCount));
+
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
+        requestedButton.setText("PENDING\n"+Integer.toString(HomeFragment.requestedCount));
+
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
+        acceptedButton.setText("PENDING\n"+Integer.toString(HomeFragment.acceptedCount));
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);

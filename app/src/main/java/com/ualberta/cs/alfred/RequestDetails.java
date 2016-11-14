@@ -18,6 +18,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RequestDetails extends AppCompatActivity {
 
+    private DecimalFormat df = new DecimalFormat("0.00");
     private GeoPoint startPoint;
     private GeoPoint destinationPoint;
     private GeoPoint midPoint;
@@ -112,7 +114,7 @@ public class RequestDetails extends AppCompatActivity {
         //get and display estimated price
         estPrice.setText(Double.toString(request.getCost()));
         //get and display distance
-        distance.setText(Double.toString(request.getDistance()));
+        distance.setText(df.format(new Double(request.getDistance()))+" km");
         //get and display start & end
         startLoc.setText(request.getSourceAddress().getLocation());
         endLoc.setText(request.getDestinationAddress().getLocation());

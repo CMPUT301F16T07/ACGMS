@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +33,7 @@ public class Request implements Serializable{
     private ArrayList<String> biddingDrivers;
     private String riderID;
     private Date requestDate;
+    private DecimalFormat df = new DecimalFormat("0.00");
 
     public Request() {
 
@@ -49,6 +51,7 @@ public class Request implements Serializable{
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
         this.destinationAddress = destinationAddress;
+
         this.distance = distance;
         this.cost = cost;
         this.driverID = null;
@@ -228,8 +231,10 @@ public class Request implements Serializable{
 
     @Override
     public String toString(){
+        //return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
+        //        this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
         return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
-                this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
+                this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
     }
 
     public ArrayList<String> getBiddingDrivers() {

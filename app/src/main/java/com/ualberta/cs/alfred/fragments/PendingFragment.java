@@ -73,6 +73,10 @@ public class PendingFragment extends Fragment {
             pendingList = getRiderPendingList();
             requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
         }
+
+        //update pending request count
+        HomeFragment.pendingCount=pendingList.size();
+
         pendingListView.setAdapter(requestAdapter);
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

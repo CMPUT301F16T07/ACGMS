@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +45,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     RoadManager roadManager;
     ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
+    public static Integer requestedCount = new Integer(0);
+    public static Integer pendingCount= new Integer(0);
+    public static Integer acceptedCount= new Integer(0);
+
    private FragmentTransaction transaction;
 
     public HomeFragment() {
@@ -70,11 +75,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
         pendingButton.setBackgroundColor(0xfffffd00);
+        pendingButton.setText("PENDING\n"+Integer.toString(pendingCount));
+
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
+        requestedButton.setText("PENDING\n"+Integer.toString(requestedCount));
+
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
         acceptedButton.setBackgroundColor(0xff90ee90);
+        acceptedButton.setText("PENDING\n"+Integer.toString(acceptedCount));
+
         Button requestButton = (Button) view.findViewById(R.id.request_button);
+
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);

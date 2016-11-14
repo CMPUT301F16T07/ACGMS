@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -20,8 +21,12 @@ import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by carlcastello on 09/11/16.
+ * This is the fragment for making a new request
  */
 
 public class RequestFragment extends Fragment implements View.OnClickListener {
@@ -34,7 +39,6 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
     private String userName;
     private Double rideCost;
     private Double rideDistance;
-
     private RequestList requestList;
 
 
@@ -72,9 +76,9 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 userName = preferences.getString("USERNAME", null);
                 // Hardcode distance for mock request
-                rideDistance = 122.00;
+                //rideDistance = 122.00;
                 // Hardcode cost for mock request
-                rideCost = 21.03;
+                rideCost = 21.55;
 
                 // Get the values on the edit text view and use them to create and address instance
                 String start = startPoint.getText().toString();
@@ -89,6 +93,16 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                     Double y2 = Double.parseDouble(endCoor[1]);
                     startAddress = new Address("", x1, y1);
                     endAddress = new Address("", x2, y2);
+                    //approximate distance with geopoint coordinates
+                    double lat1 = x1 / 1e6;
+                    double lng1 = y1 / 1e6;
+                    double lat2 = x2 / 1e6;
+                    double lng2 = y2 / 1e6;
+                    float [] dist = new float[1];
+                    Location.distanceBetween(lat1, lng1, lat2, lng2, dist);
+                    double d =(double) dist[0];
+                    rideDistance = new Double(d*1e3);
+
                 } catch (NumberFormatException exception) {
                     exception.printStackTrace();
                 }
