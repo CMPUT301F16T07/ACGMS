@@ -13,7 +13,9 @@ Github repository: https://github.com/MKergall/osmbonuspack
 <br><br>
 ####Elasticsearch Java Rest Client
 Github repository: https://github.com/searchbox-io/Jest
-
+<br><br>
+####Roughike Bottombar
+Github Repository https://github.com/roughike/BottomBar
 
 
 
