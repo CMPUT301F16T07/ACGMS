@@ -29,11 +29,21 @@ public class UserCacheController {
 
     private static UserCache userCache;
 
+    /**
+     * constructor for creating new userCacheController
+     *
+     *@param context the desired context
+     */
     public UserCacheController(Context context) {
         this.startUpContext = context;
         this.userCache = userLoggedIn();
     }
 
+    /**
+     * Keeps user logged in when app is on standby
+     *
+     *@param user user
+     */
     public void keepLoggedIn(User user) {
         try {
             FileOutputStream fos = startUpContext.openFileOutput(USERFILE, 0);
@@ -51,6 +61,11 @@ public class UserCacheController {
         }
     }
 
+    /**
+     * keeps user logged in
+     *
+     *
+     */
     public UserCache userLoggedIn() {
         try {
             FileInputStream fis = this.startUpContext.openFileInput(USERFILE);

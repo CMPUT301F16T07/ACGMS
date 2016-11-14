@@ -38,7 +38,11 @@ public class Request implements Serializable{
 
     }
 
-
+    /**
+     * constructor for creating a new Request
+     *
+     *
+     */
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
 
@@ -182,10 +186,22 @@ public class Request implements Serializable{
         this.driverID = driverID;
     }
 
+
+    /**
+     * adds a driver's id
+     *
+     *@param newDriverID the driver's id
+     */
     public void addDriverIDToList(String newDriverID) {
         this.driverIDList.add(newDriverID);
     }
 
+
+    /**
+     * Gets a list of driver IDs
+     *
+     *@return an ArrayList of driver IDs as Strings
+     */
     public ArrayList<String> getDriverIDList() {
         return driverIDList;
     }
@@ -226,12 +242,22 @@ public class Request implements Serializable{
         this.requestDate = requestDate;
     }
 
+    /**
+     * saves to elasticsearch server
+     *
+     *
+     */
     private void save() {
 
         RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
         addRequestsTask.execute(this);
     }
 
+    /**
+     * converts to string
+     *
+     *
+     */
     @Override
     public String toString(){
         //return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+

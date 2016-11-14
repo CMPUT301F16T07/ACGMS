@@ -7,16 +7,11 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.searchbox.client.JestResult;
-import io.searchbox.core.CountResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -378,7 +373,13 @@ public class RequestElasticSearchController {
         }
     }
 
-
+    /**
+     * Deletes item from the elasticsearch server
+     *
+     *
+     *
+     *
+     */
     public static class DeleteItemFromListTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... delete_parameters) {
