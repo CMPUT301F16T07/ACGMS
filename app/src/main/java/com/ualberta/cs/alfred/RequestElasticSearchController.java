@@ -32,7 +32,7 @@ import io.searchbox.core.Update;
  */
 public class RequestElasticSearchController {
 
-    private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
+    private static final String SERVER_URI = "http://192.168.1.213:9200";
     private static final String INDEX_NAME = "alfred";
     private static final String TYPE_NAME = "request";
 

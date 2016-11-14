@@ -210,7 +210,7 @@ public class RequestElasticSearchControllerTest extends ActivityInstrumentationT
         String nestedObject2Value = "90.45";
         String nestedObject3Property = "longitude";
         String nestedObject3PropertyType = "double";
-        String nestedObject3Value = "-30.45";
+        String nestedObject3Value = "-50.45";
 
         RequestElasticSearchController.SetNestedObjectPropertyValueTask setNestedObjectPropertyValueTask =
                 new RequestElasticSearchController.SetNestedObjectPropertyValueTask();
