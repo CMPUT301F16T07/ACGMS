@@ -30,7 +30,7 @@ public class Request implements Serializable{
     private double cost;
     private double distance;
     private String driverID;
-    private ArrayList<String> biddingDrivers;
+    private ArrayList<String> driverIDList;
     private String riderID;
     private Date requestDate;
     private DecimalFormat df = new DecimalFormat("0.00");
@@ -43,10 +43,6 @@ public class Request implements Serializable{
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
 
-        // Auto increment requestCount each time the constructor is called
-        //++requestCount;
-
-        //this.requestID = requestCount;
         this.requestID = null;
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
@@ -55,9 +51,9 @@ public class Request implements Serializable{
         this.distance = distance;
         this.cost = cost;
         this.driverID = null;
+        this.driverIDList = new ArrayList<>();
         this.riderID = riderID;
         this.requestDate = new Date();
-        this.biddingDrivers = new ArrayList<>();
         this.save();
     }
 
@@ -187,6 +183,14 @@ public class Request implements Serializable{
         this.driverID = driverID;
     }
 
+    public void addDriverIDToList(String newDriverID) {
+        this.driverIDList.add(newDriverID);
+    }
+
+    public ArrayList<String> getDriverIDList() {
+        return driverIDList;
+    }
+
     /**
      * Gets rider id.
      *
@@ -235,9 +239,5 @@ public class Request implements Serializable{
         //        this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
         return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
                 this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
-    }
-
-    public ArrayList<String> getBiddingDrivers() {
-        return biddingDrivers;
     }
 }
