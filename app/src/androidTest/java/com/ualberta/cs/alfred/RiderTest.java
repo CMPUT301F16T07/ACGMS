@@ -19,7 +19,7 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void test() {
-        Rider rider = new Rider("Jimbo", "Clown", "jimbo", new Date(), "12345678",
+        Rider rider = new Rider("Mag", "Clown", "mag1", new Date(), "12345678",
                 "jimbo@ualberta.ca", "34903845854");
         assertTrue(true);
     }

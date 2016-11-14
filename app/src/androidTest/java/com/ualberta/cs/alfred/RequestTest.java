@@ -36,9 +36,14 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         double req1Cost = 45.30;
         double req1Distance = 4.5;
         String req1RiderID = "rider002";
+        String driver001 = "driver001";
+        String driver002 = "driver002";
 
         Request req1 = new Request(req1Status, req1SrcAddr, req1DestAddr, req1Distance, req1Cost,
                 req1RiderID);
+
+        req1.addDriverIDToList(driver001);
+        req1.addDriverIDToList(driver002);
 
         RequestElasticSearchController.GetRequestByIdTask retrievedRequest = new RequestElasticSearchController.GetRequestByIdTask();
         retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");

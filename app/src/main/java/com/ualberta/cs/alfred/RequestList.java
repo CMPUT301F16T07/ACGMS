@@ -103,8 +103,8 @@ public class RequestList {
     public RequestList removeDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
-            if (request.getBiddingDrivers() != null) {
-                if (!request.getBiddingDrivers().contains(userName)) {
+            if (request.getDriverIDList() != null) {
+                if (!request.getDriverIDList().contains(userName)) {
                     tempRequestList.add(request);
                 }
             }
@@ -119,8 +119,8 @@ public class RequestList {
     public RequestList getWithDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
-            if (request.getBiddingDrivers() != null) {
-                if (request.getBiddingDrivers().contains(userName)) {
+            if (request.getDriverIDList() != null) {
+                if (request.getDriverIDList().contains(userName)) {
                     tempRequestList.add(request);
                 }
             }

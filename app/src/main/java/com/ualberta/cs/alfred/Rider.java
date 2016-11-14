@@ -3,6 +3,7 @@ package com.ualberta.cs.alfred;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+
 /**
  * This class is used to create and initialize a rider to be used in
  * Rider Mode, this is a subclass of User, with it's opposite being
@@ -81,6 +82,7 @@ public class Rider extends User {
         this.requests.addRequest(newRequest);
     }
 
+
     private void save() {
         UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
         addRider.execute(this);
@@ -93,4 +95,21 @@ public class Rider extends User {
             e.printStackTrace();
         }
     }
+
+
+    /*
+    private void save() {
+
+        UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
+        addRider.execute(this);
+    }
+    */
+
+    /*
+    private void save() {
+
+        UserElasticSearchController.AddRiderTask addUserTask = new UserElasticSearchController.AddRiderTask();
+        addUserTask.execute(this);
+    }
+    */
 }
