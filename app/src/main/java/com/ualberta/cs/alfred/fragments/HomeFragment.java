@@ -33,17 +33,17 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    MapView map;
-    GeoPoint defaultLocation;
+    private MapView map;
+    private GeoPoint defaultLocation;
 
 
-    GeoPoint startPoint;
-    GeoPoint destinationPoint;
-    Marker startMarker;
-    Marker endMarker;
-    IMapController mapController;
-    RoadManager roadManager;
-    ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+    private GeoPoint startPoint;
+    private GeoPoint destinationPoint;
+    private Marker startMarker;
+    private Marker endMarker;
+    private IMapController mapController;
+
+    private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
     public static Integer requestedCount = new Integer(0);
     public static Integer pendingCount= new Integer(0);
@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         RoadManager roadManager = new OSRMRoadManager(getActivity());
         //Set-up your start and end points:
-        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+        //ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
         waypoints.add(destinationPoint);
         //retreive the road between those points

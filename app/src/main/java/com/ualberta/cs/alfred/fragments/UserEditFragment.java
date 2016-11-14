@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 public class UserEditFragment extends Fragment implements View.OnClickListener {
 
-    User user;
+    private User user;
 
     private String userName;
     private String emailAddress;
