@@ -13,7 +13,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
-public class MainScreen extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity {
 
 
 

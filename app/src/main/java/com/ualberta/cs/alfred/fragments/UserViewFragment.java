@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
-    User user;
+    private User user;
     private TextView textView;
     private String userName;
     private String fullName;

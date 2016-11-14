@@ -30,6 +30,7 @@ public class RequestedFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
     private ListView requestedListView;
     private SharedPreferences preferences;
+
     public RequestedFragment() {
     }
 
