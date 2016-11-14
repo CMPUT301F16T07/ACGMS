@@ -39,7 +39,7 @@
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".MockRequestDetails"
             android:label="Mock Request Details"></activity>
-        <activity android:name=".RequestDetails"
+        <activity android:name=".RequestDetailsActivity"
             android:label="Request Details"></activity>
     </application>
 

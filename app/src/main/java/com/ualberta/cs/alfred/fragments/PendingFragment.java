@@ -1,6 +1,5 @@
 package com.ualberta.cs.alfred.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import android.widget.ListView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
-import com.ualberta.cs.alfred.RequestDetails;
+import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
 import com.ualberta.cs.alfred.RequestList;
 
@@ -83,7 +82,7 @@ public class PendingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Request r = (Request) pendingListView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), RequestDetails.class);
+                Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
                 intent.putExtra("passedRequest",r);
                 startActivity(intent);
             }
