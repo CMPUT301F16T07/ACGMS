@@ -3,8 +3,6 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -29,22 +27,28 @@ import io.searchbox.core.SearchResult;
  */
 public class UserElasticSearchController {
 
+    private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
+    private static final String INDEX_NAME = "alfred";
+    private static final String RIDER_TYPE_NAME = "rider";
+    private static final String DRIVER_TYPE_NAME = "driverinfo";
+
+    private static JestDroidClient client;
+
     public static class AddUser<T> extends AsyncTask<T, Void, Void> {
         @Override
         // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array
         protected Void doInBackground(T... objects) {
-            String esIndex = "alfred";
-            String esType;
+            verifySettings();
 
-            JestDroidClient client = new BuildClient().getClient();
+            String esType;
 
             for (T object : objects) {
                 if (object instanceof Rider) {
-                    esType = "rider";
+                    esType = RIDER_TYPE_NAME;
                 } else {
-                    esType = "driverinfo";
+                    esType = DRIVER_TYPE_NAME;
                 }
-                Index index = new Index.Builder(object).index(esIndex).type(esType).build();
+                Index index = new Index.Builder(object).index(INDEX_NAME).type(esType).build();
 
                 try {
                     DocumentResult result = client.execute(index);
@@ -67,7 +71,8 @@ public class UserElasticSearchController {
     public static class GetRider extends AsyncTask<String, Void, Rider> {
         @Override
         protected Rider doInBackground(String... search_parameters) {
-            JestDroidClient client = new BuildClient().getClient();
+
+            verifySettings();
 
             Rider rider = new Rider();
 
@@ -81,8 +86,8 @@ public class UserElasticSearchController {
                     "}";
 
             Search search = new Search.Builder(query)
-                    .addIndex("alfred")
-                    .addType("rider")
+                    .addIndex(INDEX_NAME)
+                    .addType(RIDER_TYPE_NAME)
                     .build();
 
             try {
@@ -114,7 +119,8 @@ public class UserElasticSearchController {
     public static class GetDriverInfo extends AsyncTask<String, Void, DriverInfo> {
         @Override
         protected DriverInfo doInBackground(String... search_parameters) {
-            JestDroidClient client = new BuildClient().getClient();
+
+            verifySettings();
 
             DriverInfo driverInfo = new DriverInfo();
 
@@ -146,6 +152,21 @@ public class UserElasticSearchController {
             }
 
             return driverInfo;
+        }
+    }
+
+    /**
+     * Check client settings
+     */
+    private static void verifySettings() {
+        // if the client hasn't been initialized then we should make it!
+        if (client == null) {
+            DroidClientConfig.Builder builder = new DroidClientConfig.Builder(SERVER_URI);
+            DroidClientConfig config = builder.build();
+
+            JestClientFactory factory = new JestClientFactory();
+            factory.setDroidClientConfig(config);
+            client = (JestDroidClient) factory.getObject();
         }
     }
 }

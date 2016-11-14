@@ -1,5 +1,6 @@
 package com.ualberta.cs.alfred;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +25,7 @@ public class Request {
     private double cost;
     private double distance;
     private String driverID;
+    private ArrayList<String> driverIDList;
     private String riderID;
     private Date requestDate;
 
@@ -34,10 +36,6 @@ public class Request {
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {
 
-        // Auto increment requestCount each time the constructor is called
-        //++requestCount;
-
-        //this.requestID = requestCount;
         this.requestID = null;
         this.requestStatus = requestStatus;
         this.sourceAddress = sourceAddress;
@@ -45,6 +43,7 @@ public class Request {
         this.distance = distance;
         this.cost = cost;
         this.driverID = null;
+        this.driverIDList = new ArrayList<>();
         this.riderID = riderID;
         this.requestDate = new Date();
         this.save();
@@ -174,6 +173,14 @@ public class Request {
      */
     public void setDriverID(String driverID) {
         this.driverID = driverID;
+    }
+
+    public void addDriverIDToList(String newDriverID) {
+        this.driverIDList.add(newDriverID);
+    }
+
+    public ArrayList<String> getDriverIDList() {
+        return driverIDList;
     }
 
     /**
