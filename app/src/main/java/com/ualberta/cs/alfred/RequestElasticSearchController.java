@@ -32,7 +32,7 @@ import io.searchbox.core.Update;
  */
 public class RequestElasticSearchController {
 
-    private static final String SERVER_URI = "http://192.168.1.213:9200";
+    private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
     private static final String INDEX_NAME = "alfred";
     private static final String TYPE_NAME = "request";
 
@@ -261,9 +261,9 @@ public class RequestElasticSearchController {
 
             int j = 0;
             int k = 0;
-            for (int i = 0; i < pSize - 1; ++i) {
+            for (int i = 0; i < pSize - 2; ++i) {
 
-                if (i + j + 5 < pSize) {
+                if (i + j + k + 2 < pSize) {
                     String key = update_parameters[i + j + k + 2];
                     String valueType = update_parameters[i + j + k + 3];
                     String value = update_parameters[i + j + k + 4];
@@ -296,7 +296,6 @@ public class RequestElasticSearchController {
 
 
                     if (i + j + k + 4 < pSize - 1) {
-                        System.out.println(" " + (i+j));
                         String comma = ",\n";
                         stringBuilder.append(comma);
                     }
