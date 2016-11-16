@@ -73,8 +73,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestElasticSearchController.DeleteRequestTask deleteRequestTask =
-                        new RequestElasticSearchController.DeleteRequestTask();
+                RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                        new RequestESDeleteController.DeleteRequestTask();
                 deleteRequestTask.execute(r.getRequestID());
                 try {
                     TimeUnit.MILLISECONDS.sleep(250);

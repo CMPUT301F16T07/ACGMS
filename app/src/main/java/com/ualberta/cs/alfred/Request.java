@@ -35,7 +35,6 @@ public class Request implements Serializable{
     private DecimalFormat df = new DecimalFormat("0.00");
 
     public Request() {
-
     }
 
     /**
@@ -249,7 +248,7 @@ public class Request implements Serializable{
      */
     private void save() {
 
-        RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
+        RequestESAddController.AddRequestTask addRequestsTask = new RequestESAddController.AddRequestTask();
         addRequestsTask.execute(this);
     }
 
