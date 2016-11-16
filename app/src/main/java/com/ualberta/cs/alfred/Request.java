@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 import io.searchbox.annotations.JestId;
 
@@ -36,7 +35,6 @@ public class Request implements Serializable{
     private DecimalFormat df = new DecimalFormat("0.00");
 
     public Request() {
-
     }
 
 
@@ -229,7 +227,7 @@ public class Request implements Serializable{
 
     private void save() {
 
-        RequestElasticSearchController.AddRequestTask addRequestsTask = new RequestElasticSearchController.AddRequestTask();
+        RequestESAddController.AddRequestTask addRequestsTask = new RequestESAddController.AddRequestTask();
         addRequestsTask.execute(this);
     }
 

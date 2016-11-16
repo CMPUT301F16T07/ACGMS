@@ -1,9 +1,7 @@
 package com.ualberta.cs.alfred.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -14,17 +12,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetails;
-import com.ualberta.cs.alfred.RequestElasticSearchController;
+import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -94,7 +89,7 @@ public class RequestedFragment extends Fragment {
     }
 
     private ArrayList<Request> getRiderRequestedList() {
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> requestedList = null;
 
         try {
@@ -112,8 +107,8 @@ public class RequestedFragment extends Fragment {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
         are pending that do not include the driver on the bidlist of the request.
          */
-        RequestElasticSearchController.GetRequestTask getPending = new RequestElasticSearchController.GetRequestTask();
-        RequestElasticSearchController.GetRequestTask getRequested = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
         RequestList requestedList = null;
 
         try {

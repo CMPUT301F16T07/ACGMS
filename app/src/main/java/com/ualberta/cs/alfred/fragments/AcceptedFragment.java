@@ -1,6 +1,5 @@
 package com.ualberta.cs.alfred.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import android.widget.ListView;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetails;
-import com.ualberta.cs.alfred.RequestElasticSearchController;
+import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class AcceptedFragment extends Fragment {
         final ListView acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
 
 
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> acceptedList = null;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
@@ -95,7 +94,7 @@ public class AcceptedFragment extends Fragment {
 
 
     private ArrayList<Request> getRiderAcceptedList() {
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> acceptedList = null;
 
         try {
@@ -112,7 +111,7 @@ public class AcceptedFragment extends Fragment {
     private ArrayList<Request> getDriverAcceptedList() {
         /* The request that should be selected is the requests that are accepted with only the driver left in the bidList
          */
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         RequestList acceptedList = null;
 
         try {

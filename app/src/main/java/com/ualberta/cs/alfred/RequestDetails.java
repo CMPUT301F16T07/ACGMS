@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.renderscript.Double2;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,7 +19,6 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -75,8 +73,8 @@ public class RequestDetails extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestElasticSearchController.DeleteRequestTask deleteRequestTask =
-                        new RequestElasticSearchController.DeleteRequestTask();
+                RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                        new RequestESDeleteController.DeleteRequestTask();
                 deleteRequestTask.execute(r.getRequestID());
                 try {
                     TimeUnit.MILLISECONDS.sleep(250);
