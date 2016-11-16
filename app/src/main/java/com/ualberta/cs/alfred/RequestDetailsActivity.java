@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
- * activity for the request details
+ * Created by Shelley on 2016-11-11.
  */
 public class RequestDetailsActivity extends AppCompatActivity {
 
@@ -57,7 +57,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
             ArrayList<String> fakeDrivers = new ArrayList<>();
             fakeDrivers.add("BILL");
             fakeDrivers.add("BOB");
-//            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, r.getBiddingDrivers());
+//            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
             biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, fakeDrivers);
             biddingDriversListView.setAdapter(biddingDriversAdapter);
 
