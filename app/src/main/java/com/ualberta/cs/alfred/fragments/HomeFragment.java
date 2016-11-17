@@ -1,18 +1,24 @@
 package com.ualberta.cs.alfred.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.ualberta.cs.alfred.BuildConfig;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.Request;
+import com.ualberta.cs.alfred.RequestESGetController;
+import com.ualberta.cs.alfred.RequestList;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -25,6 +31,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
@@ -32,17 +39,17 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private MapView map;
-    private GeoPoint defaultLocation;
+    //private MapView map;
+    //private GeoPoint defaultLocation;
+    private SharedPreferences preferences;
 
+    //private GeoPoint startPoint;
+    //private GeoPoint destinationPoint;
+    //private Marker startMarker;
+    //private Marker endMarker;
+    //private IMapController mapController;
 
-    private GeoPoint startPoint;
-    private GeoPoint destinationPoint;
-    private Marker startMarker;
-    private Marker endMarker;
-    private IMapController mapController;
-
-    private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+    //private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
     public static Integer requestedCount = new Integer(0);
     public static Integer pendingCount= new Integer(0);
@@ -70,7 +77,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        // This will modify initialize the counts for each list in the home screen
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            // Modified getDriverRequestList
+            // See getDriverRequestList
+            requestedCount = getDriverListCount("Request");
+            pendingCount = getDriverListCount("Pending");
+            acceptedCount = getDriverListCount("Accepted");
+
+        } else {
+            // Modified getDriverRequestList
+            // See getDriverRequestList
+            requestedCount = getRiderListCount("Requested");
+            pendingCount = getRiderListCount("Pending");
+            acceptedCount = getRiderListCount("Accepted");
+        }
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
         pendingButton.setBackgroundColor(0xfffffd00);
@@ -78,11 +101,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
-        requestedButton.setText("PENDING\n"+Integer.toString(requestedCount));
+        requestedButton.setText("Requested\n"+Integer.toString(requestedCount));
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
         acceptedButton.setBackgroundColor(0xff90ee90);
-        acceptedButton.setText("PENDING\n"+Integer.toString(acceptedCount));
+        acceptedButton.setText("Accepted\n"+Integer.toString(acceptedCount));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
@@ -95,42 +118,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //important! set your user agent to prevent getting banned from the osm servers
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
 
-        map = (MapView) view.findViewById(R.id.map_view);
+        MapView map = (MapView) view.findViewById(R.id.map_view);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        defaultLocation = new GeoPoint(53.5444,-113.4909);
-        startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
-        destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
+        GeoPoint defaultLocation = new GeoPoint(53.5444,-113.4909);
+//        GeoPoint startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
+//        GeoPoint destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
 
+        IMapController mapController;
         mapController = map.getController();
         mapController.setZoom(11);
         mapController.setCenter(defaultLocation);
 
-        startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        startMarker.setSnippet("Start");
-        map.getOverlays().add(startMarker);
+//        startMarker = new Marker(map);
+//        startMarker.setPosition(startPoint);
+//        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//        startMarker.setSnippet("Start");
+//        map.getOverlays().add(startMarker);
 
-        endMarker = new Marker(map);
-        endMarker.setPosition(destinationPoint);
-        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        endMarker.setSnippet("End");
-        map.getOverlays().add(endMarker);
+//        endMarker = new Marker(map);
+//        endMarker.setPosition(destinationPoint);
+//        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+//        endMarker.setSnippet("End");
+//        map.getOverlays().add(endMarker);
 
-        RoadManager roadManager = new OSRMRoadManager(getActivity());
+//        RoadManager roadManager = new OSRMRoadManager(getActivity());
         //Set-up your start and end points:
         //ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-        waypoints.add(startPoint);
-        waypoints.add(destinationPoint);
+//        waypoints.add(startPoint);
+//        waypoints.add(destinationPoint);
         //retreive the road between those points
-        Road road = roadManager.getRoad(waypoints);
+//        Road road = roadManager.getRoad(waypoints);
         //build a Polyline with the route shape:
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+//        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         //Add this Polyline to the overlays of your map
-        map.getOverlays().add(roadOverlay);
+//        map.getOverlays().add(roadOverlay);
 
 
         //save & display changes
@@ -181,5 +205,70 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         transaction.addToBackStack(null);
         transaction.replace(R.id.menu_fragment_container, fragment);
         transaction.commit();
+    }
+
+
+    /**
+     * Modified getRiderRequestList
+     * This function will take an argument with a type string
+     * It'll then compare the argument into an appropriate type and return an appropriate list
+     * @param argType
+     * @return
+     */
+    private int getRiderListCount(String argType) {
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        ArrayList<Request> returnList = null;
+
+        try {
+            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
+            returnList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList(argType);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return returnList.size();
+    }
+
+    /**
+     * Modified getDriverRequestList
+     * This function will take an argument with a type string
+     * It'll then compare the argument into an appropriate type and return an appropriate list
+     * @param argType
+     * @return
+     */
+    private int getDriverListCount(String argType) {
+        /* The request that should be retrieved are all requests that are currently with a requested status and those that
+        are pending that do not include the driver on the bidlist of the request.
+         */
+        RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        RequestList returnList = null;
+
+        try {
+            if (argType.equals("Request")) {
+                returnList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
+                getRequested.execute("requestStatus", "Requested");
+                returnList.addMultipleRequest(getRequested.get());
+
+            } else if (argType.equals("Pending")) {
+                getRequestTask.execute("requestStatus", "Pending");
+                returnList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
+
+            } else if (argType.equals("Accepted")) {
+                getRequestTask.execute("requestStatus", "Accepted");
+                returnList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
+
+            } else {
+                returnList = new RequestList();
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return returnList.returnArrayList().size();
     }
 }
