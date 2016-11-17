@@ -3,10 +3,6 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.searchly.jestdroid.DroidClientConfig;
-import com.searchly.jestdroid.JestClientFactory;
-import com.searchly.jestdroid.JestDroidClient;
-
 import java.util.List;
 import java.util.Map;
 
@@ -27,14 +23,6 @@ import io.searchbox.core.SearchResult;
  */
 public class UserElasticSearchController {
 
-    private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
-    private static final String INDEX_NAME = "alfred";
-    private static final String RIDER_TYPE_NAME = "rider";
-    private static final String DRIVER_TYPE_NAME = "driverinfo";
-
-    private static JestDroidClient client;
-
-
     /**
      * adds users to elasticsearch server
      *
@@ -44,20 +32,21 @@ public class UserElasticSearchController {
         @Override
         // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array
         protected Void doInBackground(T... objects) {
-            verifySettings();
+
+            ESSettings.verifySettings();
 
             String esType;
 
             for (T object : objects) {
                 if (object instanceof Rider) {
-                    esType = RIDER_TYPE_NAME;
+                    esType = ESSettings.RIDER_TYPE_NAME;
                 } else {
-                    esType = DRIVER_TYPE_NAME;
+                    esType = ESSettings.DRIVER_TYPE_NAME;
                 }
-                Index index = new Index.Builder(object).index(INDEX_NAME).type(esType).build();
+                Index index = new Index.Builder(object).index(ESSettings.INDEX_NAME).type(esType).build();
 
                 try {
-                    DocumentResult result = client.execute(index);
+                    DocumentResult result = ESSettings.client.execute(index);
                     if (!result.isSucceeded()) {
                         Log.i("Error", "Elastic search was not able to add the "+esType+".");
                     }
@@ -78,7 +67,7 @@ public class UserElasticSearchController {
         @Override
         protected Rider doInBackground(String... search_parameters) {
 
-            verifySettings();
+            ESSettings.verifySettings();
 
             Rider rider = new Rider();
 
@@ -92,12 +81,12 @@ public class UserElasticSearchController {
                     "}";
 
             Search search = new Search.Builder(query)
-                    .addIndex(INDEX_NAME)
-                    .addType(RIDER_TYPE_NAME)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.RIDER_TYPE_NAME)
                     .build();
 
             try {
-                SearchResult result = client.execute(search);
+                SearchResult result = ESSettings.client.execute(search);
                 List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
                 SearchResult.Hit hit = hits.get(0);
                 Map source = (Map)hit.source;
@@ -126,7 +115,7 @@ public class UserElasticSearchController {
         @Override
         protected DriverInfo doInBackground(String... search_parameters) {
 
-            verifySettings();
+            ESSettings.verifySettings();
 
             DriverInfo driverInfo = new DriverInfo();
 
@@ -140,12 +129,12 @@ public class UserElasticSearchController {
                     "}";
 
             Search search = new Search.Builder(query)
-                    .addIndex("alfred")
-                    .addType("driverinfo")
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.DRIVER_TYPE_NAME)
                     .build();
 
             try {
-                SearchResult result = client.execute(search);
+                SearchResult result = ESSettings.client.execute(search);
                 if (result.isSucceeded()) {
                     driverInfo = result.getSourceAsObject(DriverInfo.class);
                 }
@@ -158,21 +147,6 @@ public class UserElasticSearchController {
             }
 
             return driverInfo;
-        }
-    }
-
-    /**
-     * Check client settings
-     */
-    private static void verifySettings() {
-        // if the client hasn't been initialized then we should make it!
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder(SERVER_URI);
-            DroidClientConfig config = builder.build();
-
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
         }
     }
 }

@@ -25,7 +25,9 @@ public class RequestESAddController {
             ESSettings.verifySettings();
 
             for (Request request : requests) {
-                Index index = new Index.Builder(request).index(ESSettings.INDEX_NAME).type(ESSettings.REQUEST_TYPE_NAME).build();
+                Index index = new Index.Builder(request)
+                        .index(ESSettings.INDEX_NAME)
+                        .type(ESSettings.REQUEST_TYPE_NAME).build();
 
                 try {
                     DocumentResult result = ESSettings.client.execute(index);
