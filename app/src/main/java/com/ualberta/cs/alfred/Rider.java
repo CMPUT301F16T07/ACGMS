@@ -82,7 +82,11 @@ public class Rider extends User {
         this.requests.addRequest(newRequest);
     }
 
-
+    /**
+     * saves driver's detail to elasticsearch server
+     *
+     *
+     */
     private void save() {
         UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
         addRider.execute(this);

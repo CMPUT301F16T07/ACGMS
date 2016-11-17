@@ -2,10 +2,7 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.ualberta.cs.alfred.MainActivity;
-
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Creates all the test cases for Request
@@ -45,7 +42,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         req1.addDriverIDToList(driver001);
         req1.addDriverIDToList(driver002);
 
-        RequestElasticSearchController.GetRequestByIdTask retrievedRequest = new RequestElasticSearchController.GetRequestByIdTask();
+        RequestESGetController.GetRequestByIdTask retrievedRequest = new RequestESGetController.GetRequestByIdTask();
         retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");
 
         /*

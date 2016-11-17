@@ -100,6 +100,13 @@ public class RequestList {
         return specificRequestList;
     }
 
+    /**
+     * removes a driver
+     *
+     * @param userName the username of the driver
+     *
+     *
+     */
     public RequestList removeDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
@@ -116,6 +123,14 @@ public class RequestList {
         }
     }
 
+
+    /**
+     * get the requested driver
+     *
+     * @param userName the username of the driver
+     *
+     *
+     */
     public RequestList getWithDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {

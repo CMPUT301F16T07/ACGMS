@@ -1,6 +1,5 @@
 package com.ualberta.cs.alfred.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,8 +15,18 @@ import android.widget.ListView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
+<<<<<<< HEAD
 import com.ualberta.cs.alfred.RequestDetails;
+import com.ualberta.cs.alfred.RequestESGetController;
+=======
+<<<<<<< HEAD
+import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
+=======
+import com.ualberta.cs.alfred.RequestDetails;
+import com.ualberta.cs.alfred.RequestESGetController;
+>>>>>>> origin/G-Controllers001
+>>>>>>> f30606bbd1aac009c1ef1e0dd31c6fa707b2b56d
 import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
@@ -63,7 +72,7 @@ public class PendingFragment extends Fragment {
 
         pendingListView = (ListView) view.findViewById(R.id.pendingListView);
 
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> pendingList = null;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
@@ -83,7 +92,7 @@ public class PendingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Request r = (Request) pendingListView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), RequestDetails.class);
+                Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
                 intent.putExtra("passedRequest",r);
                 startActivity(intent);
             }
@@ -94,7 +103,7 @@ public class PendingFragment extends Fragment {
     }
 
     private ArrayList<Request> getRiderPendingList() {
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> pendingList = null;
 
         try {
@@ -114,7 +123,7 @@ public class PendingFragment extends Fragment {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
         are pending that do not include the driver on the bidlist of the request.
          */
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         RequestList pendingList = null;
 
         try {

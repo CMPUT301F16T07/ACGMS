@@ -1,18 +1,22 @@
 package com.ualberta.cs.alfred;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.BottomBarFragment;
-
 import com.ualberta.cs.alfred.fragments.HomeFragment;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
-import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
+
+/**
+ * sets the bottom bar for app navigation
+ *
+ *
+ */
 public class MenuActivity extends AppCompatActivity {
     public static BottomBar bottomBar;
 
@@ -25,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
 
         bottomBar = BottomBar.attach(this, savedInstanceState);
 
-
+        //set appropriate mappings between buttons on the list and fragment views
         bottomBar.setFragmentItems(getSupportFragmentManager(), R.id.menu_fragment_container,
                 new BottomBarFragment(HomeFragment.newInstance(), R.drawable.ic_home_white_24dp, "Home"),
                 new BottomBarFragment(ListFragment.newInstance(3), R.drawable.ic_view_list_white_24dp, "List"),

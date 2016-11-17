@@ -1,6 +1,5 @@
 package com.ualberta.cs.alfred.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,8 +15,18 @@ import android.widget.ListView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
+<<<<<<< HEAD
 import com.ualberta.cs.alfred.RequestDetails;
+import com.ualberta.cs.alfred.RequestESGetController;
+=======
+<<<<<<< HEAD
+import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestElasticSearchController;
+=======
+import com.ualberta.cs.alfred.RequestDetails;
+import com.ualberta.cs.alfred.RequestESGetController;
+>>>>>>> origin/G-Controllers001
+>>>>>>> f30606bbd1aac009c1ef1e0dd31c6fa707b2b56d
 import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
@@ -64,7 +73,7 @@ public class AcceptedFragment extends Fragment {
         final ListView acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
 
 
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> acceptedList = null;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
@@ -84,7 +93,7 @@ public class AcceptedFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Request r = (Request) acceptedListView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), RequestDetails.class);
+                Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
                 intent.putExtra("passedRequest",r);
                 startActivity(intent);
             }
@@ -95,7 +104,7 @@ public class AcceptedFragment extends Fragment {
 
 
     private ArrayList<Request> getRiderAcceptedList() {
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> acceptedList = null;
 
         try {
@@ -112,7 +121,7 @@ public class AcceptedFragment extends Fragment {
     private ArrayList<Request> getDriverAcceptedList() {
         /* The request that should be selected is the requests that are accepted with only the driver left in the bidList
          */
-        RequestElasticSearchController.GetRequestTask getRequestTask = new RequestElasticSearchController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
         RequestList acceptedList = null;
 
         try {

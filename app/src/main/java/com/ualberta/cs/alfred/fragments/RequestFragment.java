@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,8 @@ import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
-import com.ualberta.cs.alfred.RequestElasticSearchController;
+import com.ualberta.cs.alfred.RequestESAddController;
 import com.ualberta.cs.alfred.RequestList;
-
-import java.text.DecimalFormat;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by carlcastello on 09/11/16.
@@ -114,7 +110,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 // Create an instance of a request and store into elastic search
                 Request request = new Request(Status,startAddress,endAddress,rideDistance,rideCost,userName);
                 // Connect this to elastic search.
-                RequestElasticSearchController.AddRequestTask requestTask = new RequestElasticSearchController.AddRequestTask();
+                RequestESAddController.AddRequestTask requestTask = new RequestESAddController.AddRequestTask();
                 requestTask.execute(request);
 
                 // Notify save

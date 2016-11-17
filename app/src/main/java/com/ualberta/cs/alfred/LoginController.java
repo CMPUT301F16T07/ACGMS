@@ -24,6 +24,8 @@ import io.searchbox.core.SearchResult;
 public class LoginController {
     private static JestDroidClient client;
     private String userName;
+    private Rider rider;
+    private DriverInfo driverInfo;
     private String requestedStatus;
 
     /**
@@ -48,7 +50,7 @@ public class LoginController {
      */
     public Boolean checkRider() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
-        Rider rider = retrievedRider.execute(this.userName).get();
+        rider = retrievedRider.execute(this.userName).get();
         if (rider.getUserName() != null && rider.getUserName().contentEquals(this.userName)) {
             return Boolean.TRUE;
         }
@@ -64,7 +66,7 @@ public class LoginController {
      */
     public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
-        DriverInfo driverInfo = retrievedDriverInfo.execute(this.userName).get();
+        driverInfo = retrievedDriverInfo.execute(this.userName).get();
         if (driverInfo != null && driverInfo.getUserName().contentEquals(this.userName)) {
             return Boolean.TRUE;
         }

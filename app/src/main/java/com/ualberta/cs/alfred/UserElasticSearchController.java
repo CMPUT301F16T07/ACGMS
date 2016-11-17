@@ -34,6 +34,12 @@ public class UserElasticSearchController {
 
     private static JestDroidClient client;
 
+
+    /**
+     * adds users to elasticsearch server
+     *
+     *
+     */
     public static class AddUser<T> extends AsyncTask<T, Void, Void> {
         @Override
         // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array

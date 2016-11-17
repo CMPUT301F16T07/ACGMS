@@ -32,14 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainScreen"
+            android:name=".MainScreenActivity"
             android:label="@string/title_activity_main_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".MockRequestDetails"
             android:label="Mock Request Details"></activity>
-        <activity android:name=".RequestDetails"
+        <activity android:name=".RequestDetailsActivity"
             android:label="Request Details"></activity>
     </application>
 

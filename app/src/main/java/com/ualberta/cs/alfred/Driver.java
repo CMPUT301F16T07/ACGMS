@@ -1,7 +1,5 @@
 package com.ualberta.cs.alfred;
 
-import java.util.Date;
-
 /**
  * This class is used to create and initialize a driver that will be used to
  * represent a user in Driver Mode.
@@ -14,36 +12,75 @@ public class Driver extends User{
     private String plateNumber;
     private RequestList bidList;
 
+    /**
+     * Instantiates a new Driver.
+     */
     public Driver() {
         super();
     }
-
+    /**
+     * Instantiates a new Driver.
+     *
+     * @param driverInfo driver's information
+     * @param rider a rider class consisting of the driver's details
+     *
+     */
     public Driver(Rider rider, DriverInfo driverInfo) {
         super(rider.getFirstName(), rider.getLastName(), rider.getUserName(), rider.getDateOfBirth(), rider.getPhoneNumber(), rider.getEmail());
         this.licenceNumber = driverInfo.getLicenceNumber();
         this.plateNumber = driverInfo.getPlateNumber();
     }
 
+    /**
+     * gets the list of bidded rides.
+     */
     public RequestList getBidList() {
         return bidList;
     }
 
+
+    /**
+     * Adds a ride bid to the bid offer
+     *
+     * @param bid the bidded amount
+     */
     public void addBid(Request bid) {
         this.bidList.addRequest(bid);
     }
 
+
+    /**
+     * gets the license number.
+     *
+     * @return driver's license number
+     */
     public String getLicenceNumber() {
         return licenceNumber;
     }
 
+
+    /**
+     * update license number
+     */
     public void setLicenceNumber(String licenceNumber) {
         this.licenceNumber = licenceNumber;
     }
 
+    /**
+     * Get car plate number.
+     *
+     * @return returns the driver's plate number
+     */
     public String getPlateNumber() {
         return plateNumber;
     }
 
+
+    /**
+     * Update plate number.
+     *
+     * @param plateNumber the driver's plate number to be updated
+     */
     public void setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
     }

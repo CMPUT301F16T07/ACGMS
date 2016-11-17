@@ -4,7 +4,7 @@ package com.ualberta.cs.alfred;
 import java.io.Serializable;
 
 /**
- * Create the type Address.
+ * Address class which stores details of the address.
  *
  * @author carlcastello on 07/11/16.
  * @version 1.1
