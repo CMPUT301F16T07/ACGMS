@@ -107,7 +107,7 @@ public class RequestList {
      *
      *
      */
-    public RequestList removeDriver(String userName) {
+    public ArrayList<Request> removeDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
             if (request.getDriverIDList() != null) {
@@ -116,11 +116,7 @@ public class RequestList {
                 }
             }
         }
-        if (requestList != null) {
-            return new RequestList(tempRequestList);
-        } else {
-            return new RequestList();
-        }
+        return tempRequestList;
     }
 
 
@@ -131,7 +127,7 @@ public class RequestList {
      *
      *
      */
-    public RequestList getWithDriver(String userName) {
+    public ArrayList<Request> getWithDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
             if (request.getDriverIDList() != null) {
@@ -140,11 +136,7 @@ public class RequestList {
                 }
             }
         }
-        if (requestList != null) {
-            return new RequestList(tempRequestList);
-        } else {
-            return new RequestList();
-        }
+        return tempRequestList;
     }
 
 

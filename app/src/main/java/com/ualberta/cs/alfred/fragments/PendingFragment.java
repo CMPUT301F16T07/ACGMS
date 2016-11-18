@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,8 +33,17 @@ public class PendingFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
     private ListView pendingListView;
     private SharedPreferences preferences;
+    private RequestFragmentsListController rFLC;
+    private List<Pair<String, String>> listNeeded;
+    private String userName;
 
     public PendingFragment() {
+        this.rFLC = new RequestFragmentsListController();
+        this.listNeeded = null;
+        this.requestAdapter = null;
+        this.pendingListView = null;
+        this.preferences = null;
+        this.userName = null;
     }
 
     public static PendingFragment newInstance() {
@@ -44,12 +56,20 @@ public class PendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        updateRequestList();
+    }
+
+    private void updateRequestList() {
         requestAdapter.clear();
+        List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            requestAdapter.addAll(getDriverPendingList());
+            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+            requestAdapter.addAll(returned);
         } else {
-            requestAdapter.addAll(getRiderPendingList());
+            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
+            requestAdapter.addAll(returned);
         }
+        HomeFragment.pendingCount=returned.size();
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -58,25 +78,22 @@ public class PendingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pending,container,false);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userName = preferences.getString("USERNAME", null);
 
-
-        pendingListView = (ListView) view.findViewById(R.id.pendingListView);
-
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> pendingList = null;
-
+        ArrayList<Request> pendingList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            pendingList = getDriverPendingList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"));
+            pendingList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
         } else {
-            pendingList = getRiderPendingList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
+            pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
         }
+        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+        pendingListView = (ListView) view.findViewById(R.id.pendingListView);
+        pendingListView.setAdapter(requestAdapter);
 
         //update pending request count
         HomeFragment.pendingCount=pendingList.size();
-
-        pendingListView.setAdapter(requestAdapter);
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,43 +104,6 @@ public class PendingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
         return view;
-    }
-
-    private ArrayList<Request> getRiderPendingList() {
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> pendingList = null;
-
-        try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-//            getRequestTask.execute("riderID", "rider011");
-
-            pendingList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Pending");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return pendingList;
-    }
-
-    private ArrayList<Request> getDriverPendingList() {
-        /* The request that should be retrieved are all requests that are currently with a requested status and those that
-        are pending that do not include the driver on the bidlist of the request.
-         */
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        RequestList pendingList = null;
-
-        try {
-            getRequestTask.execute("requestStatus", "Pending");
-            pendingList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return pendingList.returnArrayList();
     }
 }

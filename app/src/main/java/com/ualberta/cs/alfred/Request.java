@@ -19,7 +19,7 @@ public class Request implements Serializable{
     private static final long serialVersionUID = 1L;
 
     // Count for IDs
-    //private int requestCount = 4;
+    // private int requestCount = 4;
     @JestId
     private String requestID;
 
@@ -247,7 +247,6 @@ public class Request implements Serializable{
      *
      */
     private void save() {
-
         RequestESAddController.AddRequestTask addRequestsTask = new RequestESAddController.AddRequestTask();
         addRequestsTask.execute(this);
     }

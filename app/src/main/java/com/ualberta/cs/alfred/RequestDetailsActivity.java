@@ -39,6 +39,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private ListView biddingDriversListView;
     private ArrayAdapter<String> biddingDriversAdapter;
 
+    private Button confirmButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +79,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                         new RequestESDeleteController.DeleteRequestTask();
                 deleteRequestTask.execute(r.getRequestID());
                 try {
-                    TimeUnit.MILLISECONDS.sleep(250);
+                    TimeUnit.MILLISECONDS.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
