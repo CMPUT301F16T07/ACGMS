@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public static Integer pendingCount= new Integer(0);
     public static Integer acceptedCount= new Integer(0);
 
-   private FragmentTransaction transaction;
+    private FragmentTransaction transaction;
 
     public HomeFragment() {
     }
@@ -95,13 +95,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             acceptedCount = getRiderListCount("Accepted");
         }
 
-        Button pendingButton = (Button) view.findViewById(R.id.button_pending);
-        pendingButton.setBackgroundColor(0xfffffd00);
-        pendingButton.setText("PENDING\n"+Integer.toString(pendingCount));
-
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
         requestedButton.setText("Requested\n"+Integer.toString(requestedCount));
+
+        Button pendingButton = (Button) view.findViewById(R.id.button_pending);
+        pendingButton.setBackgroundColor(0xfffffd00);
+        pendingButton.setText("PENDING\n"+Integer.toString(pendingCount));
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
         acceptedButton.setBackgroundColor(0xff90ee90);
@@ -243,32 +243,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
          */
         RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
         RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        RequestList returnList = null;
+        RequestESGetController.GetRequestTask getAccepted = new RequestESGetController.GetRequestTask();
+        ArrayList<Request> returnList = null;
 
         try {
             if (argType.equals("Request")) {
-                returnList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
                 getRequested.execute("requestStatus", "Requested");
-                returnList.addMultipleRequest(getRequested.get());
-
+                returnList = new RequestList(getRequested.get()).returnArrayList();
             } else if (argType.equals("Pending")) {
-                getRequestTask.execute("requestStatus", "Pending");
-                returnList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
+                getPending.execute("requestStatus", "Pending");
+                returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERNAME", null));
 
             } else if (argType.equals("Accepted")) {
-                getRequestTask.execute("requestStatus", "Accepted");
-                returnList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
+                getAccepted.execute("requestStatus", "Accepted");
+                returnList = new RequestList(getAccepted.get()).getWithDriver(preferences.getString("USERNAME", null));
 
             } else {
-                returnList = new RequestList();
+                returnList = new ArrayList<Request>();
             }
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return returnList.returnArrayList().size();
+        return returnList.size();
     }
 }

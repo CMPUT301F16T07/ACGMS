@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,8 +33,17 @@ public class RequestedFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
     private ListView requestedListView;
     private SharedPreferences preferences;
+    private RequestFragmentsListController rFLC;
+    private List<Pair<String, String>> listNeeded;
+    private String userName;
 
     public RequestedFragment() {
+        this.rFLC = new RequestFragmentsListController();
+        this.listNeeded = null;
+        this.requestAdapter = null;
+        this.requestedListView = null;
+        this.preferences = null;
+        this.userName = null;
     }
 
     public static RequestedFragment newInstance() {
@@ -44,12 +56,20 @@ public class RequestedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        updateRequestList();
+    }
+
+    private void updateRequestList() {
         requestAdapter.clear();
+        List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            requestAdapter.addAll(getDriverRequestedList());
+            returned = rFLC.getRequestList(listNeeded, userName).removeDriver(userName);
+            requestAdapter.addAll(returned);
         } else {
-            requestAdapter.addAll(getRiderRequestedList());
+            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
+            requestAdapter.addAll(returned);
         }
+        HomeFragment.requestedCount=returned.size();
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -57,24 +77,25 @@ public class RequestedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_requested,container,false);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        ArrayList<Request> requestedList;
+        userName = preferences.getString("USERNAME", null);
 
+        ArrayList<Request> requestedList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            requestedList = getDriverRequestedList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Requested"),
+                    new Pair<String, String>("requestStatus", "Pending"));
+            requestedList = rFLC.getRequestList(listNeeded, userName).removeDriver(userName);
         } else {
-            requestedList = getRiderRequestedList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
+            requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
         }
+        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
 
         //update requested request count
         HomeFragment.requestedCount=requestedList.size();
 
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
         requestedListView.setAdapter(requestAdapter);
-
 
         requestedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,41 +109,4 @@ public class RequestedFragment extends Fragment {
 
         return view;
     }
-
-    private ArrayList<Request> getRiderRequestedList() {
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> requestedList = null;
-
-        try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-            requestedList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Requested");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return requestedList;
-    }
-
-    private ArrayList<Request> getDriverRequestedList() {
-        /* The request that should be retrieved are all requests that are currently with a requested status and those that
-        are pending that do not include the driver on the bidlist of the request.
-         */
-        RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
-        RequestList requestedList = null;
-
-        try {
-            getPending.execute("requestStatus", "Pending");
-            requestedList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
-            getRequested.execute("requestStatus", "Requested");
-            requestedList.addMultipleRequest(getRequested.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return requestedList.returnArrayList();
-    }
-
 }

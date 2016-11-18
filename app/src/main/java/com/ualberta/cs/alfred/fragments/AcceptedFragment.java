@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -28,10 +32,19 @@ import java.util.concurrent.ExecutionException;
 
 public class AcceptedFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
-    private ListView pendingListView;
+    private ListView acceptedListView;
     private SharedPreferences preferences;
+    private RequestFragmentsListController rFLC;
+    private List<Pair<String, String>> listNeeded;
+    private String userName;
 
     public AcceptedFragment() {
+        this.rFLC = new RequestFragmentsListController();
+        this.listNeeded = null;
+        this.requestAdapter = null;
+        this.acceptedListView = null;
+        this.preferences = null;
+        this.userName = null;
     }
 
     public static AcceptedFragment newInstance() {
@@ -44,12 +57,20 @@ public class AcceptedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        updateRequestList();
+    }
+
+    private void updateRequestList() {
         requestAdapter.clear();
+        List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            requestAdapter.addAll(getDriverAcceptedList());
+            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+            requestAdapter.addAll(returned);
         } else {
-            requestAdapter.addAll(getRiderAcceptedList());
+            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
+            requestAdapter.addAll(returned);
         }
+        HomeFragment.acceptedCount=returned.size();
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -59,23 +80,23 @@ public class AcceptedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accepted,container,false);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userName = preferences.getString("USERNAME", null);
+        acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
+        ArrayList<Request> acceptedRequestList;
 
-        final ListView acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
-
-
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> acceptedList = null;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            acceptedList = getDriverAcceptedList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Accepted"));
+            acceptedRequestList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
         } else {
-            acceptedList = getRiderAcceptedList();
-            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedList);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
+            acceptedRequestList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
         }
+        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
+        acceptedListView.setAdapter(requestAdapter);
 
         //update accepted request count
-        HomeFragment.acceptedCount=acceptedList.size();
+        HomeFragment.acceptedCount=acceptedRequestList.size();
 
         acceptedListView.setAdapter(requestAdapter);
 
@@ -90,38 +111,5 @@ public class AcceptedFragment extends Fragment {
         });
 
         return view;
-    }
-
-
-    private ArrayList<Request> getRiderAcceptedList() {
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> acceptedList = null;
-
-        try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-            acceptedList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList("Accepted");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return acceptedList;
-    }
-
-    private ArrayList<Request> getDriverAcceptedList() {
-        /* The request that should be selected is the requests that are accepted with only the driver left in the bidList
-         */
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        RequestList acceptedList = null;
-
-        try {
-            getRequestTask.execute("requestStatus", "Accepted");
-            acceptedList = new RequestList(getRequestTask.get()).getWithDriver(preferences.getString("USERNAME", null));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return acceptedList.returnArrayList();
     }
 }
