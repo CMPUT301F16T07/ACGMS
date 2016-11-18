@@ -6,6 +6,12 @@ import com.searchly.jestdroid.JestDroidClient;
 
 /**
  * Holds the configuration settings to access Elasticsearch
+<<<<<<< HEAD
+=======
+ *
+ * @author ookmm
+ * @version 1.0
+>>>>>>> origin/G-Controllers002
  */
 public class ESSettings {
 
@@ -13,6 +19,7 @@ public class ESSettings {
     static final String INDEX_NAME = "alfred";
     static final String REQUEST_TYPE_NAME = "request";
     static final String RIDER_TYPE_NAME = "rider";
+    static final String DRIVER_TYPE_NAME = "driverinfo";
     static JestDroidClient client;
 
     /**
