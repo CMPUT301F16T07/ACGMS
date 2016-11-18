@@ -12,6 +12,7 @@ public class DriverInfo {
     private String userName;
     private String licenceNumber;
     private String plateNumber;
+    private Rating driverRating;
 
     /**
      * Instantiates a new null Driver info.
@@ -20,6 +21,7 @@ public class DriverInfo {
         this.userName = null;
         this.licenceNumber = null;
         this.plateNumber = null;
+        this.driverRating = new Rating();
     }
 
     /**
