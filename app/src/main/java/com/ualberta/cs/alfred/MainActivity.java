@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
+
 import java.util.concurrent.ExecutionException;
 
 
@@ -119,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                                 intent.putExtra("MODE", mode);
+                                RequestFragmentsListController rFLC = new RequestFragmentsListController();
+                                rFLC.updateCounts(mode, MainActivity.this);
                                 startActivity(intent);
                                 finish();
                             } else if (userExist == Boolean.FALSE) {

@@ -69,7 +69,11 @@ public class PendingFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.pendingCount=returned.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Pending", Integer.toString(returned.size()));
+        editor.commit();
+
+        ListFragment.update(getContext());
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -92,8 +96,9 @@ public class PendingFragment extends Fragment {
         pendingListView = (ListView) view.findViewById(R.id.pendingListView);
         pendingListView.setAdapter(requestAdapter);
 
-        //update pending request count
-        HomeFragment.pendingCount=pendingList.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Pending", Integer.toString(pendingList.size()));
+        editor.commit();
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
