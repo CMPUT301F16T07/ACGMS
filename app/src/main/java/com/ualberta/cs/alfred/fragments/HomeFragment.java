@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.ualberta.cs.alfred.BuildConfig;
+import com.ualberta.cs.alfred.MainActivity;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
@@ -51,10 +52,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     //private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 
-    public static Integer requestedCount = new Integer(0);
-    public static Integer pendingCount= new Integer(0);
-    public static Integer acceptedCount= new Integer(0);
-
     private FragmentTransaction transaction;
 
     public HomeFragment() {
@@ -79,33 +76,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        // This will modify initialize the counts for each list in the home screen
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            // Modified getDriverRequestList
-            // See getDriverRequestList
-            requestedCount = getDriverListCount("Request");
-            pendingCount = getDriverListCount("Pending");
-            acceptedCount = getDriverListCount("Accepted");
 
-        } else {
-            // Modified getDriverRequestList
-            // See getDriverRequestList
-            requestedCount = getRiderListCount("Requested");
-            pendingCount = getRiderListCount("Pending");
-            acceptedCount = getRiderListCount("Accepted");
-        }
+
+        // This will modify initialize the counts for each list in the home screen
+        RequestFragmentsListController rFLC = new RequestFragmentsListController();
+        rFLC.updateCounts(preferences.getString("MODE", null), getContext());
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
-        requestedButton.setText("Requested\n"+Integer.toString(requestedCount));
+        requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
         pendingButton.setBackgroundColor(0xfffffd00);
-        pendingButton.setText("PENDING\n"+Integer.toString(pendingCount));
+        pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
         acceptedButton.setBackgroundColor(0xff90ee90);
-        acceptedButton.setText("Accepted\n"+Integer.toString(acceptedCount));
+        acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
@@ -205,67 +192,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         transaction.addToBackStack(null);
         transaction.replace(R.id.menu_fragment_container, fragment);
         transaction.commit();
-    }
-
-
-    /**
-     * Modified getRiderRequestList
-     * This function will take an argument with a type string
-     * It'll then compare the argument into an appropriate type and return an appropriate list
-     * @param argType
-     * @return
-     */
-    private int getRiderListCount(String argType) {
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> returnList = null;
-
-        try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-            returnList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList(argType);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return returnList.size();
-    }
-
-    /**
-     * Modified getDriverRequestList
-     * This function will take an argument with a type string
-     * It'll then compare the argument into an appropriate type and return an appropriate list
-     * @param argType
-     * @return
-     */
-    private int getDriverListCount(String argType) {
-        /* The request that should be retrieved are all requests that are currently with a requested status and those that
-        are pending that do not include the driver on the bidlist of the request.
-         */
-        RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getAccepted = new RequestESGetController.GetRequestTask();
-        ArrayList<Request> returnList = null;
-
-        try {
-            if (argType.equals("Request")) {
-                getRequested.execute("requestStatus", "Requested");
-                returnList = new RequestList(getRequested.get()).returnArrayList();
-            } else if (argType.equals("Pending")) {
-                getPending.execute("requestStatus", "Pending");
-                returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERNAME", null));
-
-            } else if (argType.equals("Accepted")) {
-                getAccepted.execute("requestStatus", "Accepted");
-                returnList = new RequestList(getAccepted.get()).getWithDriver(preferences.getString("USERNAME", null));
-
-            } else {
-                returnList = new ArrayList<Request>();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return returnList.size();
     }
 }

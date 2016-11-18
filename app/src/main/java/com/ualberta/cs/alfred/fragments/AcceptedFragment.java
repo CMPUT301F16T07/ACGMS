@@ -70,7 +70,11 @@ public class AcceptedFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.acceptedCount=returned.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Accepted", Integer.toString(returned.size()));
+        editor.commit();
+
+        ListFragment.update(getContext());
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -95,8 +99,9 @@ public class AcceptedFragment extends Fragment {
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
         acceptedListView.setAdapter(requestAdapter);
 
-        //update accepted request count
-        HomeFragment.acceptedCount=acceptedRequestList.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
+        editor.commit();
 
         acceptedListView.setAdapter(requestAdapter);
 

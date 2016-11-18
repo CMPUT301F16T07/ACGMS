@@ -1,6 +1,9 @@
 package com.ualberta.cs.alfred.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +21,9 @@ import com.ualberta.cs.alfred.R;
 public class ListFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
-
+    private static Button requestedButton;
+    private static Button pendingButton;
+    private static Button acceptedButton;
 
     public ListFragment() {
     }
@@ -31,12 +36,12 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         return listFragment;
     }
 
-
     @Nullable
     @Override
     //http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list,container,false);
+
         Fragment fragment;
         Bundle bundle = this.getArguments();
 
@@ -62,14 +67,9 @@ public class ListFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        Button pendingButton = (Button) view.findViewById(R.id.button_pending);
-        pendingButton.setText("PENDING\n"+Integer.toString(HomeFragment.pendingCount));
-
-        Button requestedButton = (Button) view.findViewById(R.id.button_requested);
-        requestedButton.setText("PENDING\n"+Integer.toString(HomeFragment.requestedCount));
-
-        Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
-        acceptedButton.setText("PENDING\n"+Integer.toString(HomeFragment.acceptedCount));
+        requestedButton = (Button) view.findViewById(R.id.button_requested);
+        pendingButton = (Button) view.findViewById(R.id.button_pending);
+        acceptedButton = (Button) view.findViewById(R.id.button_accepted);
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);
@@ -105,5 +105,12 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.list_container, fragment);
         transaction.commit();
+    }
+
+    public static void update(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
+        pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
+        acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
     }
 }

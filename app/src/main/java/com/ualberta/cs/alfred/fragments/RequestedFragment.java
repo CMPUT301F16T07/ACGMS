@@ -59,7 +59,7 @@ public class RequestedFragment extends Fragment {
         updateRequestList();
     }
 
-    private void updateRequestList() {
+    public void updateRequestList() {
         requestAdapter.clear();
         List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
@@ -69,7 +69,11 @@ public class RequestedFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.requestedCount=returned.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Requested", Integer.toString(returned.size()));
+        editor.commit();
+
+        ListFragment.update(getContext());
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -91,8 +95,9 @@ public class RequestedFragment extends Fragment {
         }
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
 
-        //update requested request count
-        HomeFragment.requestedCount=requestedList.size();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Requested", Integer.toString(requestedList.size()));
+        editor.commit();
 
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
         requestedListView.setAdapter(requestAdapter);

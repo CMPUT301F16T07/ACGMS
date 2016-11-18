@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ualberta.cs.alfred.fragments.ListFragment;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -79,10 +81,11 @@ public class RequestDetailsActivity extends AppCompatActivity {
                         new RequestESDeleteController.DeleteRequestTask();
                 deleteRequestTask.execute(r.getRequestID());
                 try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                ListFragment.update(getApplicationContext());
                 finish();
             }
         });
