@@ -44,6 +44,8 @@ public class UserElasticSearchController {
         @Override
         // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array
         protected Void doInBackground(T... objects) {
+
+            //ensure that client is built
             verifySettings();
 
             String esType;

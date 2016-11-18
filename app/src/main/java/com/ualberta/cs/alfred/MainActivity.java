@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-//                                intent.putExtra("MODE", mode);
+                                intent.putExtra("MODE", mode);
                                 startActivity(intent);
                                 finish();
                             } else if (userExist == Boolean.FALSE) {

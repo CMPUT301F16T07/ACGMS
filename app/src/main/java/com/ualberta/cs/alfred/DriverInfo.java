@@ -67,4 +67,6 @@ public class DriverInfo {
     public String getPlateNumber() {
         return plateNumber;
     }
+
+
 }
