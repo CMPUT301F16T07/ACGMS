@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.ualberta.cs.alfred.R;
@@ -56,7 +57,42 @@ public class PendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateRequestList();
+
+        View view = getView();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userName = preferences.getString("USERNAME", null);
+
+        //int listCount = HomeFragment.pendingCount;
+
+        ArrayList<Request> pendingList;
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"));
+            pendingList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+        } else {
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
+            pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
+        }
+
+        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+        pendingListView = (ListView) view.findViewById(R.id.pendingListView);
+        pendingListView.setAdapter(requestAdapter);
+
+        //update pending request count
+        int listCount = pendingList.size();
+        ListFragment.pendingButton.setText("PENDING\n"+Integer.toString(listCount));
+
+        pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Request r = (Request) pendingListView.getItemAtPosition(position);
+                Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
+                intent.putExtra("passedRequest",r);
+                startActivity(intent);
+                updateRequestList();
+            }
+        });
+
     }
 
     private void updateRequestList() {
@@ -69,41 +105,19 @@ public class PendingFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.pendingCount=returned.size();
+        int listCount = returned.size();
+        ListFragment.pendingButton.setText("PENDING\n"+Integer.toString(listCount));
+
         requestAdapter.notifyDataSetChanged();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_pending,container,false);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userName = preferences.getString("USERNAME", null);
 
-        ArrayList<Request> pendingList;
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"));
-            pendingList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
-        } else {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
-            pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
-        }
-        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
-        pendingListView = (ListView) view.findViewById(R.id.pendingListView);
-        pendingListView.setAdapter(requestAdapter);
-
-        //update pending request count
-        HomeFragment.pendingCount=pendingList.size();
-
-        pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Request r = (Request) pendingListView.getItemAtPosition(position);
-                Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
-                intent.putExtra("passedRequest",r);
-                startActivity(intent);
-            }
-        });
         return view;
     }
+
 }

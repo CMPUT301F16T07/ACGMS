@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +36,8 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
     private String userName;
     private Double rideCost;
     private Double rideDistance;
-    private RequestList requestList;
 
+    private FragmentTransaction transaction;
 
     public RequestFragment() {
     }
@@ -117,12 +118,20 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
 
                 // go to list
-                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                //MenuActivity.bottomBar.selectTabAtPosition(0,true);
+                Fragment fragment = new HomeFragment().newInstance();
+                replaceFragmentwithoutStack(fragment);
 
 
                 break;
             //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
             //getRider.execute(ge);
         }
+    }
+
+    private void replaceFragmentwithoutStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.menu_fragment_container, fragment);
+        transaction.commit();
     }
 }

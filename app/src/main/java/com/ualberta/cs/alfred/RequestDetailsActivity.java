@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ualberta.cs.alfred.fragments.HomeFragment;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -80,6 +82,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                 deleteRequestTask.execute(r.getRequestID());
                 try {
                     TimeUnit.MILLISECONDS.sleep(500);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

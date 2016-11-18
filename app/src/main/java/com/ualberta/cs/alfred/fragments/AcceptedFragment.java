@@ -70,7 +70,10 @@ public class AcceptedFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.acceptedCount=returned.size();
+        //HomeFragment.acceptedCount=returned.size();
+        int listCount = returned.size();
+        ListFragment.acceptedButton.setText("Accepted\n"+Integer.toString(listCount));
+
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -84,6 +87,7 @@ public class AcceptedFragment extends Fragment {
         acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
         ArrayList<Request> acceptedRequestList;
 
+        //int listCount = HomeFragment.acceptedCount;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Accepted"));
@@ -96,7 +100,8 @@ public class AcceptedFragment extends Fragment {
         acceptedListView.setAdapter(requestAdapter);
 
         //update accepted request count
-        HomeFragment.acceptedCount=acceptedRequestList.size();
+        int listCount = acceptedRequestList.size();
+        ListFragment.acceptedButton.setText("Accepted\n"+Integer.toString(listCount));
 
         acceptedListView.setAdapter(requestAdapter);
 

@@ -69,7 +69,10 @@ public class RequestedFragment extends Fragment {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
             requestAdapter.addAll(returned);
         }
-        HomeFragment.requestedCount=returned.size();
+        //HomeFragment.requestedCount=returned.size();
+        int listCount = returned.size();
+        ListFragment.requestedButton.setText("Requested\n"+Integer.toString(listCount));
+
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -79,6 +82,8 @@ public class RequestedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_requested,container,false);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userName = preferences.getString("USERNAME", null);
+
+        //int listCount = HomeFragment.requestedCount;
 
         ArrayList<Request> requestedList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
@@ -92,7 +97,8 @@ public class RequestedFragment extends Fragment {
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
 
         //update requested request count
-        HomeFragment.requestedCount=requestedList.size();
+        int listCount = requestedList.size();
+        ListFragment.requestedButton.setText("Requested\n"+Integer.toString(listCount));
 
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
         requestedListView.setAdapter(requestAdapter);

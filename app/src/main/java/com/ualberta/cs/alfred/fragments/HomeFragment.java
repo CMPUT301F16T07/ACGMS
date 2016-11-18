@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
-        requestedButton.setText("Requested\n"+Integer.toString(requestedCount));
+        requestedButton.setText("REQUESTED\n"+Integer.toString(requestedCount));
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
         pendingButton.setBackgroundColor(0xfffffd00);
@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
         acceptedButton.setBackgroundColor(0xff90ee90);
-        acceptedButton.setText("Accepted\n"+Integer.toString(acceptedCount));
+        acceptedButton.setText("ACCEPTED\n"+Integer.toString(acceptedCount));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
@@ -216,12 +216,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * @return
      */
     private int getRiderListCount(String argType) {
-        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> returnList = null;
 
         try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
-            returnList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList(argType);
+            getTask.execute("riderID", preferences.getString("USERNAME", null));
+            returnList = (ArrayList<Request>) new RequestList(getTask.get()).getSpecificRequestList(argType);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -241,22 +241,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
         are pending that do not include the driver on the bidlist of the request.
          */
-        RequestESGetController.GetRequestTask getPending = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getAccepted = new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getTask = new RequestESGetController.GetRequestTask();
         ArrayList<Request> returnList = null;
 
         try {
             if (argType.equals("Request")) {
-                getRequested.execute("requestStatus", "Requested");
-                returnList = new RequestList(getRequested.get()).returnArrayList();
+                getTask.execute("requestStatus", "Requested");
+                returnList = new RequestList(getTask.get()).returnArrayList();
             } else if (argType.equals("Pending")) {
-                getPending.execute("requestStatus", "Pending");
-                returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERNAME", null));
+                getTask.execute("requestStatus", "Pending");
+                returnList = new RequestList(getTask.get()).getWithDriver(preferences.getString("USERNAME", null));
 
             } else if (argType.equals("Accepted")) {
-                getAccepted.execute("requestStatus", "Accepted");
-                returnList = new RequestList(getAccepted.get()).getWithDriver(preferences.getString("USERNAME", null));
+                getTask.execute("requestStatus", "Accepted");
+                returnList = new RequestList(getTask.get()).getWithDriver(preferences.getString("USERNAME", null));
 
             } else {
                 returnList = new ArrayList<Request>();
