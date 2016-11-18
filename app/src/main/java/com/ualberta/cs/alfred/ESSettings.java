@@ -6,16 +6,13 @@ import com.searchly.jestdroid.JestDroidClient;
 
 /**
  * Holds the configuration settings to access Elasticsearch
-<<<<<<< HEAD
-=======
  *
  * @author ookmm
  * @version 1.0
->>>>>>> origin/G-Controllers002
  */
 public class ESSettings {
 
-    private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
+    private static final String SERVER_URI = "http://192.168.1.213:9200";
     static final String INDEX_NAME = "alfred";
     static final String REQUEST_TYPE_NAME = "request";
     static final String RIDER_TYPE_NAME = "rider";

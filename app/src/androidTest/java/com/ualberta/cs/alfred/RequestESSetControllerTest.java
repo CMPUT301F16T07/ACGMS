@@ -21,22 +21,22 @@ public class RequestESSetControllerTest extends ActivityInstrumentationTestCase2
      */
     public void testSetPropertyValueTask() {
 
-        String requestID = "AVhdOt-dtmmsbsUPVvpZ";
+        String requestID = "AVhrljSxdE2DZPCrf9fY";
 
         String requestProperty = "driverIDList";
-        requestProperty = "cost";
-        requestProperty = "requestDate";
+        //requestProperty = "cost";
+        //requestProperty = "requestDate";
 
         String requestPropertyType = "array";
-        requestPropertyType = "double";
-        requestPropertyType = "date";
+        //requestPropertyType = "double";
+        //requestPropertyType = "date";
 
         String requestNewValue = "driver890";
-        requestNewValue = "130.00";
+        //requestNewValue = "130.00";
 
         // Format must be yyy-MM-dd : 2015-11-27
         // If you want to include time, then 2015-11-27T12:10:30Z
-        requestNewValue = "2016-10-26T12:10:30Z";
+        //requestNewValue = "2016-10-26T12:10:30Z";
 
         RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                 new RequestESSetController.SetPropertyValueTask();
