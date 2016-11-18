@@ -48,6 +48,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         fragment = new RequestedFragment().newInstance();
         replaceFragmentwithoutStack(fragment);
 
+
         if (bundle != null) {
             int position = bundle.getInt("index",0);
             //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
@@ -87,6 +88,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
             case R.id.button_pending:
                 fragment = new PendingFragment().newInstance();
                 replaceFragmentwithoutStack(fragment);
+
                 break;
 
             case R.id.button_requested:

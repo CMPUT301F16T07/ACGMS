@@ -11,6 +11,7 @@ public class Driver extends User{
     private String licenceNumber;
     private String plateNumber;
     private RequestList bidList;
+    private Rating driverRating;
 
     /**
      * Instantiates a new Driver.
@@ -29,6 +30,7 @@ public class Driver extends User{
         super(rider.getFirstName(), rider.getLastName(), rider.getUserName(), rider.getDateOfBirth(), rider.getPhoneNumber(), rider.getEmail());
         this.licenceNumber = driverInfo.getLicenceNumber();
         this.plateNumber = driverInfo.getPlateNumber();
+        this.driverRating = new Rating();
     }
 
     /**
@@ -74,6 +76,26 @@ public class Driver extends User{
     public String getPlateNumber() {
         return plateNumber;
     }
+
+
+    /**
+     * update new calculated rating
+     *
+     * @param new_rating the new rating given to the driver
+     */
+    public void updateRating(float new_rating){
+        this.driverRating.updateRating(new_rating);
+    }
+
+    /**
+     * returns driver's rating
+     *
+     * @return returns the current rating
+     */
+    public float getRating(){
+        return this.driverRating.getRating();
+    }
+
 
 
     /**
