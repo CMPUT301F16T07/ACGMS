@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,25 +15,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.ualberta.cs.alfred.BuildConfig;
-import com.ualberta.cs.alfred.MainActivity;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
-import com.ualberta.cs.alfred.Request;
-import com.ualberta.cs.alfred.RequestESGetController;
-import com.ualberta.cs.alfred.RequestList;
+
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
@@ -44,6 +37,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     //private GeoPoint defaultLocation;
     private SharedPreferences preferences;
 
+
     //private GeoPoint startPoint;
     //private GeoPoint destinationPoint;
     //private Marker startMarker;
@@ -51,6 +45,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     //private IMapController mapController;
 
     //private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+
 
     private FragmentTransaction transaction;
 
@@ -136,6 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
 //        waypoints.add(startPoint);
 //        waypoints.add(destinationPoint);
+
         //retreive the road between those points
 //        Road road = roadManager.getRoad(waypoints);
         //build a Polyline with the route shape:

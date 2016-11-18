@@ -17,9 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
-
 import java.util.concurrent.ExecutionException;
-
 
 /**
  * MainActivity is the first activity which the user sees
@@ -120,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                                intent.putExtra("MODE", mode);
                                 RequestFragmentsListController rFLC = new RequestFragmentsListController();
                                 rFLC.updateCounts(mode, MainActivity.this);
                                 startActivity(intent);

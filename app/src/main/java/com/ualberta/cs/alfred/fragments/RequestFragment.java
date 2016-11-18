@@ -20,8 +20,6 @@ import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESAddController;
 import com.ualberta.cs.alfred.RequestList;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by carlcastello on 09/11/16.
  * This is the fragment for making a new request

@@ -23,6 +23,7 @@ import com.ualberta.cs.alfred.RequestList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -36,6 +37,7 @@ public class RequestedFragment extends Fragment {
     private RequestFragmentsListController rFLC;
     private List<Pair<String, String>> listNeeded;
     private String userName;
+
 
     public RequestedFragment() {
         this.rFLC = new RequestFragmentsListController();

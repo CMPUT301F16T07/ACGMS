@@ -17,14 +17,11 @@ import android.widget.ListView;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
-import com.ualberta.cs.alfred.RequestESGetController;
-import com.ualberta.cs.alfred.RequestList;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 09/11/16.
@@ -87,7 +84,6 @@ public class AcceptedFragment extends Fragment {
         userName = preferences.getString("USERNAME", null);
         acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
         ArrayList<Request> acceptedRequestList;
-
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Accepted"));
