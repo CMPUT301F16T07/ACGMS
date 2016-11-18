@@ -6,8 +6,8 @@ package com.ualberta.cs.alfred;
  * Created by Avery on 11/18/2016.
  */
 public class Rating {
-    private float rating_total;
-    private float rating;
+    private double rating_total;
+    private double rating;
     private int rating_count;
 
 
@@ -28,7 +28,7 @@ public class Rating {
      *
      *@return returns rating of driver
      */
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
@@ -37,7 +37,7 @@ public class Rating {
      *
      * @param new_rating the new rating of the driver
      */
-    public void updateRating(float new_rating) {
+    public void updateRating(double new_rating) {
         this.rating_count = this.rating_count+1;
         this.rating_total = this.rating_total + new_rating;
         this.rating = this.rating_total/this.rating_count;

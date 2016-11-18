@@ -92,7 +92,7 @@ public class Driver extends User{
      *
      * @return returns the current rating
      */
-    public float getRating(){
+    public double getRating(){
         return this.driverRating.getRating();
     }
 
