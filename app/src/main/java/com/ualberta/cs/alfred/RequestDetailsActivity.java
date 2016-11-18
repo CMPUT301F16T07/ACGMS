@@ -77,12 +77,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
                 RequestESDeleteController.DeleteRequestTask deleteRequestTask =
                         new RequestESDeleteController.DeleteRequestTask();
                 deleteRequestTask.execute(r.getRequestID());
-                try {
-                    TimeUnit.MILLISECONDS.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 ListFragment.update(getApplicationContext());
+
                 finish();
             }
         });

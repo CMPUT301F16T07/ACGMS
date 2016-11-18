@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.Update;
+import io.searchbox.params.Parameters;
 
 /**
  * This handles the deletion of items form Requests In Elasticsearch
@@ -131,6 +132,7 @@ public class RequestESDeleteController {
 
             try {
                 ESSettings.client.execute(new Delete.Builder(search_parameters[0])
+                .setParameter(Parameters.REFRESH, true)
                 .index(ESSettings.INDEX_NAME)
                 .type(ESSettings.REQUEST_TYPE_NAME)
                 .build());
