@@ -129,7 +129,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
 
 
 
-                Fragment fragment = new UserViewFragment().newInstance();
+                Fragment fragment = UserViewFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
                 break;
         }

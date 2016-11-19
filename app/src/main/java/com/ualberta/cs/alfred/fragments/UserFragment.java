@@ -33,7 +33,7 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
-        Fragment fragment = new UserViewFragment().newInstance();
+        Fragment fragment = UserViewFragment.newInstance();
         replaceFragmentwithoutStack(fragment);
 
         return view;

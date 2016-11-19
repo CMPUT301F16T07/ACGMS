@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.BuildConfig;
@@ -29,27 +30,25 @@ import com.ualberta.cs.alfred.R;
 
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
  */
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
     //private MapView map;
     //private GeoPoint defaultLocation;
     private SharedPreferences preferences;
 
 
-    //private GeoPoint startPoint;
-    //private GeoPoint destinationPoint;
-    //private Marker startMarker;
-    //private Marker endMarker;
-    //private IMapController mapController;
-
-    //private ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
     private Fragment fragment;
     private FragmentTransaction transaction;
+
+    private MapView mapView;
+    private GoogleMap googleMap;
+    private LatLng defaultLocation = new LatLng(53.5444,-113.4904);
 
     public HomeFragment() {
     }
@@ -100,11 +99,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         requestButton.setOnClickListener(this);
 
 
+        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
 
-        fragment = MapFragment.newInstance();
-        transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.mapContainer, fragment);
-        transaction.commit();
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mapView.getMapAsync(this);
+
+
+//        fragment = MapFragment.newInstance();
+//        transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.mapContainer, fragment);
+//        transaction.commit();
 
         return view;
 
@@ -116,29 +127,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_pending:
-                fragment = new ListFragment().newInstance(1);
+                fragment = ListFragment.newInstance(1);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
                 replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_requested:
-                fragment = new ListFragment().newInstance(0);
+                fragment = ListFragment.newInstance(0);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
                 replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_accepted:
-                fragment = new ListFragment().newInstance(2);
+                fragment = ListFragment.newInstance(2);
                 MenuActivity.bottomBar.selectTabAtPosition(1,true);
                 replaceFragmentwithoutStack(fragment);
                 break;
             case R.id.request_button:
-                fragment = new RequestFragment().newInstance();
+                fragment = RequestFragment.newInstance();
                 replaceFragmentwithStack(fragment);
                 break;
         }
 
     }
+
 
     private void replaceFragmentwithoutStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
@@ -151,5 +163,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         transaction.addToBackStack(null);
         transaction.replace(R.id.menu_fragment_container, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+        googleMap = mMap;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }

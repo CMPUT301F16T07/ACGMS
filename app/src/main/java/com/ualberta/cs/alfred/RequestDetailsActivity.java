@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.MapFragment;
@@ -26,7 +31,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * activity for the request details
  */
-public class RequestDetailsActivity extends AppCompatActivity {
+public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private MapView mapView;
+    private GoogleMap googleMap;
+    private LatLng defaultLocation = new LatLng(53.5444,-113.4904);
 
     private DecimalFormat df = new DecimalFormat("0.00");
 
@@ -83,14 +92,18 @@ public class RequestDetailsActivity extends AppCompatActivity {
 
         showDetails(r);
 
-        ArrayList<LatLng> edmonton = new ArrayList<>();
-        edmonton.add(new LatLng(53.5444,-113.4904));
-        MapFragment mapFragment = new MapFragment();
-        mapFragment.putMarkers(edmonton);
-        Fragment fragment = mapFragment.newInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mapContainer, fragment);
-        transaction.commit();
+        mapView = (MapView) this.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+
+        try {
+            MapsInitializer.initialize(this.getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mapView.getMapAsync(this);
+
 
 
     }
@@ -121,7 +134,35 @@ public class RequestDetailsActivity extends AppCompatActivity {
         //get and display start & end
         startLoc.setText(request.getSourceAddress().getLocation());
         endLoc.setText(request.getDestinationAddress().getLocation());
+    }
 
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+        googleMap = mMap;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }

@@ -54,15 +54,15 @@ public class ListFragment extends Fragment implements View.OnClickListener {
             //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
             switch (position) {
                 case 0:
-                    fragment = new RequestedFragment().newInstance();
+                    fragment = RequestedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
                     break;
                 case 1:
-                    fragment = new PendingFragment().newInstance();
+                    fragment = PendingFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
                     break;
                 case 2:
-                    fragment = new AcceptedFragment().newInstance();
+                    fragment = AcceptedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
                     break;
             }
@@ -86,18 +86,18 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         Fragment fragment = null;
         switch (v.getId()) {
             case R.id.button_pending:
-                fragment = new PendingFragment().newInstance();
+                fragment = PendingFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
 
                 break;
 
             case R.id.button_requested:
-                fragment = new RequestedFragment().newInstance();
+                fragment = RequestedFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
                 break;
 
             case R.id.button_accepted:
-                fragment = new AcceptedFragment().newInstance();
+                fragment = AcceptedFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
                 break;
         }
