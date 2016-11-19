@@ -23,7 +23,7 @@ import io.searchbox.core.SearchResult;
  * This handles the getting of items from Requests
  *
  * @author ookmm
- * @version 1.2
+ * @version 1.3
  */
 public class RequestESGetController {
 

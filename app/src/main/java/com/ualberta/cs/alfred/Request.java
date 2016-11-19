@@ -11,15 +11,13 @@ import io.searchbox.annotations.JestId;
  * Holds information related to requests
  *
  * @author ookmm
- * @version 1.2
+ * @version 1.3
  */
 public class Request implements Serializable{
 
     //code from https://www.youtube.com/watch?v=Gi46yco8OJg
     private static final long serialVersionUID = 1L;
 
-    // Count for IDs
-    // private int requestCount = 4;
     @JestId
     private String requestID;
 
@@ -39,8 +37,6 @@ public class Request implements Serializable{
 
     /**
      * constructor for creating a new Request
-     *
-     *
      */
     public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                    double distance, double cost, String riderID) {

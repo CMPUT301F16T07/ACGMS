@@ -8,6 +8,7 @@ import java.io.IOException;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Update;
+import io.searchbox.params.Parameters;
 
 /**
  * Controller for for Adding Request items Elasticsearch
@@ -79,6 +80,7 @@ public class RequestESAddController {
                         .index(ESSettings.INDEX_NAME)
                         .type(ESSettings.REQUEST_TYPE_NAME)
                         .id(requestID)
+                        .setParameter(Parameters.REFRESH, true)
                         .build());
             } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with " +
