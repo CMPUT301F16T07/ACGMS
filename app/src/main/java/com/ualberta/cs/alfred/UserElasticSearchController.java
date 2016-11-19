@@ -38,30 +38,134 @@ public class UserElasticSearchController {
             String esType;
 
             for (T object : objects) {
-                if (object instanceof Rider) {
-                    esType = ESSettings.RIDER_TYPE_NAME;
-                } else {
-                    esType = ESSettings.DRIVER_TYPE_NAME;
-                }
                 Index index = new Index.Builder(object)
-                        .index(ESSettings.INDEX_NAME)
-                        .type(esType)
                         .setParameter(Parameters.REFRESH, true)
+                        .index(ESSettings.INDEX_NAME)
+                        .type(ESSettings.USER_TYPE_NAME)
                         .build();
 
                 try {
                     DocumentResult result = ESSettings.client.execute(index);
                     if (!result.isSucceeded()) {
-                        Log.i("Error", "Elastic search was not able to add the "+esType+".");
+                        Log.i("Error", "Elastic search was not able to add the "+ESSettings.USER_TYPE_NAME+".");
                     }
                 } catch (Exception e) {
-                    Log.i("Uh-Oh", "We failed to add a "+esType+ "to elastic search!");
+                    Log.i("Uh-Oh", "We failed to add a "+ESSettings.USER_TYPE_NAME+ "to elastic search!");
                     e.printStackTrace();
                 }
             }
             return null;
         }
     }
+
+    /**
+     * This class is used to run an AsyncTask in the background to get a rider from the
+     * elastic search server.
+     */
+    public static class GetUserInfo extends AsyncTask<String, Void, User> {
+        @Override
+        protected User doInBackground(String... search_parameters) {
+
+            ESSettings.verifySettings();
+
+            User rider = new User();
+
+            String query = "{\n" +
+                    "    \"query\": {\n" +
+                    "        \"match\" : {\n" +
+                    "            \"userName\" : \n" +
+                    "                \""+search_parameters[0]+"\"\n" +
+                    "            }\n" +
+                    "    }\n" +
+                    "}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.USER_TYPE_NAME)
+                    .build();
+
+            try {
+                SearchResult result = ESSettings.client.execute(search);
+                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
+                SearchResult.Hit hit = hits.get(0);
+                Map source = (Map)hit.source;
+                String id = (String)source.get(JestResult.ES_METADATA_ID);
+                if (result.isSucceeded()) {
+                    rider = result.getSourceAsObject(Rider.class);
+                    rider.setUserID(id);
+                }
+                else {
+                    Log.i("Error", "The search query failed to find the rider that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return rider;
+        }
+    }
+
+    /**
+     * This class is used to run an AsyncTask in the background to get a rider from the
+     * elastic search server.
+     */
+    public static class GetUserInfoWithoutPrivateInfo extends AsyncTask<String, Void, User> {
+        @Override
+        protected User doInBackground(String... search_parameters) {
+
+            ESSettings.verifySettings();
+
+            User rider = new User();
+            String exclusionString = "";
+            for (int i = 1; i < search_parameters.length; ++i) {
+                if (i != search_parameters.length - 1) {
+                    exclusionString += "\""+search_parameters[i]+"\",";
+                } else {
+                    exclusionString += "\""+search_parameters[i]+"\"\n";
+                }
+            }
+
+            String query = "{\n" +
+                    "           \"_source\": {\n" +
+                    "               \"excludes\": [\n" +
+                                        exclusionString +
+                                        "         ]\n" +
+                    "                        },\n"+
+                    "               \"query\": {\n" +
+                    "                   \"match\" : {\n" +
+                    "                       \"userName\" : \n" +
+                    "                       \""+search_parameters[0]+"\"\n" +
+                    "                               }\n" +
+                    "                           }\n" +
+                    "       }";
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.USER_TYPE_NAME)
+                    .build();
+
+            try {
+                SearchResult result = ESSettings.client.execute(search);
+                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
+                SearchResult.Hit hit = hits.get(0);
+                Map source = (Map)hit.source;
+                String id = (String)source.get(JestResult.ES_METADATA_ID);
+                if (result.isSucceeded()) {
+                    rider = result.getSourceAsObject(Rider.class);
+                    rider.setUserID(id);
+                }
+                else {
+                    Log.i("Error", "The search query failed to find the rider that matched.");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return rider;
+        }
+    }
+
+
 
     /**
      * This class is used to run an AsyncTask in the background to get a rider from the

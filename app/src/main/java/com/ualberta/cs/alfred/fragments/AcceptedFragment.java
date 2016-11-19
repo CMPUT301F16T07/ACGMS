@@ -71,7 +71,6 @@ public class AcceptedFragment extends Fragment {
         editor.putString("Accepted", Integer.toString(returned.size()));
         editor.commit();
 
-        ListFragment.update(getContext());
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -98,6 +97,7 @@ public class AcceptedFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
         editor.commit();
+        ListFragment.update(getContext());
 
         acceptedListView.setAdapter(requestAdapter);
 
@@ -107,6 +107,7 @@ public class AcceptedFragment extends Fragment {
                 Request r = (Request) acceptedListView.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
                 intent.putExtra("passedRequest",r);
+                intent.putExtra("FROM", "Accepted");
                 startActivity(intent);
             }
         });

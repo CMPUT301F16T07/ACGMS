@@ -33,10 +33,22 @@ public class User {
     private String phoneNumber;
     private String email;
 
+    private RiderInfo riderInfo;
+    private DriverInfo driverInfo;
+
     /**
      * Instantiates a new User. This will only be used when representing a non-existant user.
      */
     public User() {
+        this.userID = null;
+        this.userName = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.dateOfBirth = null;
+        this.phoneNumber = null;
+        this.email = null;
+        this.riderInfo = null;
+        this.driverInfo = null;
     }
 
     /**
@@ -51,13 +63,48 @@ public class User {
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email) {
-        this.userID = null;
+        this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.riderInfo = new RiderInfo();
+        this.driverInfo = new DriverInfo();
+    }
+
+    /**
+     * Instantiates a new User.
+     *
+     * @param firstName   the first name
+     * @param lastName    the last name
+     * @param userName    the user name
+     * @param dateOfBirth the date of birth
+     * @param phoneNumber the phone number
+     * @param email       the email
+     * @param riderInfo   the explicit rider info
+     */
+    public User(String firstName, String lastName, String userName, Date dateOfBirth,
+                String phoneNumber, String email, RiderInfo riderInfo) {
+        this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
+        this.riderInfo = riderInfo;
+    }
+
+    /**
+     * Instantiates a new User.
+     *
+     * @param firstName   the first name
+     * @param lastName    the last name
+     * @param userName    the user name
+     * @param dateOfBirth the date of birth
+     * @param phoneNumber the phone number
+     * @param email       the email
+     */
+    public User(String firstName, String lastName, String userName, Date dateOfBirth,
+                String phoneNumber, String email, DriverInfo driverInfo) {
+        this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
+        this.driverInfo = driverInfo;
     }
 
     /**

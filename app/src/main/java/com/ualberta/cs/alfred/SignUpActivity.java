@@ -129,10 +129,10 @@ public class SignUpActivity extends AppCompatActivity {
                             userNameEditText.getText().toString(), inputDate, phoneNumberEditText.getText().toString(),
                             emailEditText.getText().toString(), creditCardNumberEditText.getText().toString());
                 }
-                if (Mode.contentEquals("Driver Mode")) {
-                    DriverInfo driver = new DriverInfo(userNameEditText.getText().toString(),
-                            licenseNumberEditText.getText().toString(), plateNumberEditText.getText().toString());
-                }
+//                if (Mode.contentEquals("Driver Mode")) {
+//                    DriverInfo driver = new DriverInfo(userNameEditText.getText().toString(),
+//                            licenseNumberEditText.getText().toString(), plateNumberEditText.getText().toString());
+//                }
                 Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
                 SharedPreferences preferences =
                         PreferenceManager.getDefaultSharedPreferences(SignUpActivity.this);

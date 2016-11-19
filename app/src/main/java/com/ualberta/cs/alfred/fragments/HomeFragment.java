@@ -71,8 +71,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-
-
         // This will modify initialize the counts for each list in the home screen
         RequestFragmentsListController rFLC = new RequestFragmentsListController();
         rFLC.updateCounts(preferences.getString("MODE", null), getContext());
@@ -90,7 +88,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
-
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);

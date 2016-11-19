@@ -73,7 +73,6 @@ public class PendingFragment extends Fragment {
         editor.putString("Pending", Integer.toString(returned.size()));
         editor.commit();
 
-        ListFragment.update(getContext());
         requestAdapter.notifyDataSetChanged();
     }
 
@@ -99,6 +98,7 @@ public class PendingFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Pending", Integer.toString(pendingList.size()));
         editor.commit();
+        ListFragment.update(getContext());
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,6 +106,7 @@ public class PendingFragment extends Fragment {
                 Request r = (Request) pendingListView.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), RequestDetailsActivity.class);
                 intent.putExtra("passedRequest",r);
+                intent.putExtra("FROM", "Pending");
                 startActivity(intent);
             }
         });

@@ -19,7 +19,6 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
      * Instantiates a new User test.
      */
     public UserTest() {
-
         super(MainActivity.class);
     }
 

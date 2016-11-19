@@ -40,5 +40,40 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
             e.printStackTrace();
         }
     }
+
+    public void testAddRiderInfo() {
+        RiderInfo riderInfo = new RiderInfo("23423432424");
+        User user = new User("Jimmy", "Fallon", "jimFal", new Date(), "32432234", "jimmyFallon@ualberta.ca", riderInfo);
+
+        UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
+        addUser.execute(user);
+
+        UserElasticSearchController.GetUserInfo getUserInfo = new UserElasticSearchController.GetUserInfo();
+        getUserInfo.execute("jimFal");
+        User userReturn = null;
+        try {
+            userReturn = getUserInfo.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertTrue(userReturn.getUserName().contentEquals("jimFal"));
+    }
+
+    public void testUserInfoWithoutPrivate() {
+        UserElasticSearchController.GetUserInfoWithoutPrivateInfo getUserInfoWithoutPrivateInfo = new UserElasticSearchController.GetUserInfoWithoutPrivateInfo();
+        getUserInfoWithoutPrivateInfo.execute("jimFal", "riderInfo.creditCardNumber");
+
+        User userReturn = null;
+        try {
+            userReturn = getUserInfoWithoutPrivateInfo.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertTrue(userReturn.getUserName().contentEquals("jimFal"));
+    }
 }
 

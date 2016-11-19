@@ -36,6 +36,12 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         return listFragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        update(getContext());
+    }
+
     @Nullable
     @Override
     //http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
@@ -47,7 +53,6 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
         fragment = new RequestedFragment().newInstance();
         replaceFragmentwithoutStack(fragment);
-
 
         if (bundle != null) {
             int position = bundle.getInt("index",0);
@@ -85,14 +90,13 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
         Fragment fragment = null;
         switch (v.getId()) {
-            case R.id.button_pending:
-                fragment = new PendingFragment().newInstance();
-                replaceFragmentwithoutStack(fragment);
-
-                break;
-
             case R.id.button_requested:
                 fragment = new RequestedFragment().newInstance();
+                replaceFragmentwithoutStack(fragment);
+                break;
+
+            case R.id.button_pending:
+                fragment = new PendingFragment().newInstance();
                 replaceFragmentwithoutStack(fragment);
                 break;
 
@@ -111,6 +115,8 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
     public static void update(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        RequestFragmentsListController rFLC = new RequestFragmentsListController();
+        rFLC.updateCounts(preferences.getString("MODE", null), context);
         requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
         pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
         acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));

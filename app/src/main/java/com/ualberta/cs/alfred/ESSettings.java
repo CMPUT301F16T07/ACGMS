@@ -15,6 +15,7 @@ public class ESSettings {
     private static final String SERVER_URI = "http://ela1.ookoo.co:9200";
     static final String INDEX_NAME = "alfred";
     static final String REQUEST_TYPE_NAME = "request";
+    static final String USER_TYPE_NAME = "userTest02";
     static final String RIDER_TYPE_NAME = "rider";
     static final String DRIVER_TYPE_NAME = "driverinfo";
     static JestDroidClient client;
