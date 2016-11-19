@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2 {
 
     public RequestESAddControllerTest() {
-
         super(MainActivity.class);
     }
 
@@ -104,10 +103,6 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
                 req3DriverID);
         assert(true);
     }
-
-
-
-
 
     public void testAddItemToListTask() {
 

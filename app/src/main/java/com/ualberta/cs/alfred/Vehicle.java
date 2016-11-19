@@ -1,6 +1,5 @@
 package com.ualberta.cs.alfred;
 
-
 /**
  * The type Vehicle.
  *

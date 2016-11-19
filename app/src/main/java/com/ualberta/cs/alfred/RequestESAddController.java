@@ -15,7 +15,7 @@ import io.searchbox.params.Parameters;
  * @author ookmm
  * @version 1.0
  */
-public class RequestESAddController {
+public class  RequestESAddController {
     /**
      * The type Add request task.
      */

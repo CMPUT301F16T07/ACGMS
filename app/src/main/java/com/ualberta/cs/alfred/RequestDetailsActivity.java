@@ -46,46 +46,86 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request_details);
 
-        Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
+        final String mode = preferences.getString("MODE", "None");
+        Intent intent = getIntent();
+        final String from = intent.getExtras().getString("FROM", "None");
+        String next = "None";
+
+        Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
+        final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
         biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
 
-        //pass in a request (need to uncomment mock request in MainActivity to test this)
-        Intent intent = getIntent();
+        if (from.contentEquals("Requested")) {
+            // only the driver will be able to confirm anything in the first stage
+            // the rider will only be able to cancel the request
+            if (mode.contentEquals("Rider Mode")) {
+                confirmButton.setVisibility(View.GONE);
+            } else {
+                cancelButton.setVisibility(View.GONE);
+            }
+            next = "Pending";
+        } else if (from.contentEquals("Pending")) {
+            // the cancel button needs to remain for both the driver and rider
+            // since they both should be able to cancel a request or bid
+            // but only the rider should be able to confirm a bid at this time
+            if (mode.contentEquals("Driver Mode")) {
+                confirmButton.setVisibility(View.GONE);
+            }
+            next = "Accepted";
+        } else if (from.contentEquals("Accepted")) {
+            // finally the trip is in progress and now the all both can do is
+            // cancel the trip
+            confirmButton.setVisibility(View.GONE);
+        }
+
         final Request r = (Request) intent.getSerializableExtra("passedRequest");
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.getString("MODE", null).contentEquals("Rider Mode") &&
-                (r.getRequestStatus().contentEquals("Pending") || r.getRequestStatus().contentEquals("Accepted"))) {
+        if (mode.contentEquals("Rider Mode") &&
+                (r.getRequestStatus().contentEquals("Pending") ||
+                        r.getRequestStatus().contentEquals("Accepted"))) {
             // TODO: Implement a list of possible drivers for a pending request only for the rider to choose from
             ArrayList<String> fakeDrivers = new ArrayList<>();
             fakeDrivers.add("BILL");
             fakeDrivers.add("BOB");
 //            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
-            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, fakeDrivers);
-            biddingDriversListView.setAdapter(biddingDriversAdapter);
-
             // This will show all the possible drivers but we still need to be able to select a driver, and be able to view
             // his profile
+            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, fakeDrivers);
+            biddingDriversListView.setAdapter(biddingDriversAdapter);
         }
 
-        //Mock request for testing
-        /*Address start = new Address("loc1",53.5,-113.1);
-        Address end = new Address("loc2", 53.0, -113.0);
-        Request r = new Request("Accepted",start, end, 500.00, 23.09, "rider124");*/
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestESDeleteController.DeleteRequestTask deleteRequestTask =
-                        new RequestESDeleteController.DeleteRequestTask();
-                deleteRequestTask.execute(r.getRequestID());
-                ListFragment.update(getApplicationContext());
-
+                RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                        new RequestESSetController.SetPropertyValueTask();
+                if (from.contentEquals("Pending")) {
+                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Accepted");
+                } else {
+                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+                }
+                RequestESAddController.AddItemToListTask addItemToListTask =
+                        new RequestESAddController.AddItemToListTask();
+                addItemToListTask.execute(r.getRequestID(), "driverIDList", preferences.getString("USERNAME", null));
                 finish();
             }
         });
-
-
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mode.contentEquals("Rider Mode")) {
+                    RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                            new RequestESDeleteController.DeleteRequestTask();
+                    deleteRequestTask.execute(r.getRequestID());
+                } else {
+                    RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask =
+                            new RequestESDeleteController.DeleteItemFromListTask();
+                    deleteItemFromListTask.execute(r.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
+                }
+                finish();
+            }
+        });
         showDetails(r);
 
         mapView = (MapView) this.findViewById(R.id.mapView);
@@ -99,9 +139,6 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
 
         mapView.getMapAsync(this);
-
-
-
     }
 
     public void showDetails(Request request){

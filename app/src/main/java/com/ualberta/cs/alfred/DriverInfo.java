@@ -13,6 +13,7 @@ public class DriverInfo {
     private String licenceNumber;
     private String plateNumber;
     private Rating driverRating;
+    private Vehicle vehicle;
 
     /**
      * Instantiates a new null Driver info.
@@ -22,6 +23,7 @@ public class DriverInfo {
         this.licenceNumber = null;
         this.plateNumber = null;
         this.driverRating = new Rating();
+        this.vehicle = null;
     }
 
     /**
@@ -31,16 +33,12 @@ public class DriverInfo {
      * @param licenceNumber the licence number (on the users given license)
      * @param plateNumber   the plate number
      */
-    public DriverInfo(String userName, String licenceNumber, String plateNumber) {
+    public DriverInfo(String userName, String licenceNumber, String plateNumber, Vehicle vehicle) {
         this.userName = userName;
         this.licenceNumber = licenceNumber;
         this.plateNumber = plateNumber;
-        this.save();
-    }
-
-    private void save() {
-        UserElasticSearchController.AddUser<DriverInfo> addDriverInfo = new UserElasticSearchController.AddUser<DriverInfo>();
-        addDriverInfo.execute(this);
+        this.driverRating = new Rating();
+        this.vehicle = vehicle;
     }
 
     /**
