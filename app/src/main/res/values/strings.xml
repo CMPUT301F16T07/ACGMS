@@ -39,5 +39,6 @@
     <string name="home_address_text">Address</string>
     <string name="home_gps_text">GPS</string>
     <string name="home_confirm_text">CONFIRM</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

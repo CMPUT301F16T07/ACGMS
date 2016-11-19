@@ -121,14 +121,12 @@
                     android:id="@+id/end_loc" />
             </LinearLayout>
 
-            <!--MAP-->
-            <org.osmdroid.views.MapView
-                android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:id="@+id/request_map"
-                android:layout_marginBottom="2dp"
-                android:layout_centerVertical="false"
-                android:layout_centerHorizontal="false" />
+            <!-- Map -->
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

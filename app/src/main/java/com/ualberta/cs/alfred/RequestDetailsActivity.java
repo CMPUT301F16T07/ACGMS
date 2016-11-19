@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,21 +13,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.fragments.ListFragment;
+import com.ualberta.cs.alfred.fragments.MapFragment;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * activity for the request details
@@ -87,6 +83,16 @@ public class RequestDetailsActivity extends AppCompatActivity {
 
         showDetails(r);
 
+        ArrayList<LatLng> edmonton = new ArrayList<>();
+        edmonton.add(new LatLng(53.5444,-113.4904));
+        MapFragment mapFragment = new MapFragment();
+        mapFragment.putMarkers(edmonton);
+        Fragment fragment = mapFragment.newInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mapContainer, fragment);
+        transaction.commit();
+
+
     }
 
     public void showDetails(Request request){
@@ -116,53 +122,6 @@ public class RequestDetailsActivity extends AppCompatActivity {
         startLoc.setText(request.getSourceAddress().getLocation());
         endLoc.setText(request.getDestinationAddress().getLocation());
 
-        //get coordinates of start and end
-        GeoPoint startPoint = new GeoPoint(request.getSourceAddress().getLatitude(),
-                request.getSourceAddress().getLongitude());
-        GeoPoint destinationPoint = new GeoPoint(request.getDestinationAddress().getLatitude(),
-                request.getDestinationAddress().getLongitude());
-
-        //create map
-        //important! set your user agent to prevent getting banned from the osm servers
-        org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
-        MapView requestMap = (MapView) findViewById(R.id.request_map);
-        requestMap.setTileSource(TileSourceFactory.MAPNIK);
-        requestMap.setBuiltInZoomControls(true);
-        requestMap.setMultiTouchControls(true);
-        IMapController requestMapController = requestMap.getController();
-        requestMapController.setZoom(11);
-
-        //add markers on map
-        double latMiddle = (startPoint.getLatitude()+destinationPoint.getLatitude())/2;
-        double lonMiddle = (startPoint.getLongitude()+destinationPoint.getLongitude())/2;
-        GeoPoint midPoint = new GeoPoint(latMiddle,lonMiddle);
-        requestMapController.setCenter(midPoint);
-
-        Marker startMarker = new Marker(requestMap);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        startMarker.setSnippet("Start");
-        requestMap.getOverlays().add(startMarker);
-
-        Marker endMarker = new Marker(requestMap);
-        endMarker.setPosition(destinationPoint);
-        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        endMarker.setSnippet("End");
-        requestMap.getOverlays().add(endMarker);
-
-        // Route Overlay
-
-        RoadManager roadManager = new OSRMRoadManager(this);
-        //Set-up your start and end points:
-        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-        waypoints.add(startPoint);
-        waypoints.add(destinationPoint);
-        //retreive the road between those points
-        Road road = roadManager.getRoad(waypoints);
-        //build a Polyline with the route shape:
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-        //Add this Polyline to the overlays of your map
-        requestMap.getOverlays().add(roadOverlay);
 
     }
 }
