@@ -18,13 +18,13 @@ import com.ualberta.cs.alfred.BuildConfig;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 
-
+/*
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-
+*/
 import java.util.ArrayList;
 
 /**
@@ -97,6 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         acceptedButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
 
+        /*
         //important! set your user agent to prevent getting banned from the osm servers
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
 
@@ -106,42 +107,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         map.setMultiTouchControls(true);
 
         GeoPoint defaultLocation = new GeoPoint(53.5444,-113.4909);
-//        GeoPoint startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
-//        GeoPoint destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
+        GeoPoint startPoint = new GeoPoint(53.5181319516847, -113.49131921322021);
+        GeoPoint destinationPoint = new GeoPoint(53.52798002388982, -113.52341989071044);
 
         IMapController mapController;
         mapController = map.getController();
         mapController.setZoom(11);
         mapController.setCenter(defaultLocation);
 
-//        startMarker = new Marker(map);
-//        startMarker.setPosition(startPoint);
-//        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-//        startMarker.setSnippet("Start");
-//        map.getOverlays().add(startMarker);
+        //startMarker = new Marker(map);
+        //startMarker.setPosition(startPoint);
+        //startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        //startMarker.setSnippet("Start");
+        //map.getOverlays().add(startMarker);
 
-//        endMarker = new Marker(map);
-//        endMarker.setPosition(destinationPoint);
-//        endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-//        endMarker.setSnippet("End");
-//        map.getOverlays().add(endMarker);
+        //endMarker = new Marker(map);
+        //endMarker.setPosition(destinationPoint);
+        //endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        //endMarker.setSnippet("End");
+        //map.getOverlays().add(endMarker);
 
-//        RoadManager roadManager = new OSRMRoadManager(getActivity());
-        //Set-up your start and end points:
+        //RoadManager roadManager = new OSRMRoadManager(getActivity());
+             / /Set-up your start and end points:
         //ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-//        waypoints.add(startPoint);
-//        waypoints.add(destinationPoint);
+        //waypoints.add(startPoint);
+        //waypoints.add(destinationPoint);
 
         //retreive the road between those points
-//        Road road = roadManager.getRoad(waypoints);
+        //Road road = roadManager.getRoad(waypoints);
         //build a Polyline with the route shape:
-//        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+        //Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         //Add this Polyline to the overlays of your map
-//        map.getOverlays().add(roadOverlay);
+        //map.getOverlays().add(roadOverlay);
 
 
         //save & display changes
         map.invalidate();
+        */
         return view;
 
 

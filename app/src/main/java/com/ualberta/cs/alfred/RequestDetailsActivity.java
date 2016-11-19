@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ualberta.cs.alfred.fragments.ListFragment;
-
+/*
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -22,7 +22,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
-
+*/
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -115,6 +115,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
         startLoc.setText(request.getSourceAddress().getLocation());
         endLoc.setText(request.getDestinationAddress().getLocation());
 
+
+        /*
         //get coordinates of start and end
         GeoPoint startPoint = new GeoPoint(request.getSourceAddress().getLatitude(),
                 request.getSourceAddress().getLongitude());
@@ -163,5 +165,6 @@ public class RequestDetailsActivity extends AppCompatActivity {
         //Add this Polyline to the overlays of your map
         requestMap.getOverlays().add(roadOverlay);
 
+        */
     }
 }
