@@ -24,9 +24,10 @@ public class RequestFragmentsListController {
          */
         RequestList requestedList = new RequestList();
         try {
+            // TODO: Enumerate through queries for we can do the different queries
             for (Pair<String, String> query : queries) {
                 RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
-                getRequested.execute(queries.get(0).first, queries.get(0).second);
+                getRequested.execute(query.first, query.second);
                 List<Request> requested = getRequested.get();
                 requestedList.addMultipleRequest(requested);
             }
@@ -95,9 +96,11 @@ public class RequestFragmentsListController {
         SharedPreferences.Editor editor = preferences.edit();
 
         try {
-            if (argType.equals("Request")) {
+            if (argType.equals("Requested")) {
+                getPending.execute("requestStatus", "Pending");
+                returnList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
                 getRequested.execute("requestStatus", "Requested");
-                returnList = new RequestList(getRequested.get()).returnArrayList();
+                returnList.addAll(getRequested.get());
             } else if (argType.equals("Pending")) {
                 getPending.execute("requestStatus", "Pending");
                 returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERNAME", null));

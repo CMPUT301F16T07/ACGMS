@@ -55,6 +55,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getString("MODE", null).contentEquals("Rider Mode") &&
                 (r.getRequestStatus().contentEquals("Pending") || r.getRequestStatus().contentEquals("Accepted"))) {
+            // TODO: Implement a list of possible drivers for a pending request only for the rider to choose from
             ArrayList<String> fakeDrivers = new ArrayList<>();
             fakeDrivers.add("BILL");
             fakeDrivers.add("BOB");

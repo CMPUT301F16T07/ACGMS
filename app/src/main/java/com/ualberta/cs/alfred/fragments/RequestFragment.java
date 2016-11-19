@@ -109,9 +109,6 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
 
                 // Create an instance of a request and store into elastic search
                 Request request = new Request(Status,startAddress,endAddress,rideDistance,rideCost,userName);
-                // Connect this to elastic search.
-                RequestESAddController.AddRequestTask requestTask = new RequestESAddController.AddRequestTask();
-                requestTask.execute(request);
 
                 // Notify save
                 Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();

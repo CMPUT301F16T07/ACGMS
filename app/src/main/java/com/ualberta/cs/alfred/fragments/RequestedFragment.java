@@ -20,6 +20,7 @@ import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +66,8 @@ public class RequestedFragment extends Fragment {
         requestAdapter.clear();
         List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(listNeeded, userName).removeDriver(userName);
+            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
+            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
             requestAdapter.addAll(returned);
         } else {
             returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
@@ -88,9 +90,10 @@ public class RequestedFragment extends Fragment {
 
         ArrayList<Request> requestedList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Requested"),
-                    new Pair<String, String>("requestStatus", "Pending"));
-            requestedList = rFLC.getRequestList(listNeeded, userName).removeDriver(userName);
+            this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"),
+                    new Pair<String, String>("requestStatus", "Requested"));
+            requestedList = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
+            requestedList.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
         } else {
             this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
             requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
