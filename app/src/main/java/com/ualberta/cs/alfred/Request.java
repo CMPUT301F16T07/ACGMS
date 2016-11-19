@@ -32,9 +32,6 @@ public class Request implements Serializable{
     private Date requestDate;
     private DecimalFormat df = new DecimalFormat("0.00");
 
-    public Request() {
-    }
-
     /**
      * constructor for creating a new Request
      */

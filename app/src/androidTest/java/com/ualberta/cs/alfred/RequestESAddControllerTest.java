@@ -30,16 +30,16 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
          */
 
         /* Step 1: Gather rider info */
-        String rider1FirstName = "Stephen";
-        String rider1LastName = "Harper";
-        String rider1Username = "sharper";
+        String rider1FirstName = "Vladimir";
+        String rider1LastName = "Putin";
+        String rider1Username = "vputin";
 
         // Create date
-        GregorianCalendar gc = new GregorianCalendar(1970, Calendar.JUNE, 13);
+        GregorianCalendar gc = new GregorianCalendar(1950, Calendar.JUNE, 20);
         Date rider1BirthDate  = gc.getTime();
 
-        String rider1PhoneNumber = "403-230-8888";
-        String rider1Email = "sharper@example.com";
+        String rider1PhoneNumber = "416-230-8888";
+        String rider1Email = "vputin@example.com";
         String rider1CCNumber = "666688844443333";
 
         /* Step 2: Add rider info to constructor */
@@ -50,7 +50,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
 
         // Find the rider with this username
-        retrievedRider.execute("sharper");
+        retrievedRider.execute("vputin");
 
         String rider1UserId = null;
 
@@ -70,8 +70,8 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         /* Step 4: Create request any number of request with the newly retrieved rider userId */
         // Create request #1
         String req1Status = "Pending";
-        Address req1SrcAddr = new Address("South side", 65.56777, 79.34555);
-        Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);
+        Address req1SrcAddr = new Address("South side", -65.56777, 79.34555);
+        Address req1DestAddr = new Address("Downtown", -50.56500, 89.56888);
         double req1Cost = 90.30;
         double req1Distance = 4.5;
         String req1RiderID = rider1UserId;
@@ -82,8 +82,8 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
 
         // Create request #2
         String req2Status = "Accepted";
-        Address req2SrcAddr = new Address("Airport", 51.56777, 30.34555);
-        Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
+        Address req2SrcAddr = new Address("Airport", -51.56777, 30.34555);
+        Address req2DestAddr = new Address("South Campus", -20.56500, 12.56888);;
         double req2Cost = 30.30;
         double req2Distance = 21.5;
         String req2RiderID = rider1UserId;
@@ -94,8 +94,8 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
 
         // Create request #3
         String req3Status = "Pending";
-        Address req3SrcAddr = new Address("Airport", 51.56777, 30.34555);
-        Address req3DestAddr = new Address("South Campus", 51.56500, 30.56888);;
+        Address req3SrcAddr = new Address("Airport", -51.56777, 30.34555);
+        Address req3DestAddr = new Address("South Campus", -51.56500, 30.56888);;
         double req3Cost = 30.30;
         double req3Distance = 21.5;
         String req3DriverID = rider1UserId;

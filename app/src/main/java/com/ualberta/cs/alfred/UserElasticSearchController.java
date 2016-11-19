@@ -11,6 +11,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.params.Parameters;
 
 /**
  * This controller holds the functionality to add and get users from
@@ -42,7 +43,11 @@ public class UserElasticSearchController {
                 } else {
                     esType = ESSettings.DRIVER_TYPE_NAME;
                 }
-                Index index = new Index.Builder(object).index(ESSettings.INDEX_NAME).type(esType).build();
+                Index index = new Index.Builder(object)
+                        .index(ESSettings.INDEX_NAME)
+                        .type(esType)
+                        .setParameter(Parameters.REFRESH, true)
+                        .build();
 
                 try {
                     DocumentResult result = ESSettings.client.execute(index);

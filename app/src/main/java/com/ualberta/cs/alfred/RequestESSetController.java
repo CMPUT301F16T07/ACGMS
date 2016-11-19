@@ -158,6 +158,12 @@ public class RequestESSetController {
                             stringBuilder.append(keyValue);
                             break;
 
+                        case "address" :
+                            keyValue = String.format("\"%s\" : %s", key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+
                         default:
                             throw new IllegalArgumentException("Provided an unsupported property type: " +
                                     valueType);

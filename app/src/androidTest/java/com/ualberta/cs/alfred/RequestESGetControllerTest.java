@@ -63,7 +63,7 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
                 new RequestESGetController.GetRequestByIdTask();
 
         // Find the request with this id
-        retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");
+        retrievedRequest.execute("AVh6kX-AdE2DZPCrf9kW");
 
         try {
             Request request = retrievedRequest.get();
@@ -73,6 +73,8 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
             System.out.println("Request Distance: " + request.getDistance());
             System.out.println("Request Cost: " + request.getCost());
             System.out.println("Request Status: " + request.getRequestStatus());
+            System.out.println("Request Source Address Location: " + request.getSourceAddress().getLocation());
+            System.out.println("Request Destination Address Location: " + request.getDestinationAddress().getLocation());
 
             System.out.println("====================");
             assert (true);
