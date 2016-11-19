@@ -7,7 +7,7 @@ import android.test.ActivityInstrumentationTestCase2;
  * Creates the type Address test.
  *
  * @author carlcastello on 07/11/16.
- * @version 1.1
+ * @version 1.2
  * @see Address
  */
 public class AddressTest extends ActivityInstrumentationTestCase2 {
@@ -27,9 +27,9 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         // Initializing all necessary variable for testing.
         Address address;
         String location = "116 Knottwood Road NW";
+        double longitude = -73.989308;
         double latitude = 40.741895;
-        double longtitude = -73.989308;
-        address = new Address(location, latitude, longtitude);
+        address = new Address(location, longitude, latitude);
 
         assertTrue("getLocation Failed!", location.equals(address.getLocation()));
     }
@@ -41,9 +41,13 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         // Initializing all necessary variable for testing.
         Address address;
         String location = "116 Knottwood Road NW";
-        double latitude = 40.741895;
         double longitude = -73.989308;
-        address = new Address(location, latitude, longitude);
+        double latitude = 40.741895;
+        address = new Address(location, longitude, latitude);
+
+        System.out.println("====== Lat =======");
+        System.out.println(address.getLatitude());
+        System.out.println("====== End =======");
 
         assertTrue("getLatitude Failed!", latitude == address.getLatitude());
     }
@@ -55,9 +59,9 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         // Initializing all necessary variable for testing.
         Address address;
         String location = "116 Knottwood Road NW";
-        double latitude = 40.741895;
         double longitude = -73.989308;
-        address = new Address(location, latitude, longitude);
+        double latitude = 40.741895;
+        address = new Address(location, longitude, latitude);
 
         assertTrue("getLongitude Failed!", longitude == address.getLongitude());
     }
@@ -70,9 +74,9 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         Address address;
         String location1 = "116 Knottwood Road NW";
         String location2 = "7632 23 Ave NW";
-        double latitude = 40.741895;
         double longitude = -73.989308;
-        address = new Address(location1, latitude, longitude);
+        double latitude = 40.741895;
+        address = new Address(location1, longitude, latitude);
 
         address.setLocation(location2);
 
@@ -88,10 +92,10 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         // Initializing all necessary variable for testing.
         Address address;
         String location1 = "116 Knottwood Road NW";
+        double longitude = -73.989308;
         double latitude1 = 40.741895;
         double latitude2 = 43.231312;
-        double longitude = -73.989308;
-        address = new Address(location1, latitude1, longitude);
+        address = new Address(location1, longitude, latitude1);
 
         address.setLatitude(latitude2);
 
@@ -107,10 +111,10 @@ public class AddressTest extends ActivityInstrumentationTestCase2 {
         // Initializing all necessary variable for testing.
         Address address;
         String location1 = "116 Knottwood Road NW";
-        double latitude = 40.741895;
         double longitude1 = -73.989308;
         double longitude2 = -77.201313;
-        address = new Address(location1, latitude, longitude1);
+        double latitude = 40.741895;
+        address = new Address(location1, longitude1, latitude);
 
         address.setLongitude(longitude1);
 

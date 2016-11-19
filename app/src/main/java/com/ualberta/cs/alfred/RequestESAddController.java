@@ -81,6 +81,7 @@ public class RequestESAddController {
                         .index(ESSettings.INDEX_NAME)
                         .type(ESSettings.REQUEST_TYPE_NAME)
                         .id(requestID)
+                        .setParameter(Parameters.REFRESH, true)
                         .build());
             } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with " +

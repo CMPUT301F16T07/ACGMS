@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import io.searchbox.core.SearchResult;
  * This handles the getting of items from Requests
  *
  * @author ookmm
- * @version 1.2
+ * @version 1.3
  */
 public class RequestESGetController {
 
@@ -30,11 +31,9 @@ public class RequestESGetController {
      * Get request task.
      *
      * @return a list of requests matching the search parameters.
-     * <<<<<<< HEAD
-     * =======
+     *
      * @Note: Use GetRequestByMultiplePreferencesTask function to allow for more search
      * preferences like finding Pending requests by certain rider.
-     * >>>>>>> origin/G-Controllers002
      */
     public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<Request>> {
         @Override
@@ -289,18 +288,24 @@ public class RequestESGetController {
             try {
                 SearchResult result2 = ESSettings.client.execute(search2);
 
+
                 if (result2.isSucceeded()) {
-            /*
-            JsonArray hits = result.getJsonObject()
-                    .getAsJsonObject("hits")
-                    .getAsJsonArray("hits");
 
-            int numHits = hits.size();
-            */
+                    /*
+                    JsonArray hits = result2.getJsonObject()
+                            .getAsJsonObject("hits")
+                            .getAsJsonArray("hits");
 
+                    int numHits = hits.size();
+
+                    System.out.println("==== Num hits =====");
+                    System.out.println(numHits);
+                    System.out.println("==== End of Num hits =====");
+                    */
 
                     List<Request> foundRequests = result2.getSourceAsObjectList(Request.class);
                     requests.addAll(foundRequests);
+
                 } else {
                     Log.i("Error", "The search query failed to find the request that matched.");
                 }

@@ -29,24 +29,15 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         RequestESGetController.GetRequestTask retrievedRequest =
                 new RequestESGetController.GetRequestTask();
 
-<<<<<<< HEAD
         // Find all requests where riderID is rider001
         retrievedRequest.execute("riderID", "rider001");
-=======
-        // Find all requests where riderID is rider011
-        retrievedRequest.execute("riderID", "rider011");
->>>>>>> origin/G-Controllers002
 
         try {
             ArrayList<Request> requests = retrievedRequest.get();
             for (Request request : requests) {
                 System.out.println("====================");
-                System.out.println("Request ID is: " + request.getRequestID());
-<<<<<<< HEAD
                 System.out.println("Request ID is: " + request.getRiderID());
-=======
                 System.out.println("Rider ID is: " + request.getRiderID());
->>>>>>> origin/G-Controllers002
                 System.out.println("Request Distance: " + request.getDistance());
                 System.out.println("Request Cost: " + request.getCost());
                 System.out.println("Request Status: " + request.getRequestStatus());
@@ -72,7 +63,7 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
                 new RequestESGetController.GetRequestByIdTask();
 
         // Find the request with this id
-        retrievedRequest.execute("AVhUaYHOFLrhMuj9wTs4");
+        retrievedRequest.execute("AVh6kX-AdE2DZPCrf9kW");
 
         try {
             Request request = retrievedRequest.get();
@@ -82,6 +73,8 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
             System.out.println("Request Distance: " + request.getDistance());
             System.out.println("Request Cost: " + request.getCost());
             System.out.println("Request Status: " + request.getRequestStatus());
+            System.out.println("Request Source Address Location: " + request.getSourceAddress().getLocation());
+            System.out.println("Request Destination Address Location: " + request.getDestinationAddress().getLocation());
 
             System.out.println("====================");
             assert (true);
@@ -92,8 +85,6 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         }
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Test get request by multiple preferences task.
      *
@@ -149,6 +140,4 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
             e.printStackTrace();
         }
     }
-
->>>>>>> origin/G-Controllers002
 }

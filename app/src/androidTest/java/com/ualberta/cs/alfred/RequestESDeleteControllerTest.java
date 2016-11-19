@@ -50,7 +50,7 @@ public class RequestESDeleteControllerTest extends ActivityInstrumentationTestCa
                 new RequestESDeleteController.DeleteRequestTask();
 
         // Delete the request with this id
-        deleteRequest.execute("AVhdOt-dtmmsbsUPVvpZ");
+        deleteRequest.execute("AVhdOt9qtmmsbsUPVvpY");
         assert (true);
     }
 

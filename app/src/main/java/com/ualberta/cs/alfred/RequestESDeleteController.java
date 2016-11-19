@@ -13,7 +13,7 @@ import io.searchbox.params.Parameters;
  * This handles the deletion of items form Requests In Elasticsearch
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  */
 public class RequestESDeleteController {
 
@@ -101,15 +101,11 @@ public class RequestESDeleteController {
                             requestValue);
             }
 
-            System.out.println("=================");
-            System.out.println(query);
-            System.out.println("=================");
-
-
             try {
                 ESSettings.client.execute(new Update.Builder(query)
                         .index(ESSettings.INDEX_NAME)
                         .type(ESSettings.REQUEST_TYPE_NAME)
+                        .setParameter(Parameters.REFRESH, true)
                         .id(requestID)
                         .build());
             } catch (IOException e) {
@@ -135,6 +131,7 @@ public class RequestESDeleteController {
                 .setParameter(Parameters.REFRESH, true)
                 .index(ESSettings.INDEX_NAME)
                 .type(ESSettings.REQUEST_TYPE_NAME)
+                .setParameter(Parameters.REFRESH, true)
                 .build());
             } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with " +

@@ -6,12 +6,9 @@ import com.searchly.jestdroid.JestDroidClient;
 
 /**
  * Holds the configuration settings to access Elasticsearch
-<<<<<<< HEAD
-=======
  *
  * @author ookmm
  * @version 1.0
->>>>>>> origin/G-Controllers002
  */
 public class ESSettings {
 

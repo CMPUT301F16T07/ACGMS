@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Address class which stores details of the address.
  *
  * @author carlcastello on 07/11/16.
- * @version 1.1
+ * @version 1.2
  */
 public class Address implements Serializable{
 
@@ -15,16 +15,17 @@ public class Address implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private String location;
-    private double latitude;
-    private double longitude;
+    private double[] coordinates;
 
     /**
      * Instantiates a new Address.
      */
     public Address(){
         this.location = null;
-        this.latitude = 0.0;
-        this.longitude = 0.0;
+        this.coordinates = new double[2];
+        this.coordinates[0] = 0.0;
+        this.coordinates[1] = 0.0;
+
     }
 
     /**
@@ -34,10 +35,11 @@ public class Address implements Serializable{
      * @param latitude  the latitude
      * @param longitude the longitude
      */
-    public Address(String location, double latitude, double longitude) {
+    public Address(String location, double longitude, double latitude) {
         this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.coordinates = new double[2];
+        this.coordinates[0] = longitude;
+        this.coordinates[1] = latitude;
     }
 
     /**
@@ -59,21 +61,24 @@ public class Address implements Serializable{
     }
 
     /**
-     * Gets latitude.
+     * Sets coordinates.
      *
-     * @return the latitude
+     * @param longitude the longitude
+     * @param latitude  the latitude
      */
-    public double getLatitude() {
-        return latitude;
+    public void setCoordinates(double longitude, double latitude) {
+        this.coordinates[0] = longitude;
+        this.coordinates[1] = latitude;
     }
 
+
     /**
-     * Sets latitude.
+     * Get coordinates double [ ].
      *
-     * @param latitude the latitude
+     * @return the double [ ]
      */
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public double[] getCoordinates() {
+        return this.coordinates;
     }
 
     /**
@@ -82,7 +87,7 @@ public class Address implements Serializable{
      * @return the longitude
      */
     public double getLongitude() {
-        return longitude;
+        return this.coordinates[0];
     }
 
     /**
@@ -91,6 +96,28 @@ public class Address implements Serializable{
      * @param longitude the longitude
      */
     public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        this.coordinates[0] = longitude;
     }
+
+
+    /**
+     * Gets latitude.
+     *
+     * @return the latitude
+     */
+    public double getLatitude() {
+        return this.coordinates[1];
+    }
+
+    /**
+     * Sets latitude.
+     *
+     * @param latitude the latitude
+     */
+    public void setLatitude(double latitude) {
+        this.coordinates[1] = latitude;
+    }
+
+
+
 }

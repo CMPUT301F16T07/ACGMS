@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import io.searchbox.core.Update;
+import io.searchbox.params.Parameters;
 
 /**
  * This handles the setting of items to Requests
@@ -98,6 +99,7 @@ public class RequestESSetController {
                         .index(ESSettings.INDEX_NAME)
                         .type(ESSettings.REQUEST_TYPE_NAME)
                         .id(requestID)
+                        .setParameter(Parameters.REFRESH, true)
                         .build());
             } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with " +
@@ -156,6 +158,12 @@ public class RequestESSetController {
                             stringBuilder.append(keyValue);
                             break;
 
+                        case "address" :
+                            keyValue = String.format("\"%s\" : %s", key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+
                         default:
                             throw new IllegalArgumentException("Provided an unsupported property type: " +
                                     valueType);
@@ -191,6 +199,7 @@ public class RequestESSetController {
                         .index(ESSettings.INDEX_NAME)
                         .type(ESSettings.REQUEST_TYPE_NAME)
                         .id(requestID)
+                        .setParameter(Parameters.REFRESH, true)
                         .build());
             } catch (IOException e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with " +
