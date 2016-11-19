@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,12 +18,10 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.fragments.ListFragment;
-import com.ualberta.cs.alfred.fragments.MapFragment;
 
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 /**
