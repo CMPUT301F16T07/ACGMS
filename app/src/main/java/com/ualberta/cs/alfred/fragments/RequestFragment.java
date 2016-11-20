@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +21,10 @@ import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESAddController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * Created by carlcastello on 09/11/16.
  * This is the fragment for making a new request
@@ -35,7 +40,6 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
     private String userName;
     private Double rideCost;
     private Double rideDistance;
-    private RequestList requestList;
 
 
     public RequestFragment() {
@@ -68,9 +72,72 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
             case R.id.request_done_button:
                 // Initialize request status
                 Status = "Requested";
+
                 // Get user id from the user who requested a ride
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 userName = preferences.getString("USERNAME", null);
+
+
+                String start = startPoint.getText().toString();
+                String end = endPoint.getText().toString();
+
+                // Check if input is null
+                if (start.matches("") || end.matches("")) {
+                    // do nothing
+                } else {
+                    Geocoder geocoder = new Geocoder(getContext(),Locale.getDefault());
+                    // List of points returned by the address
+                    List<android.location.Address> startCoordinates;
+                    List<android.location.Address> endCoordinates;
+                    try {
+                        startCoordinates = geocoder.getFromLocationName(start,1);
+                        endCoordinates = geocoder.getFromLocationName(end,1);
+
+                        int startCoordinatesSize = startCoordinates.size();
+                        int endCoordinatesSize = endCoordinates.size();
+
+                        // Check if both list are empty
+                        if (startCoordinatesSize > 0 && endCoordinatesSize > 0) {
+                            // get the coordinates of the first results for both address
+                            double x1 = startCoordinates.get(0).getLatitude();
+                            double y1 = startCoordinates.get(0).getLongitude();
+                            double x2 = endCoordinates.get(0).getLatitude();
+                            double y2 = endCoordinates.get(0).getLongitude();
+
+                            // Address is defined as
+                            // Address(String location, double longitude, double latitude)
+                            startAddress = new Address(start, y1, x1);
+                            endAddress = new Address(end, y2, x2);
+
+                            // Create an instance of a request and store into elastic search
+                            Request request = new Request(Status,startAddress,endAddress,rideDistance,rideCost,userName);
+
+                            // Notify save
+                            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+
+                            // go to list
+                            MenuActivity.bottomBar.selectTabAtPosition(1,true);
+
+                        } else {
+                            // Error messages
+                            String errorMessage = "Unable to find start and destination Address";
+                            if (startCoordinatesSize == 0) {
+                                errorMessage = "Unable to find the start address";
+                            }
+                            if (endCoordinatesSize == 0) {
+                                errorMessage = "Unable to find the destination address";
+                            }
+                            Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                
+                /*
                 // Hardcode distance for mock request
                 //rideDistance = 122.00;
                 // Hardcode cost for mock request
@@ -118,6 +185,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
 
 
                 break;
+                  */
             //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
             //getRider.execute(ge);
         }
