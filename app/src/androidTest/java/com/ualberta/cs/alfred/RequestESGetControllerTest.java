@@ -118,7 +118,65 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         String keyword = "South";
         retrievedRequest.execute(
                 "requestStatus", "string", "Pending",
-                "_all", "string", "South"
+                "_all", "string", keyword
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get request by multiple preferences task.
+     *
+     * @Note: need to provide the search parameters, and if sorted by either asc or desc.
+     */
+    public void testGetRequestSortedByPricePerKmTask() {
+
+        RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequest =
+                new RequestESGetController.GetRequestSortedByPricePerKmTask();
+        /*
+        // Find all requests where riderID is rider011 and requestStatus is Pending
+        retrievedRequest.execute(
+                "riderID", "string", "rider011",
+                "requestStatus", "string", "Pending"
+        );
+        */
+
+        /*
+        // Find a request where id = AVhUaYHOFLrhMuj9wTs4
+        retrievedRequest.execute(
+                "_id", "string", "AVhUaYHOFLrhMuj9wTs4"
+        );
+        */
+
+        /*
+        // Find all requests where riderID is rider011
+        retrievedRequest.execute("riderID", "string", "rider011");
+        */
+
+        // Find all requests with status "Pending" where rider is rider001
+        // sorted by price per kilometre in descending order.
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "requestStatus", "string", "Pending",
+                "riderID", "string", "rider001",
+                orderBy
         );
 
         try {
