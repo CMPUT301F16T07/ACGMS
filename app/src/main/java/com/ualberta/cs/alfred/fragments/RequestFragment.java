@@ -115,8 +115,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                             float[] results = new float[1];
                             Location.distanceBetween(x1,y1,x2,y2,results);
 
+                            // Calculate Distance
+                            double distance = results[0]/1000;
                             // round to the nearest cent
-                            double cost = Math.round( (results[0]/2) * 100.0 ) / 100.0 ;
+                            double cost = Math.round( (distance/2) * 100.0 ) / 100.0 ;
 
                             //String string = Float.toString(results[0]);
                             //Toast.makeText(getActivity(),string,Toast.LENGTH_LONG).show();
