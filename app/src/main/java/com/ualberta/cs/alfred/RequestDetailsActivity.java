@@ -3,6 +3,7 @@ package com.ualberta.cs.alfred;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -116,13 +117,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestESSetController.SetPropertyValueTask setPropertyValueTask =
-                        new RequestESSetController.SetPropertyValueTask();
-                if (from.contentEquals("Pending")) {
-                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Accepted");
-                } else {
-                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
-                }
+                upgradeStatus(from);
                 RequestESAddController.AddItemToListTask addItemToListTask =
                         new RequestESAddController.AddItemToListTask();
                 addItemToListTask.execute(r.getRequestID(), "driverIDList", preferences.getString("USERNAME", null));
@@ -137,8 +132,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                             new RequestESDeleteController.DeleteRequestTask();
                     deleteRequestTask.execute(r.getRequestID());
                 } else {
-                    RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask =
-                            new RequestESDeleteController.DeleteItemFromListTask();
+                    downgradeStatus(from);
+                    RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
                     deleteItemFromListTask.execute(r.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
                 }
                 finish();
@@ -158,6 +153,26 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
 
         mapView.getMapAsync(this);
+    }
+
+    public void upgradeStatus(String from) {
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                new RequestESSetController.SetPropertyValueTask();
+        if (from.contentEquals("Pending")) {
+            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Accepted");
+        } else {
+            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+        }
+    }
+
+    public void downgradeStatus(String from) {
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                new RequestESSetController.SetPropertyValueTask();
+        if (from.contentEquals("Pending")) {
+            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Requested");
+        } else {
+            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+        }
     }
 
     public void showDetails(Request request){
