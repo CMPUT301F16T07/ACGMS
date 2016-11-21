@@ -55,6 +55,8 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.isRider = Boolean.FALSE;
+        this.isDriver = Boolean.FALSE;
     }
 
     /**
@@ -73,6 +75,7 @@ public class User {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.riderInfo = riderInfo;
         this.isRider = Boolean.TRUE;
+        this.isDriver = Boolean.FALSE;
     }
 
     /**
@@ -90,6 +93,7 @@ public class User {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.driverInfo = driverInfo;
         this.isDriver = Boolean.TRUE;
+        this.isRider = Boolean.FALSE;
     }
 
 
