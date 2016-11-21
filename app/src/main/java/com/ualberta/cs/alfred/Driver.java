@@ -15,12 +15,6 @@ public class Driver extends User{
 
     /**
      * Instantiates a new Driver.
-     */
-    public Driver() {
-        super();
-    }
-    /**
-     * Instantiates a new Driver.
      *
      * @param driverInfo driver's information
      * @param rider a rider class consisting of the driver's details

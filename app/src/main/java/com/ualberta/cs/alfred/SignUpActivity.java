@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,34 +102,36 @@ public class SignUpActivity extends AppCompatActivity {
             emailEditText.setVisibility(View.GONE);
             TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
             emailTextView.setVisibility(View.GONE);
-
-            if (this.oppositeExists.contentEquals("Rider Mode")) {
-                creditCardNumberEditText.setVisibility(View.GONE);
-                TextView creditCardNumberTextView = (TextView) findViewById(R.id.creditCardTextView);
-                creditCardNumberTextView.setVisibility(View.GONE);
-            } else if (this.oppositeExists.contentEquals("Driver Mode")){
-                plateNumberEditText.setVisibility(View.GONE);
-                TextView plateNumberTextView = (TextView) findViewById(R.id.plateNumberTextView);
-                plateNumberTextView.setVisibility(View.GONE);
-                serialNumberEditText.setVisibility(View.GONE);
-                TextView serialNumberTextView = (TextView) findViewById(R.id.serialNumberTextView);
-                serialNumberTextView.setVisibility(View.GONE);
-                typeEditText.setVisibility(View.GONE);
-                TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
-                typeTextView.setVisibility(View.GONE);
-                makeEditText.setVisibility(View.GONE);
-                TextView makeTextView = (TextView) findViewById(R.id.makeTextView);
-                makeTextView.setVisibility(View.GONE);
-                modelEditText.setVisibility(View.GONE);
-                TextView modelTextView = (TextView) findViewById(R.id.modelTextView);
-                modelTextView.setVisibility(View.GONE);
-                yearEditText.setVisibility(View.GONE);
-                TextView yearTextView = (TextView) findViewById(R.id.yearTextView);
-                yearTextView.setVisibility(View.GONE);
-                colorEditText.setVisibility(View.GONE);
-                TextView colorTextView = (TextView) findViewById(R.id.colorTextView);
-                colorTextView.setVisibility(View.GONE);
-            }
+        }
+        if ((this.oppositeExists != null && this.oppositeExists.contentEquals("Rider Mode")) || Mode.contentEquals("Driver Mode")) {
+            creditCardNumberEditText.setVisibility(View.GONE);
+            TextView creditCardNumberTextView = (TextView) findViewById(R.id.creditCardTextView);
+            creditCardNumberTextView.setVisibility(View.GONE);
+        } else if ((this.oppositeExists != null && this.oppositeExists.contentEquals("Driver Mode")) || Mode.contentEquals("Rider Mode")){
+            licenseNumberEditText.setVisibility(View.GONE);
+            TextView licenseNumberTextView = (TextView) findViewById(R.id.licenseNumberTextView);
+            licenseNumberTextView.setVisibility(View.GONE);
+            plateNumberEditText.setVisibility(View.GONE);
+            TextView plateNumberTextView = (TextView) findViewById(R.id.plateNumberTextView);
+            plateNumberTextView.setVisibility(View.GONE);
+            serialNumberEditText.setVisibility(View.GONE);
+            TextView serialNumberTextView = (TextView) findViewById(R.id.serialNumberTextView);
+            serialNumberTextView.setVisibility(View.GONE);
+            typeEditText.setVisibility(View.GONE);
+            TextView typeTextView = (TextView) findViewById(R.id.typeTextView);
+            typeTextView.setVisibility(View.GONE);
+            makeEditText.setVisibility(View.GONE);
+            TextView makeTextView = (TextView) findViewById(R.id.makeTextView);
+            makeTextView.setVisibility(View.GONE);
+            modelEditText.setVisibility(View.GONE);
+            TextView modelTextView = (TextView) findViewById(R.id.modelTextView);
+            modelTextView.setVisibility(View.GONE);
+            yearEditText.setVisibility(View.GONE);
+            TextView yearTextView = (TextView) findViewById(R.id.yearTextView);
+            yearTextView.setVisibility(View.GONE);
+            colorEditText.setVisibility(View.GONE);
+            TextView colorTextView = (TextView) findViewById(R.id.colorTextView);
+            colorTextView.setVisibility(View.GONE);
         }
 
         dateOfBirthEditText.setFocusable(false);
@@ -157,15 +160,16 @@ public class SignUpActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!oppositeExists.contentEquals("None")) {
-                    if (oppositeExists.contentEquals("Driver Mode")) {
-                        UserElasticSearchController.UpdateUser<RiderInfo> updateUser = new UserElasticSearchController.UpdateUser<RiderInfo>(userName, "riderInfo");
-                        RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
-                        updateUser.execute(riderInfo);
-                    } else if (oppositeExists.contentEquals("Rider Mode")) {
-                        UserElasticSearchController.UpdateUser<DriverInfo> updateUser = new UserElasticSearchController.UpdateUser<DriverInfo>(userName, "driverInfo");
-                        updateUser.execute(collectDriverInfo());
-                    }
+                if (oppositeExists != null) {
+                    Toast.makeText(SignUpActivity.this, "Update user is to be done", Toast.LENGTH_LONG);
+//                    if (oppositeExists.contentEquals("Driver Mode")) {
+//                        UserElasticSearchController.UpdateUser<RiderInfo> updateUser = new UserElasticSearchController.UpdateUser<RiderInfo>(userName, "riderInfo");
+//                        RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
+//                        updateUser.execute(riderInfo);
+//                    } else if (oppositeExists.contentEquals("Rider Mode")) {
+//                        UserElasticSearchController.UpdateUser<DriverInfo> updateUser = new UserElasticSearchController.UpdateUser<DriverInfo>(userName, "driverInfo");
+//                        updateUser.execute(collectDriverInfo());
+//                    }
                 } else {
                     UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
                     RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());

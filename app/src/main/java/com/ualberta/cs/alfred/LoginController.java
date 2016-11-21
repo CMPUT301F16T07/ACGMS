@@ -24,15 +24,13 @@ import io.searchbox.core.SearchResult;
 public class LoginController {
     private static JestDroidClient client;
     private String userName;
-    private RiderInfo riderInfo;
-    private DriverInfo driverInfo;
     private String mode;
 
     /**
      * Instantiates a new Login controller.
      *
      * @param userName    the user name
-     * @param driverRider the driver rider
+     * @param mode
      */
     public LoginController(String userName, String mode) {
         BuildClient bC = new BuildClient();

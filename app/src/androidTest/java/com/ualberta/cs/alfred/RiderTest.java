@@ -76,38 +76,5 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
         }
         assertTrue(userReturn.getUserName().contentEquals("jimFal"));
     }
-
-    public void testUpdateUser() {
-        UserElasticSearchController.GetUserInfo getUserInfo = new UserElasticSearchController.GetUserInfo();
-        getUserInfo.execute("jimFal");
-        User user = null;
-
-        try {
-            user = getUserInfo.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        UserElasticSearchController.UpdateUser<RiderInfo> updateUser = new UserElasticSearchController.UpdateUser<RiderInfo>(user.getUserID(), "riderInfo");
-        RiderInfo riderInfo = new RiderInfo("testCreditCardNumber2");
-        Gson gson = new Gson();
-        String json = gson.toJson(riderInfo);
-
-        updateUser.execute(riderInfo);
-
-        UserElasticSearchController.GetUserInfo getUserInfoAfter = new UserElasticSearchController.GetUserInfo();
-        getUserInfoAfter.execute("jimFal");
-
-        try {
-            user = getUserInfo.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-            String item = user.getEmail();
-    }
 }
 
