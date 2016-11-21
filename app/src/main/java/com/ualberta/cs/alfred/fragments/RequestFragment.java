@@ -33,13 +33,12 @@ import java.util.Locale;
 public class RequestFragment extends Fragment implements View.OnClickListener {
     // Variable for edit text view
     private String Status;
-    private EditText startPoint;
-    private Address startAddress;
-    private Address endAddress;
-    private EditText endPoint;
+    private EditText startAddress;
+    private EditText startCity;
+    private EditText endAddress;
+    private EditText endCity;
     private String userName;
-    private Double rideCost;
-    private Double rideDistance;
+
 
 
     public RequestFragment() {
@@ -57,8 +56,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_request,container,false);
 
-        startPoint = (EditText) view.findViewById(R.id.start_input);
-        endPoint = (EditText) view.findViewById(R.id.end_input);
+        startAddress = (EditText) view.findViewById(R.id.start_address_input);
+        startCity = (EditText) view.findViewById(R.id.start_city_input);
+        endAddress = (EditText) view.findViewById(R.id.end_address_input);
+        endCity = (EditText) view.findViewById(R.id.end_city_input);
 
         Button doneButton = (Button) view.findViewById(R.id.request_done_button);
         doneButton.setOnClickListener(this);
@@ -78,8 +79,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                 userName = preferences.getString("USERNAME", null);
 
 
-                String start = startPoint.getText().toString();
-                String end = endPoint.getText().toString();
+                String start = startAddress.getText().toString() +", "+
+                        startCity.getText().toString() + "    ";
+                String end = "    " + endAddress.getText().toString() +", "+
+                        endCity.getText().toString();
 
                 // Check if input is null
                 if (start.matches("") || end.matches("")) {
@@ -106,11 +109,22 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
 
                             // Address is defined as
                             // Address(String location, double longitude, double latitude)
-                            startAddress = new Address(start, y1, x1);
-                            endAddress = new Address(end, y2, x2);
+                            Address startPoint = new Address(start, y1, x1);
+                            Address endPoint = new Address(end, y2, x2);
+
+                            float[] results = new float[1];
+                            Location.distanceBetween(x1,y1,x2,y2,results);
+
+                            // round to the nearest cent
+                            double cost = Math.round( (results[0]/2) * 100.0 ) / 100.0 ;
+
+                            //String string = Float.toString(results[0]);
+                            //Toast.makeText(getActivity(),string,Toast.LENGTH_LONG).show();
 
                             // Create an instance of a request and store into elastic search
-                            Request request = new Request(Status,startAddress,endAddress,rideDistance,rideCost,userName);
+                            //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
+                            //              double distance, double cost, String riderID)
+                            Request request = new Request(Status,startPoint,endPoint,(double) results[0],cost,userName);
 
                             // Notify save
                             Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
@@ -130,64 +144,11 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
                         }
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 }
-                
-                /*
-                // Hardcode distance for mock request
-                //rideDistance = 122.00;
-                // Hardcode cost for mock request
-                rideCost = 21.55;
-
-                // Get the values on the edit text view and use them to create and address instance
-                String start = startPoint.getText().toString();
-                String end = endPoint.getText().toString();
-                try {
-                    String[] startCoor = start.split(",");
-                    String[] endCoor = end.split(",");
-                    // Code for Geolocation
-                    Double x1 = Double.parseDouble(startCoor[0]);
-                    Double y1 = Double.parseDouble(startCoor[1]);
-                    Double x2 = Double.parseDouble(endCoor[0]);
-                    Double y2 = Double.parseDouble(endCoor[1]);
-                    startAddress = new Address("", x1, y1);
-                    endAddress = new Address("", x2, y2);
-                    //approximate distance with geopoint coordinates
-                    double lat1 = x1 / 1e6;
-                    double lng1 = y1 / 1e6;
-                    double lat2 = x2 / 1e6;
-                    double lng2 = y2 / 1e6;
-                    float [] dist = new float[1];
-                    Location.distanceBetween(lat1, lng1, lat2, lng2, dist);
-                    double d =(double) dist[0];
-                    rideDistance = new Double(d*1e3);
-
-                } catch (NumberFormatException exception) {
-                    exception.printStackTrace();
-                }
-
-
-//                public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
-//                double distance, double cost, String riderID)
-
-                // Create an instance of a request and store into elastic search
-                Request request = new Request(Status,startAddress,endAddress,rideDistance,rideCost,userName);
-
-                // Notify save
-                Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
-
-                // go to list
-                MenuActivity.bottomBar.selectTabAtPosition(1,true);
-
-
-                break;
-                  */
-            //UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
-            //getRider.execute(ge);
         }
     }
 }

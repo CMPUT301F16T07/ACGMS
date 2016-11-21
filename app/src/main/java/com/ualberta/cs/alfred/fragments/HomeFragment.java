@@ -1,6 +1,7 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -23,13 +25,19 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.BuildConfig;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.Request;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -100,6 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
+
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -166,6 +175,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+
+
+        LatLng house = new LatLng(0,0);
+
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        // List of points returned by the address
+        String start = "2369 29a Ave NW Edmonton";
+        List<android.location.Address> startCoordinates;
+        try {
+            startCoordinates = geocoder.getFromLocationName(start,1);
+
+            int startCoordinatesSize = startCoordinates.size();
+
+            // Check if both list are empty
+            if (startCoordinatesSize > 0) {
+                // get the coordinates of the first results for both address
+                double x1 = startCoordinates.get(0).getLatitude();
+                double y1 = startCoordinates.get(0).getLongitude();
+                house = new LatLng(x1,y1);
+
+            } else {
+                // Error messages
+                String errorMessage = "Unable to find start and destination Address";
+                if (startCoordinatesSize == 0) {
+                    errorMessage = "Unable to find the start address";
+                }
+                Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Marker mhouse = googleMap.addMarker(new MarkerOptions()
+                .position(house)
+        );
+        //mhouse.setTag(0);
+
     }
 
     @Override
