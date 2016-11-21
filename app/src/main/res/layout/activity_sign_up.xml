@@ -159,6 +159,102 @@
             android:id="@+id/plateNmberEditText"
             android:hint="Plate Number" />
 
+        <TextView
+            android:text="Serial Number: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/serialNumberTextView"
+            android:textSize="20dp"
+            android:textStyle="normal|bold" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/serialNumberEditText" />
+
+        <TextView
+            android:text="Type (eg. Car, Truck, Van):"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/typeTextView"
+            android:textStyle="normal|bold"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/typeEditText"
+            android:textSize="18sp" />
+
+        <TextView
+            android:text="Make:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/makeTextView"
+            android:textStyle="normal|bold"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/makeEditText" />
+
+        <TextView
+            android:text="Model:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/modelTextView"
+            android:textStyle="normal|bold"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/modelEditText" />
+
+        <TextView
+            android:text="Year: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/yearTextView"
+            android:textStyle="normal|bold"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/yearEditText" />
+
+        <TextView
+            android:text="Color: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/colorTextView"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/colorEditText" />
+
         <Button
             android:text="Submit"
             android:layout_width="match_parent"

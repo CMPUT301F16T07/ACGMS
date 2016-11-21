@@ -3,6 +3,8 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 import io.searchbox.params.Parameters;
 
 /**
@@ -53,6 +56,61 @@ public class UserElasticSearchController {
                     Log.i("Uh-Oh", "We failed to add a "+ESSettings.USER_TYPE_NAME+ "to elastic search!");
                     e.printStackTrace();
                 }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * updates a user to elasticsearch server
+     *
+     *
+     */
+    public static class UpdateUser<T> extends AsyncTask<T, Void, Void> {
+        private String userID;
+        private String updateParameter;
+
+        public UpdateUser(String userID, String updateParameter) {
+            this.userID = userID;
+            this.updateParameter = updateParameter;
+        }
+
+        @Override
+        protected Void doInBackground(T... objects) {
+            ESSettings.verifySettings();
+
+            Gson gson = new Gson();
+            String newObject = gson.toJson(objects[0]);
+            String query = "{\n" +
+                    "\"doc\": {\n" +
+                    "\""+this.updateParameter+"\":" +
+                    ""+newObject+"\n"+
+                    "}\n" +
+                    "}";
+
+            Index index = new Index.Builder(query)
+                    .index(ESSettings.INDEX_NAME)
+                    .type(ESSettings.USER_TYPE_NAME)
+                    .id(this.userID)
+                    .setParameter(Parameters.REFRESH, true)
+                    .build();
+            try {
+                System.out.println("++++++++++++++++++++");
+                System.out.println(query);
+                System.out.println("++++++++++++++++++++");
+                DocumentResult result = ESSettings.client.execute(new Update.Builder(query).index(ESSettings.INDEX_NAME).type(ESSettings.USER_TYPE_NAME).id(this.userID).setParameter(Parameters.REFRESH, true).build());
+//                DocumentResult result = ESSettings.client.execute(index);
+                String resultString = result.getJsonString();
+                System.out.println("+++++++++++++++++++");
+                System.out.println(resultString);
+                System.out.println("+++++++++++++++++++");
+
+                if (!result.isSucceeded()) {
+                    Log.i("Error", "Elastic search was not able to update the "+ESSettings.USER_TYPE_NAME+".");
+                }
+            } catch (Exception e) {
+                Log.i("Uh-Oh", "We failed to update a "+ESSettings.USER_TYPE_NAME+ "to elastic search!");
+                e.printStackTrace();
             }
             return null;
         }

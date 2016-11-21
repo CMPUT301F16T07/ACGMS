@@ -11,7 +11,6 @@ package com.ualberta.cs.alfred;
 public class DriverInfo {
     private String userName;
     private String licenceNumber;
-    private String plateNumber;
     private Rating driverRating;
     private Vehicle vehicle;
 
@@ -21,7 +20,6 @@ public class DriverInfo {
     public DriverInfo() {
         this.userName = null;
         this.licenceNumber = null;
-        this.plateNumber = null;
         this.driverRating = new Rating();
         this.vehicle = null;
     }
@@ -31,12 +29,10 @@ public class DriverInfo {
      *
      * @param userName      the username
      * @param licenceNumber the licence number (on the users given license)
-     * @param plateNumber   the plate number
      */
-    public DriverInfo(String userName, String licenceNumber, String plateNumber, Vehicle vehicle) {
+    public DriverInfo(String userName, String licenceNumber,Vehicle vehicle) {
         this.userName = userName;
         this.licenceNumber = licenceNumber;
-        this.plateNumber = plateNumber;
         this.driverRating = new Rating();
         this.vehicle = vehicle;
     }
@@ -58,15 +54,5 @@ public class DriverInfo {
     public String getLicenceNumber() {
         return licenceNumber;
     }
-
-    /**
-     * Gets plate number.
-     *
-     * @return the plate number
-     */
-    public String getPlateNumber() {
-        return plateNumber;
-    }
-
 
 }

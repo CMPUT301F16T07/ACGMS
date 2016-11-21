@@ -32,9 +32,29 @@ public class User {
     private Date dateOfBirth;
     private String phoneNumber;
     private String email;
+    private Boolean isRider;
 
+
+
+    private Boolean isDriver;
     private RiderInfo riderInfo;
     private DriverInfo driverInfo;
+
+    public Boolean getIsRider() {
+        return isRider;
+    }
+
+    public void setIsRider(Boolean rider) {
+        isRider = rider;
+    }
+
+    public Boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(Boolean driver) {
+        isDriver = driver;
+    }
 
     /**
      * Instantiates a new User. This will only be used when representing a non-existant user.
