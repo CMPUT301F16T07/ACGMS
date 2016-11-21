@@ -253,7 +253,7 @@ public class Request implements Serializable{
     public String toString(){
         //return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
         //        this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
-        return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
+        return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"  -->  "+
                 this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
     }
 }

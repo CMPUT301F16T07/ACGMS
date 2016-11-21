@@ -115,8 +115,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                             float[] results = new float[1];
                             Location.distanceBetween(x1,y1,x2,y2,results);
 
+                            double distance = (double) results[0] / 1000;
+
                             // round to the nearest cent
-                            double cost = Math.round( (results[0]/2) * 100.0 ) / 100.0 ;
+                            double cost = Math.round( (distance/2) * 100.0 ) / 100.0 ;
 
                             //String string = Float.toString(results[0]);
                             //Toast.makeText(getActivity(),string,Toast.LENGTH_LONG).show();
@@ -124,7 +126,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
                             // Create an instance of a request and store into elastic search
                             //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
                             //              double distance, double cost, String riderID)
-                            Request request = new Request(Status,startPoint,endPoint,(double) results[0],cost,userName);
+                            Request request = new Request(Status,startPoint,endPoint,distance,cost,userName);
 
                             // Notify save
                             Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
