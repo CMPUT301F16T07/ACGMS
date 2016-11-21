@@ -80,8 +80,8 @@ public class RequestFragment extends Fragment implements View.OnClickListener {
 
 
                 String start = startAddress.getText().toString() +", "+
-                        startCity.getText().toString() + "    ";
-                String end = "    " + endAddress.getText().toString() +", "+
+                        startCity.getText().toString();
+                String end = endAddress.getText().toString() +", "+
                         endCity.getText().toString();
 
                 // Check if input is null
