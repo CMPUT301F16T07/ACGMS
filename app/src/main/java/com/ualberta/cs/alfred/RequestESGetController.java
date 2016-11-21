@@ -23,7 +23,7 @@ import io.searchbox.core.SearchResult;
  * This handles the getting of items from Requests
  *
  * @author ookmm
- * @version 1.3
+ * @version 1.4
  */
 public class RequestESGetController {
 
@@ -147,7 +147,8 @@ public class RequestESGetController {
     /**
      * Get Request using multiple preferences
      *
-     * Example: get pending requests by a certain rider
+     * Example: get pending requests by a certain rider.
+     * @Note: Can also be used to retrieve all requests, without any preferences. See test cases.
      */
     public static class GetRequestByMultiplePreferencesTask extends AsyncTask<String, Void, ArrayList<Request>> {
         @Override
@@ -176,6 +177,7 @@ public class RequestESGetController {
                     switch (valueType.toLowerCase()) {
 
                         case "string":
+                        case "date":
                             keyValue = String.format(
                                     "{ \n" +
                                             "\"match\" : { \n" +
@@ -198,12 +200,10 @@ public class RequestESGetController {
                             stringBuilder.append(keyValue);
                             break;
 
-                        case "date":
+                        case "all":
                             keyValue = String.format(
                                     "{ \n" +
-                                            "\"match\" : { \n" +
-                                            "\"%s\" : \"%s\"\n" +
-                                            "}\n" +
+                                            "\"%s\" : %s\n" +
                                             "}",
                                     key, value);
                             stringBuilder.append(keyValue);
@@ -302,6 +302,365 @@ public class RequestESGetController {
                     System.out.println(numHits);
                     System.out.println("==== End of Num hits =====");
                     */
+
+                    List<Request> foundRequests = result2.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+
+                } else {
+                    Log.i("Error", "The search query failed to find the request that matched.");
+                }
+            } catch (IOException e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with " +
+                        "the elasticsearch server!");
+            }
+
+            return requests;
+        }
+    }
+
+    /**
+     * Get Request with multiple preferences sorted by price
+     *
+     * Example: get pending requests by a certain rider sorted by price in descending order.
+     * @Note: Can also be used to get all requests sorted by cost.
+     */
+    public static class GetRequestSortedByPriceTask extends AsyncTask<String, Void, ArrayList<Request>> {
+        @Override
+        protected ArrayList<Request> doInBackground(String... preference_parameters) {
+
+            ESSettings.verifySettings();
+
+            ArrayList<Request> requests = new ArrayList<>();
+
+            // The number of elements in "update_parameters"
+            int pSize = preference_parameters.length;
+            // Last element in preference_parameters is how to order the result (asc or desc)
+            String orderBy = preference_parameters[pSize - 1];
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            int j = 0;
+            int k = 0;
+            for (int i = 0; i < pSize - 3; ++i) {
+
+                if (i + j + k + 2 < pSize) {
+                    String key = preference_parameters[i + j + k];
+                    String valueType = preference_parameters[i + j + k + 1];
+                    String value = preference_parameters[i + j + k + 2];
+
+                    String keyValue = null;
+
+                    switch (valueType.toLowerCase()) {
+
+                        case "string":
+                        case "date":
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"match\" : { \n" +
+                                            "\"%s\" : \"%s\"\n" +
+                                            "}\n" +
+                                            "}",
+                                    key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        case "double":
+                            double valueAsDouble = Double.parseDouble(value);
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"match\" : { \n" +
+                                            "\"%s\" : %s\n" +
+                                            "}\n" +
+                                            "}",
+                                    key, valueAsDouble);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        case "all":
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"%s\" : %s\n" +
+                                            "}",
+                                    key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Provided an unsupported property type: " +
+                                    valueType);
+
+                    }
+
+                    /**
+                     * Don't add new line and comma on last element
+                     */
+                    if (i + j + k + 2 < pSize - 2) {
+                        String comma = ",\n";
+                        stringBuilder.append(comma);
+                    }
+
+                    ++j;
+                    ++k;
+
+                }
+            }
+
+            /**
+             * Get the total number of results
+             */
+            String query = String.format(
+                    "{\n" +
+                            "\"query\" : {\n" +
+                            "\"bool\" : {\n" +
+                            "\"must\" : [\n" +
+                            "%s \n" +
+                            "]\n" +
+                            "}\n" +
+                            "}\n" +
+                            "}",
+                    stringBuilder);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.REQUEST_TYPE_NAME)
+                    .build();
+
+            JsonElement total = null;
+
+            try {
+                SearchResult result = ESSettings.client.execute(search);
+                if (result.isSucceeded()) {
+                    // Number of elements that matched the search
+                    total = result.getJsonObject().getAsJsonObject("hits").get("total");
+                } else {
+                    Log.i("Error", "The search query failed to find the request that matched.");
+                }
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with " +
+                        "the elasticsearch server!");
+            }
+
+            /**
+             * String for sorting by cost
+             */
+            String sortByCost = String.format(
+                    "\"sort\" : [\n" +
+                            "{\n" +
+                            "\"cost\" : {\n" +
+                            "\"order\" : \"%s\"\n" +
+                            "}\n" +
+                            "}\n" +
+                            "]\n",
+            orderBy);
+
+            /**
+             * Return results size based on the value of total
+             */
+            String query2 = String.format(
+                    "{\n" +
+                            "\"query\" : {\n" +
+                            "\"bool\" : {\n" +
+                            "\"must\" : [\n" +
+                            "%s \n" +
+                            "]\n" +
+                            "}\n" +
+                            "},\n" +
+                            "%s,\n" +
+                            "\"size\" : %s\n" +
+                            "}",
+                    stringBuilder, sortByCost, total);
+
+            Search search2 = new Search.Builder(query2)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.REQUEST_TYPE_NAME)
+                    .build();
+
+            try {
+                SearchResult result2 = ESSettings.client.execute(search2);
+
+
+                if (result2.isSucceeded()) {
+
+                    List<Request> foundRequests = result2.getSourceAsObjectList(Request.class);
+                    requests.addAll(foundRequests);
+
+                } else {
+                    Log.i("Error", "The search query failed to find the request that matched.");
+                }
+            } catch (IOException e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with " +
+                        "the elasticsearch server!");
+            }
+
+            return requests;
+        }
+    }
+
+    /**
+     * Get Request with multiple preferences sorted by price per kilometer
+     *
+     * Example: get pending requests by a certain rider sorted by price per kilometers in descending
+     * order.
+     * @Note: Can also be used to get all requests sorted by price per kilometer
+     */
+    public static class GetRequestSortedByPricePerKmTask extends AsyncTask<String, Void, ArrayList<Request>> {
+        @Override
+        protected ArrayList<Request> doInBackground(String... preference_parameters) {
+
+            ESSettings.verifySettings();
+
+            ArrayList<Request> requests = new ArrayList<>();
+
+            // The number of elements in "update_parameters"
+            int pSize = preference_parameters.length;
+            // Last element in preference_parameters is how to order the result (asc or desc)
+            String orderBy = preference_parameters[pSize - 1];
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            int j = 0;
+            int k = 0;
+            for (int i = 0; i < pSize - 3; ++i) {
+
+                if (i + j + k + 2 < pSize) {
+                    String key = preference_parameters[i + j + k];
+                    String valueType = preference_parameters[i + j + k + 1];
+                    String value = preference_parameters[i + j + k + 2];
+
+                    String keyValue = null;
+
+                    switch (valueType.toLowerCase()) {
+
+                        case "string":
+                        case "date":
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"match\" : { \n" +
+                                            "\"%s\" : \"%s\"\n" +
+                                            "}\n" +
+                                            "}",
+                                    key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        case "double":
+                            double valueAsDouble = Double.parseDouble(value);
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"match\" : { \n" +
+                                            "\"%s\" : %s\n" +
+                                            "}\n" +
+                                            "}",
+                                    key, valueAsDouble);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        case "all":
+                            keyValue = String.format(
+                                    "{ \n" +
+                                            "\"%s\" : %s\n" +
+                                            "}",
+                                    key, value);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Provided an unsupported property type: " +
+                                    valueType);
+
+                    }
+
+                    /**
+                     * Don't add new line and comma on last element
+                     */
+                    if (i + j + k + 2 < pSize - 2) {
+                        String comma = ",\n";
+                        stringBuilder.append(comma);
+                    }
+
+                    ++j;
+                    ++k;
+
+                }
+            }
+
+            /**
+             * Get the total number of results
+             */
+            String query = String.format(
+                    "{\n" +
+                            "\"query\" : {\n" +
+                            "\"bool\" : {\n" +
+                            "\"must\" : [\n" +
+                            "%s \n" +
+                            "]\n" +
+                            "}\n" +
+                            "}\n" +
+                            "}",
+                    stringBuilder);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.REQUEST_TYPE_NAME)
+                    .build();
+
+            JsonElement total = null;
+
+            try {
+                SearchResult result = ESSettings.client.execute(search);
+                if (result.isSucceeded()) {
+                    // Number of elements that matched the search
+                    total = result.getJsonObject().getAsJsonObject("hits").get("total");
+                } else {
+                    Log.i("Error", "The search query failed to find the request that matched.");
+                }
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with " +
+                        "the elasticsearch server!");
+            }
+
+            /**
+             * String for sorting cost per kilometer
+             */
+            String sortCostPerKm = String.format("\"sort\" : {\n" +
+                    "\"_script\" : {\n" +
+                    "\"type\" : \"number\",\n" +
+                    "\"script\" : {\n" +
+                    "\"lang\" : \"painless\",\n" +
+                    "\"inline\" : \"doc['cost'].value / doc['distance'].value\"\n" +
+                    "},\n" +
+                    "\"order\" : \"%s\"\n" +
+                    "}\n" +
+                    "}",
+                    orderBy);
+
+            /**
+             * Return results size based on the value of total
+             */
+            String query2 = String.format(
+                    "{\n" +
+                            "\"query\" : {\n" +
+                            "\"bool\" : {\n" +
+                            "\"must\" : [\n" +
+                            "%s \n" +
+                            "]\n" +
+                            "}\n" +
+                            "},\n" +
+                            "%s,\n" +
+                            "\"size\" : %s\n" +
+                            "}",
+                    stringBuilder, sortCostPerKm, total);
+
+            Search search2 = new Search.Builder(query2)
+                    .addIndex(ESSettings.INDEX_NAME)
+                    .addType(ESSettings.REQUEST_TYPE_NAME)
+                    .build();
+
+            try {
+                SearchResult result2 = ESSettings.client.execute(search2);
+
+
+                if (result2.isSucceeded()) {
 
                     List<Request> foundRequests = result2.getSourceAsObjectList(Request.class);
                     requests.addAll(foundRequests);

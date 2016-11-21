@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for getting item from requests
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.4
  * @see RequestESGetController
  */
 public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2 {
@@ -114,11 +114,116 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         retrievedRequest.execute("riderID", "string", "rider011");
         */
 
+        /*
         // Get open requests by keyword
         String keyword = "South";
         retrievedRequest.execute(
                 "requestStatus", "string", "Pending",
-                "_all", "string", "South"
+                "_all", "string", keyword
+        );
+        */
+
+        // Get all requests
+        retrievedRequest.execute(
+                "match_all", "all", "{}"
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get request by multiple preferences task sorted by price (cost).
+     *
+     * @Note: need to provide the search parameters, and if sorted by either asc or desc.
+     */
+    public void testGetRequestSortedByPriceTask() {
+
+        RequestESGetController.GetRequestSortedByPriceTask retrievedRequest =
+                new RequestESGetController.GetRequestSortedByPriceTask();
+
+        /**
+         * Find all requests with status "Pending" where rider is rider011
+         * sorted by price in descending order.
+         */
+        /*
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "requestStatus", "string", "Pending",
+                "riderID", "string", "rider011",
+                orderBy
+        );
+        */
+
+        // Get all requests sorted by by price in descending order.
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "match_all", "all", "{}", orderBy
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get request by multiple preferences task sorted by price per kilometer.
+     *
+     * @Note: need to provide the search parameters, and if sorted by either asc or desc.
+     */
+    public void testGetRequestSortedByPricePerKmTask() {
+
+        RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequest =
+                new RequestESGetController.GetRequestSortedByPricePerKmTask();
+
+        /**
+         * Find all requests with status "Pending" where rider is rider011
+         * sorted by price in descending order.
+         */
+        /*
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "requestStatus", "string", "Pending",
+                "riderID", "string", "rider011",
+                orderBy
+        );
+        */
+
+        // Get all requests sorted by by price in descending order.
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "match_all", "all", "{}", orderBy
         );
 
         try {

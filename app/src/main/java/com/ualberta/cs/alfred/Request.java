@@ -138,7 +138,7 @@ public class Request implements Serializable{
      *
      * @param distance the distance
      */
-    public void setDistance(Double distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -156,7 +156,7 @@ public class Request implements Serializable{
      *
      * @param cost the cost
      */
-    public void setCost(Double cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
