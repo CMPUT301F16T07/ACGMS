@@ -93,11 +93,7 @@ public class MainActivity extends AppCompatActivity {
                             LoginController loginController = new LoginController(userName.getText().toString(), mode);
                             Boolean userExist = null;
                             try {
-                                if (mode.contentEquals("Driver Mode")) {
-                                    userExist = loginController.checkDriverInfo();
-                                } else {
-                                    userExist = loginController.checkRider();
-                                }
+                                userExist = loginController.checkUser();
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
@@ -107,34 +103,33 @@ public class MainActivity extends AppCompatActivity {
                             // Access the default SharedPreferences
                             SharedPreferences preferences =
                                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            // The SharedPreferences editor - must use commit() to submit changes
                             SharedPreferences.Editor editor = preferences.edit();
-
-                            // Edit the saved preferences
                             editor.putString("USERNAME", userName.getText().toString());
                             editor.putString("MODE", mode);
                             editor.commit();
 
+                            // if the user already exists as the desired type of user
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                                RequestFragmentsListController rFLC = new RequestFragmentsListController();
-                                rFLC.updateCounts(mode, MainActivity.this);
                                 startActivity(intent);
                                 finish();
+                            // if the user does not exist as the desired type of user or not at all
                             } else if (userExist == Boolean.FALSE) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                Boolean isRider = Boolean.FALSE;
+                                Boolean isOpposite = Boolean.FALSE;
+                                String oppositeMode = "Driver Mode";
                                 try {
-                                    if (mode.contentEquals("Driver Mode") && loginController.checkRider()) {
-                                        builder.setMessage("No driver was found under the username of "+userName.getText().toString()+
-                                                ". Although a rider profile was found." + " Would you like to add additional driver info?");
-                                        builder.setTitle("Driver not found");
-                                        isRider = Boolean.TRUE;
+                                    if (loginController.checkOpposite()) {
+                                        isOpposite = Boolean.TRUE;
+                                        if (mode.contentEquals("Driver Mode")) {
+                                            oppositeMode = "Rider Mode";
+                                        }
+                                        builder.setMessage("No "+mode+" profile was found under the username of "+userName.getText().toString()+
+                                                ". Although a "+oppositeMode+" profile was found." + " Would you like to add additional "+mode+" info?");
                                     } else {
                                         builder.setMessage("No profile was found under the username of "+userName.getText().toString()+
                                         " Would you like to create a new profile?");
-                                        builder.setTitle("User not found");
                                     }
                                 } catch (ExecutionException e) {
                                     e.printStackTrace();
@@ -142,14 +137,17 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 
-                                final Boolean finalIsRider = isRider;
-
+                                builder.setTitle(mode + " not found");
                                 builder.setCancelable(Boolean.FALSE);
+                                final Boolean finalIsOpposite = isOpposite;
+                                final String finalOppositeMode = oppositeMode;
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                                        intent.putExtra("ISRIDER", finalIsRider.toString());
+                                        if (finalIsOpposite) {
+                                            intent.putExtra("OPPOSITE", finalOppositeMode);
+                                        }
                                         startActivity(intent);
                                         finish();
                                     }
@@ -161,10 +159,8 @@ public class MainActivity extends AppCompatActivity {
                                         userName.setText("");
                                     }
                                 });
-
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
-
                             } else {
                                 // This scenerio covers the event where the device is connected to the internet but had an error occur with the ES server
                                 Toast.makeText(MainActivity.this, "Sorry there was a connection error with the server, please try again.", Toast.LENGTH_LONG).show();

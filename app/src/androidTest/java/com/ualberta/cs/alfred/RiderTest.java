@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.google.gson.Gson;
 import com.ualberta.cs.alfred.MainActivity;
 
 import java.util.Date;

@@ -21,13 +21,6 @@ public class Rider extends User {
     private RequestList requests;
 
     /**
-     * Instantiates a new null Rider.
-     */
-    public Rider() {
-        super();
-    }
-
-    /**
      * Instantiates a new Rider.
      *
      * @param firstName        the first name

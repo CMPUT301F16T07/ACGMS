@@ -32,24 +32,10 @@ public class User {
     private Date dateOfBirth;
     private String phoneNumber;
     private String email;
-
+    private Boolean isRider;
+    private Boolean isDriver;
     private RiderInfo riderInfo;
     private DriverInfo driverInfo;
-
-    /**
-     * Instantiates a new User. This will only be used when representing a non-existant user.
-     */
-    public User() {
-        this.userID = null;
-        this.userName = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.dateOfBirth = null;
-        this.phoneNumber = null;
-        this.email = null;
-        this.riderInfo = null;
-        this.driverInfo = null;
-    }
 
     /**
      * Instantiates a new User.
@@ -63,15 +49,12 @@ public class User {
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email) {
-        this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.riderInfo = new RiderInfo();
-        this.driverInfo = new DriverInfo();
     }
 
     /**
@@ -89,6 +72,7 @@ public class User {
                 String phoneNumber, String email, RiderInfo riderInfo) {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.riderInfo = riderInfo;
+        this.isRider = Boolean.TRUE;
     }
 
     /**
@@ -105,8 +89,25 @@ public class User {
                 String phoneNumber, String email, DriverInfo driverInfo) {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.driverInfo = driverInfo;
+        this.isDriver = Boolean.TRUE;
     }
 
+
+    public Boolean getIsRider() {
+        return isRider;
+    }
+
+    public void setIsRider(Boolean rider) {
+        isRider = rider;
+    }
+
+    public Boolean getIsDriver() {
+        return isDriver;
+    }
+
+    public void setIsDriver(Boolean driver) {
+        isDriver = driver;
+    }
     /**
      * Gets email.
      *

@@ -15,12 +15,6 @@ public class Driver extends User{
 
     /**
      * Instantiates a new Driver.
-     */
-    public Driver() {
-        super();
-    }
-    /**
-     * Instantiates a new Driver.
      *
      * @param driverInfo driver's information
      * @param rider a rider class consisting of the driver's details
@@ -29,7 +23,6 @@ public class Driver extends User{
     public Driver(Rider rider, DriverInfo driverInfo) {
         super(rider.getFirstName(), rider.getLastName(), rider.getUserName(), rider.getDateOfBirth(), rider.getPhoneNumber(), rider.getEmail());
         this.licenceNumber = driverInfo.getLicenceNumber();
-        this.plateNumber = driverInfo.getPlateNumber();
         this.driverRating = new Rating();
     }
 

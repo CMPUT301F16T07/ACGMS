@@ -3,6 +3,8 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 import io.searchbox.params.Parameters;
 
 /**
@@ -58,6 +61,7 @@ public class UserElasticSearchController {
         }
     }
 
+
     /**
      * This class is used to run an AsyncTask in the background to get a rider from the
      * elastic search server.
@@ -68,7 +72,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            User rider = new User();
+            User user = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +
@@ -91,8 +95,8 @@ public class UserElasticSearchController {
                 Map source = (Map)hit.source;
                 String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
-                    rider.setUserID(id);
+                    user = result.getSourceAsObject(Rider.class);
+                    user.setUserID(id);
                 }
                 else {
                     Log.i("Error", "The search query failed to find the rider that matched.");
@@ -101,7 +105,7 @@ public class UserElasticSearchController {
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return rider;
+            return user;
         }
     }
 
@@ -115,7 +119,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            User rider = new User();
+            User user = null;
             String exclusionString = "";
             for (int i = 1; i < search_parameters.length; ++i) {
                 if (i != search_parameters.length - 1) {
@@ -151,17 +155,17 @@ public class UserElasticSearchController {
                 Map source = (Map)hit.source;
                 String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
-                    rider.setUserID(id);
+                    user = result.getSourceAsObject(Rider.class);
+                    user.setUserID(id);
                 }
                 else {
-                    Log.i("Error", "The search query failed to find the rider that matched.");
+                    Log.i("Error", "The search query failed to find the user that matched.");
                 }
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return rider;
+            return user;
         }
     }
 
@@ -177,7 +181,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            Rider rider = new Rider();
+            Rider rider = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +

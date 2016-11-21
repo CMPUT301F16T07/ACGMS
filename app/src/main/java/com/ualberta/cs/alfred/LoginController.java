@@ -24,50 +24,63 @@ import io.searchbox.core.SearchResult;
 public class LoginController {
     private static JestDroidClient client;
     private String userName;
-    private Rider rider;
-    private DriverInfo driverInfo;
-    private String requestedStatus;
+    private String mode;
 
     /**
      * Instantiates a new Login controller.
      *
      * @param userName    the user name
-     * @param driverRider the driver rider
+     * @param mode
      */
-    public LoginController(String userName, String driverRider) {
+    public LoginController(String userName, String mode) {
         BuildClient bC = new BuildClient();
         this.client = bC.getClient();
         this.userName = userName;
-        this.requestedStatus = driverRider;
+        this.mode = mode;
+    }
+
+
+    private Boolean isExpected(String mode, User user) {
+        if (user != null) {
+            if ( (mode.contentEquals("Rider Mode") && user.getIsRider()) ||
+                    (mode.contentEquals("Driver Mode") && user.getIsDriver()) ) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
     /**
-     * Check rider exists.
+     * Check user exists.
      *
      * @return the boolean
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public Boolean checkRider() throws ExecutionException, InterruptedException {
-        UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
-        rider = retrievedRider.execute(this.userName).get();
-        if (rider.getUserName() != null && rider.getUserName().contentEquals(this.userName)) {
+    public Boolean checkUser() throws ExecutionException, InterruptedException {
+        UserElasticSearchController.GetUserInfo retrievedUser = new UserElasticSearchController.GetUserInfo();
+        User user = retrievedUser.execute(this.userName).get();
+        if (user != null && this.isExpected(this.mode, user)) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
 
     /**
-     * Check driver exists.
+     * Check if opposite mode exists.
      *
      * @return the boolean
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public Boolean checkDriverInfo() throws ExecutionException, InterruptedException {
-        UserElasticSearchController.GetDriverInfo retrievedDriverInfo = new UserElasticSearchController.GetDriverInfo();
-        driverInfo = retrievedDriverInfo.execute(this.userName).get();
-        if (driverInfo != null && driverInfo.getUserName().contentEquals(this.userName)) {
+    public Boolean checkOpposite() throws ExecutionException, InterruptedException {
+        UserElasticSearchController.GetUserInfo retrievedUser = new UserElasticSearchController.GetUserInfo();
+        User user = retrievedUser.execute(this.userName).get();
+        String oppositeMode = "Driver Mode";
+        if (this.mode.contentEquals(oppositeMode)) {
+            oppositeMode = "Rider Mode";
+        }
+        if (user != null && this.isExpected(oppositeMode, user)) {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
