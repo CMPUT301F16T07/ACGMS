@@ -127,7 +127,10 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
                     emailAddress = emailEdit.getText().toString();
                 }
 
-
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                    fm.popBackStack();
+                }
 
                 Fragment fragment = UserViewFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);

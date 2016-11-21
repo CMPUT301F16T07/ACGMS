@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -225,6 +226,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
 
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
         // go to list
         MenuActivity.bottomBar.selectTabAtPosition(1,true);
     }

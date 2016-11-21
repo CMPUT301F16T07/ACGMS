@@ -16,6 +16,7 @@ import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserElasticSearchController;
 
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,13 +24,6 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class UserViewFragment extends Fragment implements View.OnClickListener {
-
-    private User user;
-    private TextView textView;
-    private String userName;
-    private String fullName;
-    private String emailAddress;
-    private String phoneNumber;
 
     private FragmentTransaction transaction;
 
@@ -49,26 +43,29 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userName = preferences.getString("USERNAME", null);
+        String userName = preferences.getString("USERNAME", null);
+        String userMode = preferences.getString("MODE","None");
 
+        User user = new User("","","",new Date(),"","");
 
-        //retrieving rider's informatino from elasticsearch
-        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
         try {
-            user = getRider.execute(userName).get();
+            //retrieving rider's informatino from elasticsearch
+            UserElasticSearchController.GetUserInfo getUser = new UserElasticSearchController.GetUserInfo();
+            user = getUser.execute(userName).get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        fullName = user.getFirstName() + " " + user.getLastName();
-        emailAddress = user.getEmail();
-        phoneNumber= user.getPhoneNumber();
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        String emailAddress = user.getEmail();
+        String phoneNumber= user.getPhoneNumber();
 
 
         //setting the textviews to what we want to show
-        textView = (TextView) view.findViewById(R.id.edit_username_input);
+        TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
         textView.setText(userName);
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);

@@ -49,11 +49,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     private Request r;
 
-    //private Button cancelButton;
     private ListView biddingDriversListView;
     private ArrayAdapter<String> biddingDriversAdapter;
-
-    private Button confirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +66,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
         TableLayout tableLayout = (TableLayout) findViewById(R.id.tableView);
         final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
-        //biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
+        biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
 
         if (from.contentEquals("Requested")) {
             // only the driver will be able to confirm anything in the first stage
@@ -90,12 +87,19 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             // but only the rider should be able to confirm a bid at this time
             if (mode.contentEquals("Driver Mode")) {
                 confirmButton.setVisibility(View.GONE);
+                tableLayout.setColumnStretchable(0,true);
+                tableLayout.setColumnCollapsed(1,true);
+            } else {
+                tableLayout.setColumnStretchable(0,true);
+                tableLayout.setColumnStretchable(1,true);
             }
             next = "Accepted";
         } else if (from.contentEquals("Accepted")) {
             // finally the trip is in progress and now the all both can do is
             // cancel the trip
             confirmButton.setVisibility(View.GONE);
+            tableLayout.setColumnStretchable(0,true);
+            tableLayout.setColumnCollapsed(1,true);
         }
 
         r = (Request) intent.getSerializableExtra("passedRequest");

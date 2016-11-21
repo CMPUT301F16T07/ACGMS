@@ -51,8 +51,6 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         Fragment fragment;
         Bundle bundle = this.getArguments();
 
-        fragment = new RequestedFragment().newInstance();
-        replaceFragmentwithoutStack(fragment);
 
         if (bundle != null) {
             int position = bundle.getInt("index",0);
