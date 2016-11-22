@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Test cases for adding request item to Elasticsearch.
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  * @see RequestESAddControllerTest
  */
 public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2 {
@@ -41,12 +41,14 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         String rider1Email = "vputin@example.com";
         String rider1CCNumber = "666688844443333";
 
+        RiderInfo riderInfo = new RiderInfo(rider1CCNumber);
+
         /* Step 2: Add rider info to constructor */
-        Rider rider1 = new Rider(rider1FirstName, rider1LastName, rider1Username, rider1BirthDate,
-                rider1PhoneNumber, rider1Email, rider1CCNumber);
+        User rider1 = new User(rider1FirstName, rider1LastName, rider1Username, rider1BirthDate,
+                rider1PhoneNumber, rider1Email, riderInfo);
 
         /* Step 3:  Get rider with a given username from ES */
-        UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
+        UserESGetController.GetUserTask retrievedRider = new UserESGetController.GetUserTask();
 
         // Find the rider with this username
         retrievedRider.execute("vputin");
@@ -54,7 +56,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         String rider1UserId = null;
 
         try {
-            Rider rider = retrievedRider.get();
+            User rider = retrievedRider.get();
             rider1UserId = rider.getUserID();
             System.out.println("====================");
             System.out.println("Rider1 ID: " + rider1UserId);

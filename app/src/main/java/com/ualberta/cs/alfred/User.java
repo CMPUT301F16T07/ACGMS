@@ -10,10 +10,7 @@ import io.searchbox.annotations.JestId;
  * when a user logs in to the local device.
  *
  * @author mmcote
- * @version 1.0
- *
- * @see Rider
- * @see Driver
+ * @version 1.1
  */
 public class User {
     /** userID is the most consistent piece of data for a user profile. It will remain
@@ -32,8 +29,8 @@ public class User {
     private Date dateOfBirth;
     private String phoneNumber;
     private String email;
-    private Boolean isRider;
-    private Boolean isDriver;
+    private boolean isDriver = false;
+
     private RiderInfo riderInfo;
     private DriverInfo driverInfo;
 
@@ -49,14 +46,14 @@ public class User {
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email) {
+        this.userID = null;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.isRider = Boolean.FALSE;
-        this.isDriver = Boolean.FALSE;
+        this.save();
     }
 
     /**
@@ -74,8 +71,6 @@ public class User {
                 String phoneNumber, String email, RiderInfo riderInfo) {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.riderInfo = riderInfo;
-        this.isRider = Boolean.TRUE;
-        this.isDriver = Boolean.FALSE;
     }
 
     /**
@@ -87,31 +82,15 @@ public class User {
      * @param dateOfBirth the date of birth
      * @param phoneNumber the phone number
      * @param email       the email
+     * @param driverInfo  the driver info
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email, DriverInfo driverInfo) {
         this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
         this.driverInfo = driverInfo;
-        this.isDriver = Boolean.TRUE;
-        this.isRider = Boolean.FALSE;
+        this.isDriver = true;
     }
 
-
-    public Boolean getIsRider() {
-        return isRider;
-    }
-
-    public void setIsRider(Boolean rider) {
-        isRider = rider;
-    }
-
-    public Boolean getIsDriver() {
-        return isDriver;
-    }
-
-    public void setIsDriver(Boolean driver) {
-        isDriver = driver;
-    }
     /**
      * Gets email.
      *
@@ -237,4 +216,58 @@ public class User {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    /**
+     * Gets rider info.
+     *
+     * @return the rider info
+     */
+    public RiderInfo getRiderInfo() {
+        return riderInfo;
+    }
+
+    /**
+     * Sets rider info.
+     *
+     * @param riderInfo the rider info
+     */
+    public void setRiderInfo(RiderInfo riderInfo) {
+        this.riderInfo = riderInfo;
+    }
+
+    /**
+     * Gets driver info.
+     *
+     * @return the driver info
+     */
+    public DriverInfo getDriverInfo() {
+        return driverInfo;
+    }
+
+    /**
+     * Sets driver info.
+     *
+     * @param driverInfo the driver info
+     */
+    public void setDriverInfo(DriverInfo driverInfo) {
+        this.driverInfo = driverInfo;
+        this.isDriver = true;
+    }
+
+    /**
+     * Check if user is a driver.
+     *
+     * @return the boolean
+     */
+    public boolean isDriver() {
+        return isDriver;
+    }
+
+
+    private void save() {
+
+        UserESAddController.AddUserTask<User> addRider = new UserESAddController.AddUserTask<User>();
+        addRider.execute(this);
+    }
+
 }

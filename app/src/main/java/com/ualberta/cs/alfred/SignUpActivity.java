@@ -49,6 +49,8 @@ public class SignUpActivity extends AppCompatActivity {
     private String oppositeExists;
     private String userName;
 
+    //TODO: Check this!
+    /* =====
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                        updateUser.execute(collectDriverInfo());
 //                    }
                 } else {
-                    UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
+                    UserElasticSearchController.AddUserTask<User> addUser = new UserElasticSearchController.AddUserTask<User>();
                     RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
                     addUser.execute(collectUser());
                 }
@@ -198,6 +200,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
     };
+
 
     private DriverInfo collectDriverInfo() {
         Vehicle vehicle = new Vehicle(
@@ -231,4 +234,6 @@ public class SignUpActivity extends AppCompatActivity {
                     new RiderInfo(creditCardNumberEditText.getText().toString()));
         }
     }
+    =====
+    */
 }

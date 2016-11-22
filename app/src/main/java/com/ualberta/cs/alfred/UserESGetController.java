@@ -3,70 +3,29 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 import java.util.Map;
 
 import io.searchbox.client.JestResult;
-import io.searchbox.core.DocumentResult;
-import io.searchbox.core.Index;
+import io.searchbox.core.Get;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-import io.searchbox.core.Update;
-import io.searchbox.params.Parameters;
 
 /**
- * This controller holds the functionality to add and get users from
+ * This controller holds the functionality to get users from
  * the elastic search server.
  *
  * @author mmcote
  * @version 1.0
- * @see Rider
- * @see Driver
+ * @see User
  */
-public class UserElasticSearchController {
-    /**
-     * adds users to elasticsearch server
-     *
-     *
-     */
-    public static class AddUser<T> extends AsyncTask<T, Void, Void> {
-        @Override
-        // one or more objects (riders or drivers) given, can be an array of Riders without specifying an array
-        protected Void doInBackground(T... objects) {
-            ESSettings.verifySettings();
-
-
-            String esType;
-
-            for (T object : objects) {
-                Index index = new Index.Builder(object)
-                        .setParameter(Parameters.REFRESH, true)
-                        .index(ESSettings.INDEX_NAME)
-                        .type(ESSettings.USER_TYPE_NAME)
-                        .build();
-
-                try {
-                    DocumentResult result = ESSettings.client.execute(index);
-                    if (!result.isSucceeded()) {
-                        Log.i("Error", "Elastic search was not able to add the "+ESSettings.USER_TYPE_NAME+".");
-                    }
-                } catch (Exception e) {
-                    Log.i("Uh-Oh", "We failed to add a "+ESSettings.USER_TYPE_NAME+ "to elastic search!");
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-    }
-
+public class UserESGetController {
 
     /**
      * This class is used to run an AsyncTask in the background to get a rider from the
      * elastic search server.
      */
-    public static class GetUserInfo extends AsyncTask<String, Void, User> {
+    public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... search_parameters) {
 
@@ -90,13 +49,8 @@ public class UserElasticSearchController {
 
             try {
                 SearchResult result = ESSettings.client.execute(search);
-                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
-                SearchResult.Hit hit = hits.get(0);
-                Map source = (Map)hit.source;
-                String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    user = result.getSourceAsObject(Rider.class);
-                    user.setUserID(id);
+                    user = result.getSourceAsObject(User.class);
                 }
                 else {
                     Log.i("Error", "The search query failed to find the rider that matched.");
@@ -105,6 +59,40 @@ public class UserElasticSearchController {
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
+            return user;
+        }
+    }
+
+
+    /**
+     * Gets User by id task.
+     *
+     * @return a user matching the id.
+     */
+    public static class GetUserByIdTask extends AsyncTask<String, Void, User> {
+        @Override
+        protected User doInBackground(String... search_parameters) {
+
+            ESSettings.verifySettings();
+
+            User user = null;
+
+            Get get = new Get.Builder(ESSettings.INDEX_NAME, search_parameters[0])
+                    .type(ESSettings.USER_TYPE_NAME)
+                    .build();
+
+            try {
+                JestResult result = ESSettings.client.execute(get);
+                if (result.isSucceeded()) {
+                    user = result.getSourceAsObject(User.class);
+                } else {
+                    Log.i("Error", "The search query failed to find the user that matched.");
+                }
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with " +
+                        "the elasticsearch server!");
+            }
+
             return user;
         }
     }
@@ -119,7 +107,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            User user = null;
+            User rider = null;
             String exclusionString = "";
             for (int i = 1; i < search_parameters.length; ++i) {
                 if (i != search_parameters.length - 1) {
@@ -132,8 +120,8 @@ public class UserElasticSearchController {
             String query = "{\n" +
                     "           \"_source\": {\n" +
                     "               \"excludes\": [\n" +
-                                        exclusionString +
-                                        "         ]\n" +
+                    exclusionString +
+                    "         ]\n" +
                     "                        },\n"+
                     "               \"query\": {\n" +
                     "                   \"match\" : {\n" +
@@ -155,56 +143,7 @@ public class UserElasticSearchController {
                 Map source = (Map)hit.source;
                 String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    user = result.getSourceAsObject(Rider.class);
-                    user.setUserID(id);
-                }
-                else {
-                    Log.i("Error", "The search query failed to find the user that matched.");
-                }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-            return user;
-        }
-    }
-
-
-
-    /**
-     * This class is used to run an AsyncTask in the background to get a rider from the
-     * elastic search server.
-     */
-    public static class GetRider extends AsyncTask<String, Void, Rider> {
-        @Override
-        protected Rider doInBackground(String... search_parameters) {
-
-            ESSettings.verifySettings();
-
-            Rider rider = null;
-
-            String query = "{\n" +
-                    "    \"query\": {\n" +
-                    "        \"match\" : {\n" +
-                    "            \"userName\" : \n" +
-                    "                \""+search_parameters[0]+"\"\n" +
-                    "            }\n" +
-                    "    }\n" +
-                    "}";
-
-            Search search = new Search.Builder(query)
-                    .addIndex(ESSettings.INDEX_NAME)
-                    .addType(ESSettings.RIDER_TYPE_NAME)
-                    .build();
-
-            try {
-                SearchResult result = ESSettings.client.execute(search);
-                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
-                SearchResult.Hit hit = hits.get(0);
-                Map source = (Map)hit.source;
-                String id = (String)source.get(JestResult.ES_METADATA_ID);
-                if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
+                    rider = result.getSourceAsObject(User.class);
                     rider.setUserID(id);
                 }
                 else {
@@ -214,7 +153,6 @@ public class UserElasticSearchController {
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-
             return rider;
         }
     }
@@ -229,7 +167,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            DriverInfo driverInfo = new DriverInfo();
+            DriverInfo driverInfo = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +

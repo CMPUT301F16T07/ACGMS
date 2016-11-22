@@ -14,10 +14,8 @@ import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.User;
-import com.ualberta.cs.alfred.UserElasticSearchController;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 08/11/16.
@@ -47,7 +45,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         String userMode = preferences.getString("MODE","None");
 
         User user = new User("","","",new Date(),"","");
-
+        //TODO: Check this!
+        /* =====
         try {
             //retrieving rider's informatino from elasticsearch
             UserElasticSearchController.GetUserInfo getUser = new UserElasticSearchController.GetUserInfo();
@@ -58,6 +57,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        =====
+        */
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         String emailAddress = user.getEmail();
