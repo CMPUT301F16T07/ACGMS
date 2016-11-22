@@ -187,6 +187,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     }
 
+    // Custom Radio button
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         EditText editText = (EditText) getView().findViewById(R.id.filter_input);

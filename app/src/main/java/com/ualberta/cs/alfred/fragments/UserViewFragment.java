@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.User;
+import com.ualberta.cs.alfred.UserESGetController;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 08/11/16.
@@ -45,20 +47,17 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         String userMode = preferences.getString("MODE","None");
 
         User user = new User("","","",new Date(),"","");
-        //TODO: Check this!
-        /* =====
+
         try {
             //retrieving rider's informatino from elasticsearch
-            UserElasticSearchController.GetUserInfo getUser = new UserElasticSearchController.GetUserInfo();
+            UserESGetController.GetUserByIdTask getUser = new UserESGetController.GetUserByIdTask();
             user = getUser.execute(userName).get();
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        =====
-        */
+
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         String emailAddress = user.getEmail();
@@ -67,7 +66,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
-        textView.setText(userName);
+        textView.setText(userName+" ("+userMode+")");
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);
         textView.setText(fullName);
