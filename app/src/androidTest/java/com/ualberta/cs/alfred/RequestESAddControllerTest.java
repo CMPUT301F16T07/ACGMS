@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Test cases for adding request item to Elasticsearch.
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  * @see RequestESAddControllerTest
  */
 public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2 {

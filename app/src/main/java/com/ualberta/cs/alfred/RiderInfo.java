@@ -3,21 +3,17 @@ package com.ualberta.cs.alfred;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by mmcote on 2016-11-19.
- */
 
+/**
+ * The type Rider info. It stores specific info about a rider
+ *
+ * @author mmcote
+ * @version 1.1
+ */
 public class RiderInfo {
+
     private String creditCardNumber;
     private RequestList requests;
-
-    /**
-     * Instantiates a new null Rider.
-     */
-    public RiderInfo() {
-        this.creditCardNumber = null;
-        this.requests = new RequestList();
-    }
 
     /**
      * Instantiates a new Rider.

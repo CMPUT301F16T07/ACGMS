@@ -2,8 +2,6 @@ package com.ualberta.cs.alfred;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.ualberta.cs.alfred.MainActivity;
-
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -48,11 +46,11 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
         UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
         addUser.execute(user);
 
-        UserElasticSearchController.GetUserInfo getUserInfo = new UserElasticSearchController.GetUserInfo();
-        getUserInfo.execute("jimFal");
+        UserElasticSearchController.GetUserTask getUserTask = new UserElasticSearchController.GetUserTask();
+        getUserTask.execute("jimFal");
         User userReturn = null;
         try {
-            userReturn = getUserInfo.get();
+            userReturn = getUserTask.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

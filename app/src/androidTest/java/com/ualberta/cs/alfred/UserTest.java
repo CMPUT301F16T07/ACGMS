@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
  * Creates the test cases for type User.
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  */
 public class UserTest extends ActivityInstrumentationTestCase2 {
 
@@ -148,5 +148,70 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertTrue("Email not the same", u1Email.equals(u1.getEmail()));
     }
 
+    public void testIsRider() {
+
+        String u1FirstName = "Donald";
+        String u1LastName = "Trump";
+        String u1UserName = "dtrump";
+
+        // Create date
+        GregorianCalendar gc = new GregorianCalendar(2001, Calendar.JUNE, 13);
+        Date u1DateOfBirth = gc.getTime();
+
+        String u1PhoneNumber = "780-444-5555";
+        String u1Email = "email@example.com";
+
+        User u1 = new User(u1FirstName, u1LastName, u1UserName, u1DateOfBirth, u1PhoneNumber, u1Email);
+
+        assertTrue("User is not a rider", u1.isDriver() == false);
+    }
+
+    public void testIsDriver() {
+
+        /**
+         * Step 1: Basic user info
+         */
+        String u1FirstName = "Donald";
+        String u1LastName = "Trump";
+        String u1UserName = "dtrump";
+
+        // Create date
+        GregorianCalendar gc = new GregorianCalendar(2001, Calendar.JUNE, 13);
+        Date u1DateOfBirth = gc.getTime();
+
+        String u1PhoneNumber = "780-444-5555";
+        String u1Email = "email@example.com";
+
+        /**
+         * Step 2: Create a driver licenceNumber
+         */
+        String licenceNumber = "AB0005";
+
+        /**
+         * Create a vehicle
+         */
+        String serialNumber = "serial000222444";
+        String plateNumber = "BUT001";
+        String type = "Sedan";
+        String make = "Tesla";
+        String model = "Model S";
+        int year = 2016;
+        String color = "Silver";
+
+        Vehicle vehicle = new Vehicle(serialNumber, plateNumber, type, make, model, year, color);
+
+        /**
+         * Step 3: Create driverInfo
+         */
+        DriverInfo driverInfo = new DriverInfo(licenceNumber, vehicle);
+
+        /**
+         * Step 4: Create user that is a driver
+         */
+        User driver = new User(u1FirstName, u1LastName, u1UserName, u1DateOfBirth, u1PhoneNumber,
+                u1Email, driverInfo);
+
+        assertTrue("User is a driver", driver.isDriver() == true);
+    }
 
 }

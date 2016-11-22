@@ -3,6 +3,8 @@ package com.ualberta.cs.alfred;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -62,13 +64,13 @@ public class UserElasticSearchController {
      * This class is used to run an AsyncTask in the background to get a rider from the
      * elastic search server.
      */
-    public static class GetUserInfo extends AsyncTask<String, Void, User> {
+    public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... search_parameters) {
 
             ESSettings.verifySettings();
 
-            User rider = new User();
+            User user = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +
@@ -86,13 +88,8 @@ public class UserElasticSearchController {
 
             try {
                 SearchResult result = ESSettings.client.execute(search);
-                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
-                SearchResult.Hit hit = hits.get(0);
-                Map source = (Map)hit.source;
-                String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
-                    rider.setUserID(id);
+                    user = result.getSourceAsObject(User.class);
                 }
                 else {
                     Log.i("Error", "The search query failed to find the rider that matched.");
@@ -101,7 +98,7 @@ public class UserElasticSearchController {
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return rider;
+            return user;
         }
     }
 
@@ -115,7 +112,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            User rider = new User();
+            User rider = null;
             String exclusionString = "";
             for (int i = 1; i < search_parameters.length; ++i) {
                 if (i != search_parameters.length - 1) {
@@ -177,7 +174,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            Rider rider = new Rider();
+            Rider rider = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +
@@ -225,7 +222,7 @@ public class UserElasticSearchController {
 
             ESSettings.verifySettings();
 
-            DriverInfo driverInfo = new DriverInfo();
+            DriverInfo driverInfo = null;
 
             String query = "{\n" +
                     "    \"query\": {\n" +
