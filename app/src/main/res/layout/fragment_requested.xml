@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,8 +19,7 @@
         android:layout_height="55dp"
         android:id="@+id/show_filter"
         android:text="Show Filter"
-        android:layout_above="@+id/filter_table"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:textSize="@dimen/button_text"
         style="@style/Widget.AppCompat.Button"/>
 
@@ -30,16 +30,17 @@
         android:layout_alignParentStart="true"
         android:padding="10dp"
         android:id="@+id/filter_table"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        tools:elevation="10dp">
 
         <EditText
             android:layout_width="match_parent"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/filter_input"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:hint="Search by KeyWord"
+            android:hint="@string/search_keyword_text"
             android:layout_height="45dp"
             android:background="@color/colorHighlight"/>
 
@@ -47,24 +48,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RadioGroup android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radioGroup"
-                android:layout_gravity="center">
                 <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="3dp">
                     <TableRow
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content">
                         <RadioButton
-                            android:text="@string/list_search_coordinate_text"
+                            android:text="@string/search_keyword_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonKeyword"
                             android:checked="true"/>
                         <RadioButton
-                            android:text="@string/home_request_coordinate_text"
+                            android:text="@string/search_coordinate_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonCoordinates" />
@@ -73,18 +74,17 @@
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content">
                         <RadioButton
-                            android:text="@string/home_request_coordinate_text"
+                            android:text="@string/search_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonPrice" />
                         <RadioButton
-                            android:text="@string/home_request_coordinate_text"
+                            android:text="@string/search_address_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonAddress" />
                     </TableRow>
                 </TableLayout>
-            </RadioGroup>
         </TableRow>
         <LinearLayout
             android:layout_height="match_parent"

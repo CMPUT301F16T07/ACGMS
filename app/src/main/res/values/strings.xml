@@ -45,9 +45,9 @@
     <string name="home_cancel_text">CANCEL</string>
     <string name="title_activity_maps">Map</string>
 
-
-    <string name="list_search_coordinate_text">Search by Coordinate</string>
-    <string name="list_search_address_text">Search by Address</string>
-    <string name="list_search_price"> Search by $/KM</string>
+    <string name="search_keyword_text">Search by Keyword</string>
+    <string name="search_coordinate_text">Search by Coordinate</string>
+    <string name="search_address_text">Search by Address</string>
+    <string name="search_price"> Search by $/KM</string>
 
 </resources>
