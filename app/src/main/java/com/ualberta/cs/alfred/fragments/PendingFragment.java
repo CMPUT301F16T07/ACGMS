@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TableLayout;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
@@ -56,30 +58,8 @@ public class PendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateRequestList();
-    }
+        View view = getView();
 
-    private void updateRequestList() {
-        requestAdapter.clear();
-        List returned;
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
-            requestAdapter.addAll(returned);
-        } else {
-            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
-            requestAdapter.addAll(returned);
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Pending", Integer.toString(returned.size()));
-        editor.commit();
-
-        requestAdapter.notifyDataSetChanged();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_pending,container,false);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userName = preferences.getString("USERNAME", null);
 
@@ -108,8 +88,34 @@ public class PendingFragment extends Fragment {
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Pending");
                 startActivity(intent);
+                updateRequestList();
             }
         });
+    }
+
+    private void updateRequestList() {
+        requestAdapter.clear();
+        List returned;
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+            requestAdapter.addAll(returned);
+        } else {
+            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
+            requestAdapter.addAll(returned);
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Pending", Integer.toString(returned.size()));
+        editor.commit();
+
+        requestAdapter.notifyDataSetChanged();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_pending,container,false);
+
+
         return view;
     }
 }
