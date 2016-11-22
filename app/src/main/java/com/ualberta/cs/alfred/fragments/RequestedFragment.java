@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
@@ -49,6 +50,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private Button button1;
     private TableLayout tableLayout;
     private RelativeLayout.LayoutParams params;
+
+    private EditText editText;
 
     // Custom Check View
     private RadioButton rb1;
@@ -109,28 +112,28 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Requested");
                 startActivity(intent);
-//                updateRequestList();
+                updateRequestList();
             }
         });
     }
 
-//    public void updateRequestList() {
-//        requestAdapter.clear();
-//        List returned;
-//        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-//            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
-//            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
-//            requestAdapter.addAll(returned);
-//        } else {
-//            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
-//            requestAdapter.addAll(returned);
-//        }
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString("Requested", Integer.toString(returned.size()));
-//        editor.commit();
-//
-//        requestAdapter.notifyDataSetChanged();
-//    }
+    public void updateRequestList() {
+        requestAdapter.clear();
+        List returned;
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
+            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
+            requestAdapter.addAll(returned);
+        } else {
+            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
+            requestAdapter.addAll(returned);
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Requested", Integer.toString(returned.size()));
+        editor.commit();
+
+        requestAdapter.notifyDataSetChanged();
+    }
 
     @Nullable
     @Override
@@ -151,6 +154,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
         Button button3 = (Button) view.findViewById(R.id.request_done_button);
         button3.setOnClickListener(this);
+
+        editText = (EditText) view.findViewById(R.id.filter_input);
 
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
@@ -191,8 +196,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequest =
                         new RequestESGetController.GetRequestByMultiplePreferencesTask();
 
-                EditText editText = (EditText) v.findViewById(R.id.filter_input);
                 String filter = editText.getText().toString();
+
+                Toast.makeText(getContext(),filter,Toast.LENGTH_SHORT).show();
 
                 switch (searchType){
                     case R.id.radioButtonKeyword:
@@ -228,11 +234,12 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     e.printStackTrace();
                 }
 
-                requestAdapter.clear();
-                requestAdapter.addAll(requests);
+                requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                requestedListView.setAdapter(requestAdapter);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("Requested", Integer.toString(requests.size()));
                 editor.commit();
+                requestAdapter.notifyDataSetChanged();
                 break;
         }
 
