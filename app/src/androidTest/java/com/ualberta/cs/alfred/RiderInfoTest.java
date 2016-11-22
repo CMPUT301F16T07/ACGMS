@@ -5,6 +5,10 @@ import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Creates all the test for Rider info.
+ *
+ * @author ookmm
+ * @version 1.0
+ * @see RiderInfo
  */
 public class RiderInfoTest extends ActivityInstrumentationTestCase2 {
 
