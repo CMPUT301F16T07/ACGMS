@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
                             final RadioButton radioButtonSelected = (RadioButton) findViewById(selected);
                             final String mode = radioButtonSelected.getText().toString();
 
+                            //TODO: Check this!
+                            /* =====
                             // check if the username exists in the current elastic search server
                             LoginController loginController = new LoginController(userName.getText().toString(), mode);
                             Boolean userExist = null;
@@ -99,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-
+                            ======
+                            */
                             // Access the default SharedPreferences
                             SharedPreferences preferences =
                                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -108,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("MODE", mode);
                             editor.commit();
 
+                            //TODO: Check this!
+                            /* =====
                             // if the user already exists as the desired type of user
                             if (userExist == Boolean.TRUE) {
                                 // Launch MenuActivity where the buttom navbar is located.
@@ -165,9 +170,13 @@ public class MainActivity extends AppCompatActivity {
                                 // This scenerio covers the event where the device is connected to the internet but had an error occur with the ES server
                                 Toast.makeText(MainActivity.this, "Sorry there was a connection error with the server, please try again.", Toast.LENGTH_LONG).show();
                             }
+                            =====
+                            */
+                            
                         } else {
                             Toast connectionErrorToast = Toast.makeText(MainActivity.this, "Please check your network connection before attempting to log in again.", Toast.LENGTH_LONG);
                         }
+
                     }
                 }
         );

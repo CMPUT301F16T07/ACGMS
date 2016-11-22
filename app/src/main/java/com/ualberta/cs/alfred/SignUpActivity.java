@@ -49,6 +49,8 @@ public class SignUpActivity extends AppCompatActivity {
     private String oppositeExists;
     private String userName;
 
+    //TODO: Check this!
+    /* =====
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,6 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
+
     private DriverInfo collectDriverInfo() {
         Vehicle vehicle = new Vehicle(
                 serialNumberEditText.getText().toString(),
@@ -231,4 +234,6 @@ public class SignUpActivity extends AppCompatActivity {
                     new RiderInfo(creditCardNumberEditText.getText().toString()));
         }
     }
+    =====
+    */
 }

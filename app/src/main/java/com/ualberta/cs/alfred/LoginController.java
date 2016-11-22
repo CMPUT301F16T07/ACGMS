@@ -39,7 +39,8 @@ public class LoginController {
         this.mode = mode;
     }
 
-
+    //TODO : Check this!
+    /* ====
     private Boolean isExpected(String mode, User user) {
         if (user != null) {
             if ( (mode.contentEquals("Rider Mode") && user.getIsRider()) ||
@@ -49,6 +50,8 @@ public class LoginController {
         }
         return Boolean.FALSE;
     }
+    =====
+    */
 
     /**
      * Check user exists.
@@ -57,6 +60,8 @@ public class LoginController {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
+    //TODO : Check this!
+    /* =====
     public Boolean checkUser() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetUserInfo retrievedUser = new UserElasticSearchController.GetUserInfo();
         User user = retrievedUser.execute(this.userName).get();
@@ -65,6 +70,8 @@ public class LoginController {
         }
         return Boolean.FALSE;
     }
+    =====
+    */
 
     /**
      * Check if opposite mode exists.
@@ -73,6 +80,8 @@ public class LoginController {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
+    //TODO : Check this!
+    /* ====
     public Boolean checkOpposite() throws ExecutionException, InterruptedException {
         UserElasticSearchController.GetUserInfo retrievedUser = new UserElasticSearchController.GetUserInfo();
         User user = retrievedUser.execute(this.userName).get();
@@ -85,4 +94,6 @@ public class LoginController {
         }
         return Boolean.FALSE;
     }
+    =====
+    */
 }
