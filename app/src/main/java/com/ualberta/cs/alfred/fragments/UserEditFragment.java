@@ -63,7 +63,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
 
 
         //retrieving rider's informatino from elasticsearch
-        UserESGetController.GetRider getRider = new UserESGetController.GetRider();
+        UserESGetController.GetUserTask getRider = new UserESGetController.GetUserTask();
         try {
             user = getRider.execute(userName).get();
         } catch (InterruptedException e) {

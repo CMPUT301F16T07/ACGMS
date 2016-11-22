@@ -143,7 +143,7 @@ public class UserESGetController {
                 Map source = (Map)hit.source;
                 String id = (String)source.get(JestResult.ES_METADATA_ID);
                 if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
+                    rider = result.getSourceAsObject(User.class);
                     rider.setUserID(id);
                 }
                 else {
@@ -153,54 +153,6 @@ public class UserESGetController {
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return rider;
-        }
-    }
-
-    /**
-     * This class is used to run an AsyncTask in the background to get a rider from the
-     * elastic search server.
-     */
-    public static class GetRider extends AsyncTask<String, Void, Rider> {
-        @Override
-        protected Rider doInBackground(String... search_parameters) {
-
-            ESSettings.verifySettings();
-
-            Rider rider = null;
-
-            String query = "{\n" +
-                    "    \"query\": {\n" +
-                    "        \"match\" : {\n" +
-                    "            \"userName\" : \n" +
-                    "                \""+search_parameters[0]+"\"\n" +
-                    "            }\n" +
-                    "    }\n" +
-                    "}";
-
-            Search search = new Search.Builder(query)
-                    .addIndex(ESSettings.INDEX_NAME)
-                    .addType(ESSettings.RIDER_TYPE_NAME)
-                    .build();
-
-            try {
-                SearchResult result = ESSettings.client.execute(search);
-                List<SearchResult.Hit<Map,Void>> hits = result.getHits(Map.class);
-                SearchResult.Hit hit = hits.get(0);
-                Map source = (Map)hit.source;
-                String id = (String)source.get(JestResult.ES_METADATA_ID);
-                if (result.isSucceeded()) {
-                    rider = result.getSourceAsObject(Rider.class);
-                    rider.setUserID(id);
-                }
-                else {
-                    Log.i("Error", "The search query failed to find the rider that matched.");
-                }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
             return rider;
         }
     }
