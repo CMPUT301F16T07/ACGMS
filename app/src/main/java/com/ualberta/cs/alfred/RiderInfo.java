@@ -1,19 +1,15 @@
 package com.ualberta.cs.alfred;
 
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-
 
 /**
  * The type Rider info. It stores specific info about a rider
  *
  * @author mmcote
- * @version 1.1
+ * @version 1.2
  */
 public class RiderInfo {
 
     private String creditCardNumber;
-    private RequestList requests;
 
     /**
      * Instantiates a new Rider.
@@ -22,7 +18,6 @@ public class RiderInfo {
      */
     public RiderInfo(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
-        this.requests = new RequestList();
     }
 
     /**
@@ -41,23 +36,5 @@ public class RiderInfo {
      */
     public void setCreditCardNumber(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
-    }
-
-    /**
-     * Gets requests.
-     *
-     * @return the requests
-     */
-    public RequestList getRequests() {
-        return requests;
-    }
-
-    /**
-     * Add request.
-     *
-     * @param newRequest the new request
-     */
-    public void addRequest(Request newRequest) {
-        this.requests.addRequest(newRequest);
     }
 }
