@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             =====
                             */
-                            
+
                         } else {
                             Toast connectionErrorToast = Toast.makeText(MainActivity.this, "Please check your network connection before attempting to log in again.", Toast.LENGTH_LONG);
                         }

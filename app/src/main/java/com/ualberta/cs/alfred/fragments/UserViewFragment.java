@@ -47,7 +47,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         String userMode = preferences.getString("MODE","None");
 
         User user = new User("","","",new Date(),"","");
-
+        //TODO: Check this!
+        /* =====
         try {
             //retrieving rider's informatino from elasticsearch
             UserElasticSearchController.GetUserInfo getUser = new UserElasticSearchController.GetUserInfo();
@@ -58,6 +59,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        =====
+        */
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         String emailAddress = user.getEmail();
