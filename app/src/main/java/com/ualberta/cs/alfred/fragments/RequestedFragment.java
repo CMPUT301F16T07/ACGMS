@@ -107,28 +107,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Requested");
                 startActivity(intent);
-//                updateRequestList();
             }
         });
     }
-
-//    public void updateRequestList() {
-//        requestAdapter.clear();
-//        List returned;
-//        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-//            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
-//            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
-//            requestAdapter.addAll(returned);
-//        } else {
-//            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
-//            requestAdapter.addAll(returned);
-//        }
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString("Requested", Integer.toString(returned.size()));
-//        editor.commit();
-//
-//        requestAdapter.notifyDataSetChanged();
-//    }
 
     @Nullable
     @Override

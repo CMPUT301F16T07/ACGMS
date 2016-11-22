@@ -163,7 +163,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
 
         User u1 = new User(u1FirstName, u1LastName, u1UserName, u1DateOfBirth, u1PhoneNumber, u1Email);
 
-        assertTrue("User is not a rider", u1.isDriver() == false);
+        assertTrue("User is not a rider", u1.getIsDriver().equals(Boolean.FALSE));
     }
 
     public void testIsDriver() {
@@ -211,7 +211,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         User driver = new User(u1FirstName, u1LastName, u1UserName, u1DateOfBirth, u1PhoneNumber,
                 u1Email, driverInfo);
 
-        assertTrue("User is a driver", driver.isDriver() == true);
+        assertTrue("User is a driver", driver.getIsDriver().equals(Boolean.FALSE));
     }
 
 }

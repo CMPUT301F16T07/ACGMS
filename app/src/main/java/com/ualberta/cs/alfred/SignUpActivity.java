@@ -49,8 +49,6 @@ public class SignUpActivity extends AppCompatActivity {
     private String oppositeExists;
     private String userName;
 
-    //TODO: Check this!
-    /* =====
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,9 +171,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                        updateUser.execute(collectDriverInfo());
 //                    }
                 } else {
-                    UserElasticSearchController.AddUserTask<User> addUser = new UserElasticSearchController.AddUserTask<User>();
-                    RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
-                    addUser.execute(collectUser());
+                    createUser();
                 }
                 Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
                 SharedPreferences preferences =
@@ -201,7 +197,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
-
     private DriverInfo collectDriverInfo() {
         Vehicle vehicle = new Vehicle(
                 serialNumberEditText.getText().toString(),
@@ -212,13 +207,12 @@ public class SignUpActivity extends AppCompatActivity {
                 Integer.valueOf(yearEditText.getText().toString()),
                 colorEditText.getText().toString());
         DriverInfo driverInfo = new DriverInfo(
-                userNameEditText.getText().toString(),
                 licenseNumberEditText.getText().toString(),
                 vehicle);
         return driverInfo;
     }
 
-    private User collectUser() {
+    private void createUser() {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
         String finalUserName = userNameEditText.getText().toString();
@@ -226,14 +220,12 @@ public class SignUpActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
 
         if (Mode.contentEquals("Driver Mode")) {
-            return new User(firstName, lastName, finalUserName,
+            new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email, collectDriverInfo());
         } else {
-            return new User(firstName, lastName, finalUserName,
+            new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email,
                     new RiderInfo(creditCardNumberEditText.getText().toString()));
         }
     }
-    =====
-    */
 }
