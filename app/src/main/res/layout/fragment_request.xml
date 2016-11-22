@@ -4,79 +4,6 @@
     android:layout_height="match_parent">
 
 
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/request_done_button">
-
-
-        <TextView
-            android:text="@string/home_start_text"
-            android:layout_marginTop="25dp"
-            android:textSize="@dimen/home_text"
-            android:layout_marginRight="10dp"
-            android:textColor="#000000"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:id="@+id/start_text" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_height="35dp"
-            android:background="@color/colorHighlight"
-            android:inputType="textPersonName"
-            android:hint="@string/home_address_text"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textSize="@dimen/home_text"
-            android:id="@+id/start_input"
-            android:layout_toEndOf="@+id/start_text" />
-
-        <TextView
-            android:text="@string/home_end_text"
-            android:textSize="@dimen/home_text"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="25dp"
-            android:textColor="#000000"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/end_text"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/start_input" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/colorHighlight"
-            android:inputType="textPersonName"
-            android:hint="@string/home_address_text"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textSize="@dimen/home_text"
-            android:id="@+id/end_input"
-            android:layout_below="@+id/start_input"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/end_text" />
-
-        <TextView
-            android:text="@string/home_option_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/textView15"
-            android:layout_alignStart="@+id/end_input"
-            android:layout_below="@+id/end_input"
-            android:textColor="@color/colorPrimary"/>
-
-    </RelativeLayout>
     <Button
         android:text="@string/home_confirm_text"
         android:layout_width="match_parent"
@@ -87,4 +14,171 @@
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:padding="5dp"
+        android:stretchColumns="0,1"
+        android:layout_gravity="center"
+        android:layout_above="@+id/request_done_button">
+
+
+        <TextView
+            android:text="@string/home_start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_text"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:padding="5dp"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:text="@string/home_address_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_input1_text"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="1dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textPersonName"
+                android:hint="1 Sir Winston Churchill SQ"
+                android:ems="10"
+                android:id="@+id/start_input_1"
+                android:layout_height="35dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:text="@string/home_city_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_input2_text"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="1dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textPersonName"
+                android:hint="Edmonton"
+                android:ems="10"
+                android:id="@+id/start_input_2"
+                android:layout_height="35dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+        </TableRow>
+
+        <TextView
+            android:text="@string/home_end_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/end_text"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:padding="5dp"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:text="@string/home_address_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/end_input1_text"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="1dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textPersonName"
+                android:hint="1 Sir Winston Churchill SQ"
+                android:ems="10"
+                android:id="@+id/end_input_1"
+                android:layout_height="35dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:text="@string/home_city_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/end_input2_text"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="1dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textPersonName"
+                android:hint="Edmonton"
+                android:ems="10"
+                android:id="@+id/end_input_2"
+                android:layout_height="35dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+
+            <RadioGroup android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioGroup"
+                android:layout_column="1">
+                <RadioButton
+                    android:text="@string/home_request_address_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioButtonAddress"
+                    android:checked="true"/>
+                <RadioButton
+                    android:text="@string/home_request_coordinate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioButtonCoordinates" />
+            </RadioGroup>
+
+        </TableRow>
+    </TableLayout>
+
 </RelativeLayout>

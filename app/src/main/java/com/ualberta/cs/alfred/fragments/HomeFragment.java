@@ -1,6 +1,8 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -23,13 +26,19 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.BuildConfig;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.Request;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -38,17 +47,8 @@ import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-    //private MapView map;
-    //private GeoPoint defaultLocation;
-    private SharedPreferences preferences;
-
-
-    private Fragment fragment;
-    private FragmentTransaction transaction;
-
     private MapView mapView;
     private GoogleMap googleMap;
-    private LatLng defaultLocation = new LatLng(53.5444,-113.4904);
 
     public HomeFragment() {
     }
@@ -70,11 +70,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // This will modify initialize the counts for each list in the home screen
         RequestFragmentsListController rFLC = new RequestFragmentsListController();
         rFLC.updateCounts(preferences.getString("MODE", null), getContext());
+
+        String userMode = preferences.getString("MODE", null);
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setBackgroundColor(0xfff08080);
@@ -93,12 +95,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);
         acceptedButton.setOnClickListener(this);
-        requestButton.setOnClickListener(this);
+
+        if (userMode.contentEquals("Rider Mode")) {
+            requestButton.setOnClickListener(this);
+        } else {
+            requestButton.clearFocus();
+            requestButton.setText("Driver Mode");
+            requestButton.setBackgroundColor(Color.WHITE);
+        }
 
 
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -122,6 +132,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     @Override
     public void onClick(View v) {
+        Fragment fragment;
         switch (v.getId()) {
             case R.id.button_pending:
                 fragment = ListFragment.newInstance(1);
@@ -150,12 +161,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
 
     private void replaceFragmentwithoutStack(Fragment fragment) {
+        FragmentTransaction transaction;
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.menu_fragment_container, fragment);
         transaction.commit();
     }
 
     private void replaceFragmentwithStack(Fragment fragment) {
+        FragmentTransaction transaction;
         transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(R.id.menu_fragment_container, fragment);
@@ -165,7 +178,46 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
+        LatLng defaultLocation = new LatLng(53.5444,-113.4904);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+
+
+        LatLng house = new LatLng(0,0);
+
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        // List of points returned by the address
+        String start = "2369 29a Ave NW Edmonton";
+        List<android.location.Address> startCoordinates;
+        try {
+            startCoordinates = geocoder.getFromLocationName(start,1);
+
+            int startCoordinatesSize = startCoordinates.size();
+
+            // Check if both list are empty
+            if (startCoordinatesSize > 0) {
+                // get the coordinates of the first results for both address
+                double x1 = startCoordinates.get(0).getLatitude();
+                double y1 = startCoordinates.get(0).getLongitude();
+                house = new LatLng(x1,y1);
+
+            } else {
+                // Error messages
+                String errorMessage = "Unable to find start and destination Address";
+                if (startCoordinatesSize == 0) {
+                    errorMessage = "Unable to find the start address";
+                }
+                Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Marker mhouse = googleMap.addMarker(new MarkerOptions()
+                .position(house)
+        );
+        //mhouse.setTag(0);
+
     }
 
     @Override

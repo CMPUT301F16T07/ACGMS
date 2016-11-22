@@ -34,11 +34,20 @@
     <string name="home_request">Make Request</string>
     <string name="home_start_text">Start</string>
     <string name="home_end_text">End</string>
-    <string name="home_option_text">Search by coordinate</string>
+    <string name="home_request_coordinate_text">Add by Coordinate</string>
+    <string name="home_request_address_text">Add by Address</string>
     <string name="home_request_text">Request</string>
     <string name="home_address_text">Address</string>
-    <string name="home_gps_text">GPS</string>
+    <string name="home_city_text">City</string>
+    <string name="home_latitude_text">Latitude</string>
+    <string name="home_longitude_text">Longitude</string>
     <string name="home_confirm_text">CONFIRM</string>
+    <string name="home_cancel_text">CANCEL</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="search_keyword_text">Search by Keyword</string>
+    <string name="search_coordinate_text">Search by Coordinate</string>
+    <string name="search_address_text">Search by Address</string>
+    <string name="search_price"> Search by $/KM</string>
 
 </resources>

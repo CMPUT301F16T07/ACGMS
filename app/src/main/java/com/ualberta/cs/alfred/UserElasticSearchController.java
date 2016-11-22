@@ -125,8 +125,8 @@ public class UserElasticSearchController {
             String query = "{\n" +
                     "           \"_source\": {\n" +
                     "               \"excludes\": [\n" +
-                                        exclusionString +
-                                        "         ]\n" +
+                    exclusionString +
+                    "         ]\n" +
                     "                        },\n"+
                     "               \"query\": {\n" +
                     "                   \"match\" : {\n" +
