@@ -49,6 +49,7 @@ public class User {
      */
     public User(String firstName, String lastName, String userName, Date dateOfBirth,
                 String phoneNumber, String email) {
+        this.userID = null;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,6 +58,7 @@ public class User {
         this.email = email;
         this.isRider = Boolean.FALSE;
         this.isDriver = Boolean.FALSE;
+        this.save();
     }
 
     /**
@@ -97,21 +99,32 @@ public class User {
     }
 
 
-    public Boolean getIsRider() {
-        return isRider;
+    public DriverInfo getDriverInfo() {
+        return driverInfo;
     }
 
-    public void setIsRider(Boolean rider) {
-        isRider = rider;
+    public void setDriverInfo(DriverInfo driverInfo) {
+        this.driverInfo = driverInfo;
+        this.isDriver = Boolean.TRUE;
+    }
+
+    public RiderInfo getRiderInfo() {
+        return riderInfo;
+    }
+
+    public void setRiderInfo(RiderInfo riderInfo) {
+        this.riderInfo = riderInfo;
+        this.isRider = Boolean.TRUE;
+    }
+
+    public Boolean getIsRider() {
+        return isRider;
     }
 
     public Boolean getIsDriver() {
         return isDriver;
     }
 
-    public void setIsDriver(Boolean driver) {
-        isDriver = driver;
-    }
     /**
      * Gets email.
      *
@@ -238,8 +251,7 @@ public class User {
         this.userID = userID;
     }
 
-    private void save() {
-
+    private void save(){
         UserESAddController.AddUserTask<User> addUserTask = new UserESAddController.AddUserTask<User>();
         addUserTask.execute(this);
     }

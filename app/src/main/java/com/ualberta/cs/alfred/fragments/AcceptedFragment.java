@@ -56,31 +56,8 @@ public class AcceptedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateRequestList();
-    }
+        View view = getView();
 
-    private void updateRequestList() {
-        requestAdapter.clear();
-        List returned;
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
-            requestAdapter.addAll(returned);
-        } else {
-            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
-            requestAdapter.addAll(returned);
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Accepted", Integer.toString(returned.size()));
-        editor.commit();
-
-        requestAdapter.notifyDataSetChanged();
-    }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_accepted,container,false);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userName = preferences.getString("USERNAME", null);
         acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
@@ -113,7 +90,12 @@ public class AcceptedFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_accepted,container,false);
         return view;
     }
 }
