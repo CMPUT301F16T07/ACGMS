@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for setting item to a request
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  * @see UserESSetController
  */
 public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
@@ -81,55 +81,6 @@ public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
         setNestedObjectPropertyValueTask.execute(userID, userProperty,
                 nestedObject1Property, nestedObject1ValueType, nestedObject1Value);
         assert (true);
-
-    }
-
-    /**
-     * Test for Adding new driver to driverList on a particular request
-     *
-     * @method SetPropertyValueTask()
-     */
-    // TODO: Need to review this. Still buggy.
-    public void testSetNewDriverToList() {
-
-        /**
-         * Another approach
-         */
-        UserESGetController.GetUserByIdTask retrievedUser =
-                new UserESGetController.GetUserByIdTask();
-
-        // Find user
-        retrievedUser.execute("AViKhQYzdE2DZPCrf9mx");
-
-        try {
-            User user = retrievedUser.get();
-            assert (true);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
-        String userID = "AViKhQYzdE2DZPCrf9mx";
-        String userProperty = "riderInfo";
-
-        String nestedObject1Property = "requests";
-        String nestedObject1ValueType = "array";
-        String nestedObject1Value = "request001";
-
-
-        String nestedObjectFinalValue = String.format("[\"%s\"]", nestedObject1Value);
-
-
-        UserESSetController.SetNestedObjectPropertyValueTask setNestedObjectPropertyValueTask =
-                new UserESSetController.SetNestedObjectPropertyValueTask();
-
-        setNestedObjectPropertyValueTask.execute(
-                userID, userProperty,
-                nestedObject1Property, nestedObject1ValueType, nestedObjectFinalValue);
-        assert (true);
-
 
     }
 

@@ -81,9 +81,9 @@ public class Rider extends User {
      *
      */
     private void save() {
-        UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
+        UserESAddController.AddUserTask<Rider> addRider = new UserESAddController.AddUserTask<Rider>();
         addRider.execute(this);
-        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
+        UserESGetController.GetRider getRider = new UserESGetController.GetRider();
         try {
             this.setUserID(getRider.execute(this.getUserName()).get().getUserID());
         } catch (InterruptedException e) {
@@ -97,7 +97,7 @@ public class Rider extends User {
     /*
     private void save() {
 
-        UserElasticSearchController.AddUser<Rider> addRider = new UserElasticSearchController.AddUser<Rider>();
+        UserElasticSearchController.AddUserTask<Rider> addRider = new UserElasticSearchController.AddUserTask<Rider>();
         addRider.execute(this);
     }
     */

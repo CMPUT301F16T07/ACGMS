@@ -46,7 +46,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
                 rider1PhoneNumber, rider1Email, rider1CCNumber);
 
         /* Step 3:  Get rider with a given username from ES */
-        UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
+        UserESGetController.GetRider retrievedRider = new UserESGetController.GetRider();
 
         // Find the rider with this username
         retrievedRider.execute("vputin");

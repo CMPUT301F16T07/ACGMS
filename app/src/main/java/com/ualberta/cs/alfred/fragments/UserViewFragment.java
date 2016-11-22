@@ -14,10 +14,8 @@ import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.User;
-import com.ualberta.cs.alfred.UserElasticSearchController;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 08/11/16.

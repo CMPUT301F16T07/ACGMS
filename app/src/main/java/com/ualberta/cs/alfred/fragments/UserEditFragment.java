@@ -12,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
-import com.ualberta.cs.alfred.Rider;
 import com.ualberta.cs.alfred.User;
-import com.ualberta.cs.alfred.UserElasticSearchController;
+import com.ualberta.cs.alfred.UserESGetController;
 
 import java.util.concurrent.ExecutionException;
 
@@ -65,7 +63,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
 
 
         //retrieving rider's informatino from elasticsearch
-        UserElasticSearchController.GetRider getRider = new UserElasticSearchController.GetRider();
+        UserESGetController.GetRider getRider = new UserESGetController.GetRider();
         try {
             user = getRider.execute(userName).get();
         } catch (InterruptedException e) {

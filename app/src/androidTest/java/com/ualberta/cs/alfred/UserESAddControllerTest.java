@@ -43,16 +43,16 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
         /**
          * Step 1: Basic user info
          */
-        String u1FirstName = "Micheal";
-        String u1LastName = "Jordan";
-        String u1UserName = "highness";
+        String u1FirstName = "Peter";
+        String u1LastName = "Mansbridge";
+        String u1UserName = "peterman";
 
         // Create date
-        GregorianCalendar gc = new GregorianCalendar(1970, Calendar.JUNE, 21);
+        GregorianCalendar gc = new GregorianCalendar(1940, Calendar.JUNE, 21);
         Date u1DateOfBirth = gc.getTime();
 
-        String u1PhoneNumber = "780-888-5555";
-        String u1Email = "highness@example.com";
+        String u1PhoneNumber = "613-888-5555";
+        String u1Email = "peterman@example.com";
 
         /**
          * Step 2: Create credit card

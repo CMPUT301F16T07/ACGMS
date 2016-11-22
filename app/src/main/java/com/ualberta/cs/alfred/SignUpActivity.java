@@ -173,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                        updateUser.execute(collectDriverInfo());
 //                    }
                 } else {
-                    UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
+                    UserElasticSearchController.AddUserTask<User> addUser = new UserElasticSearchController.AddUserTask<User>();
                     RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
                     addUser.execute(collectUser());
                 }

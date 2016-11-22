@@ -266,7 +266,7 @@ public class User {
 
     private void save() {
 
-        UserElasticSearchController.AddUser<User> addRider = new UserElasticSearchController.AddUser<User>();
+        UserESAddController.AddUserTask<User> addRider = new UserESAddController.AddUserTask<User>();
         addRider.execute(this);
     }
 

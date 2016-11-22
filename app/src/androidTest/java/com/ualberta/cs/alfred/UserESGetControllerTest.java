@@ -17,19 +17,19 @@ public class UserESGetControllerTest extends ActivityInstrumentationTestCase2 {
                 new UserESGetController.GetUserByIdTask();
 
         // Find user
-        retrievedUser.execute("AViJL7VadE2DZPCrf9mb");
+        retrievedUser.execute("AViNIZ0VdE2DZPCrf9nF");
 
         try {
             User user = retrievedUser.get();
 
             System.out.println("====================");
-            //System.out.println("User ID: " + user.getUserID());
-            //System.out.println("Username: " + user.getUserName());
-            //System.out.println("First name: " + user.getFirstName());
-            //System.out.println("Last name: " + user.getLastName());
-            //System.out.println("Phone: " + user.getPhoneNumber());
-            //System.out.println("Email: " + user.getEmail());
-            //System.out.println("Requests" + user.getRiderInfo().getRequests().getRequestList());
+            System.out.println("User ID: " + user.getUserID());
+            System.out.println("Username: " + user.getUserName());
+            System.out.println("First name: " + user.getFirstName());
+            System.out.println("Last name: " + user.getLastName());
+            System.out.println("Phone: " + user.getPhoneNumber());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Credit card: " + user.getRiderInfo().getCreditCardNumber());
             System.out.println("====================");
             assert (true);
         } catch (InterruptedException e) {

@@ -23,7 +23,7 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testGetRider() {
-        UserElasticSearchController.GetRider retrievedRider = new UserElasticSearchController.GetRider();
+        UserESGetController.GetRider retrievedRider = new UserESGetController.GetRider();
         retrievedRider.execute("jimbo");
 
         try {
@@ -43,10 +43,10 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
         RiderInfo riderInfo = new RiderInfo("23423432424");
         User user = new User("Jimmy", "Fallon", "jimFal", new Date(), "32432234", "jimmyFallon@ualberta.ca", riderInfo);
 
-        UserElasticSearchController.AddUser<User> addUser = new UserElasticSearchController.AddUser<User>();
-        addUser.execute(user);
+        UserESAddController.AddUserTask<User> addUserTask = new UserESAddController.AddUserTask<User>();
+        addUserTask.execute(user);
 
-        UserElasticSearchController.GetUserTask getUserTask = new UserElasticSearchController.GetUserTask();
+        UserESGetController.GetUserTask getUserTask = new UserESGetController.GetUserTask();
         getUserTask.execute("jimFal");
         User userReturn = null;
         try {
@@ -60,7 +60,7 @@ public class RiderTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testUserInfoWithoutPrivate() {
-        UserElasticSearchController.GetUserInfoWithoutPrivateInfo getUserInfoWithoutPrivateInfo = new UserElasticSearchController.GetUserInfoWithoutPrivateInfo();
+        UserESGetController.GetUserInfoWithoutPrivateInfo getUserInfoWithoutPrivateInfo = new UserESGetController.GetUserInfoWithoutPrivateInfo();
         getUserInfoWithoutPrivateInfo.execute("jimFal", "riderInfo.creditCardNumber");
 
         User userReturn = null;

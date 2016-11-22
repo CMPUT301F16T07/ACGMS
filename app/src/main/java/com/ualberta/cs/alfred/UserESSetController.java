@@ -299,10 +299,6 @@ public class UserESSetController {
                             "}",
                     userProperty, stringBuilder);
 
-            System.out.println("=================");
-            System.out.println(query);
-            System.out.println("=================");
-
             try {
                 ESSettings.client.execute(new Update.Builder(query)
                         .index(ESSettings.INDEX_NAME)
