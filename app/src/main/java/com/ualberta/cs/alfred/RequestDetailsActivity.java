@@ -1,13 +1,16 @@
 package com.ualberta.cs.alfred;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -32,8 +35,10 @@ import com.ualberta.cs.alfred.fragments.ListFragment;
 
 import org.w3c.dom.Document;
 
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -44,13 +49,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private MapView mapView;
     private GoogleMap googleMap;
     private LatLng defaultLocation = new LatLng(53.5444,-113.4904);
-
     private DecimalFormat df = new DecimalFormat("0.00");
-
     private Request r;
-
     private ListView biddingDriversListView;
     private ArrayAdapter<String> biddingDriversAdapter;
+    private String driverSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
         final String mode = preferences.getString("MODE", "None");
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final String from = intent.getExtras().getString("FROM", "None");
         String next = "None";
 
@@ -107,16 +110,56 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         if (mode.contentEquals("Rider Mode") &&
                 (r.getRequestStatus().contentEquals("Pending") ||
                         r.getRequestStatus().contentEquals("Accepted"))) {
-            // TODO: Implement a list of possible drivers for a pending request only for the rider to choose from
-            ArrayList<String> fakeDrivers = new ArrayList<>();
-            fakeDrivers.add("BILL");
-            fakeDrivers.add("BOB");
 //            biddingDriversAdapter = new ArrayAdapter<>(RequestDetails.this, R.layout.custom_row, r.getBiddingDrivers());
             // This will show all the possible drivers but we still need to be able to select a driver, and be able to view
             // his profile
-            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, fakeDrivers);
+            ArrayList<String> driverArray = r.getDriverIDList();
+            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, driverArray);
             biddingDriversListView.setAdapter(biddingDriversAdapter);
+            if (driverArray.size() > 0) {
+                driverSelected = driverArray.get(0);
+            } else {
+                driverSelected = "Error";
+            }
         }
+
+        biddingDriversListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                final String possibleDriver = (String) biddingDriversListView.getItemAtPosition(position);
+                if (!driverSelected.contentEquals(possibleDriver)) {
+                    builder.setTitle("Change selected driver?");
+                    builder.setCancelable(Boolean.TRUE);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            driverSelected = possibleDriver;
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                } else {
+                    builder.setTitle("Driver is already selected.");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                }
+                builder.setNeutralButton("View Profile", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override

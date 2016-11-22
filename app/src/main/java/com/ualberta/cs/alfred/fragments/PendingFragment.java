@@ -22,6 +22,7 @@ import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,34 +89,31 @@ public class PendingFragment extends Fragment {
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Pending");
                 startActivity(intent);
-                updateRequestList();
             }
         });
     }
 
-    private void updateRequestList() {
-        requestAdapter.clear();
-        List returned;
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
-            requestAdapter.addAll(returned);
-        } else {
-            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
-            requestAdapter.addAll(returned);
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Pending", Integer.toString(returned.size()));
-        editor.commit();
-
-        requestAdapter.notifyDataSetChanged();
-    }
+//    private void updateRequestList() {
+//        requestAdapter.clear();
+//        List returned;
+//        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+//            returned = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+//            requestAdapter.addAll(returned);
+//        } else {
+//            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
+//            requestAdapter.addAll(returned);
+//        }
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putString("Pending", Integer.toString(returned.size()));
+//        editor.commit();
+//
+//        requestAdapter.notifyDataSetChanged();
+//    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pending,container,false);
-
-
         return view;
     }
 }
