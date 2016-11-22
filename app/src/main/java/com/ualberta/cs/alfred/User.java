@@ -10,7 +10,7 @@ import io.searchbox.annotations.JestId;
  * when a user logs in to the local device.
  *
  * @author mmcote
- * @version 1.0
+ * @version 1.1
  *
  * @see RiderInfo
  * @see DriverInfo
@@ -236,5 +236,11 @@ public class User {
      */
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    private void save() {
+
+        UserESAddController.AddUserTask<User> addUserTask = new UserESAddController.AddUserTask<User>();
+        addUserTask.execute(this);
     }
 }

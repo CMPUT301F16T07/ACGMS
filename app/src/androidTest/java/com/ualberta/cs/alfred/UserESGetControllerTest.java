@@ -29,7 +29,7 @@ public class UserESGetControllerTest extends ActivityInstrumentationTestCase2 {
             System.out.println("Last name: " + user.getLastName());
             System.out.println("Phone: " + user.getPhoneNumber());
             System.out.println("Email: " + user.getEmail());
-            System.out.println("Credit card: " + user.getRiderInfo().getCreditCardNumber());
+            //System.out.println("Credit card: " + user.getRiderInfo().getCreditCardNumber());
             System.out.println("====================");
             assert (true);
         } catch (InterruptedException e) {
