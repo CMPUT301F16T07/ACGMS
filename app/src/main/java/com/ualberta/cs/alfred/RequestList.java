@@ -103,15 +103,15 @@ public class RequestList {
     /**
      * removes a driver
      *
-     * @param userName the username of the driver
+     * @param userID the username of the driver
      *
      *
      */
-    public ArrayList<Request> removeDriver(String userName) {
+    public ArrayList<Request> removeDriver(String userID) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
             if (request.getDriverIDList() != null) {
-                if (!request.getDriverIDList().contains(userName)) {
+                if (!request.getDriverIDList().contains(userID)) {
                     tempRequestList.add(request);
                 }
             }

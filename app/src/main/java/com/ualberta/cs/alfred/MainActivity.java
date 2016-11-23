@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.username_input);
         password = (EditText) findViewById(R.id.password_input);
         driverRider = (RadioGroup) findViewById(R.id.radioGroup);
-
     }
 
     /**
@@ -61,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -73,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                         // This line creates a connectivity manager which queries for information on
                         // the connectivity status of the device
                         ConnectivityManager cm = (ConnectivityManager) MainActivity.this.getSystemService(MainActivity.this.CONNECTIVITY_SERVICE);
-
                         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
                         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                             // grab the corresponding user information based on a query using the
                             // username to check if the user even exists
@@ -109,12 +107,26 @@ public class MainActivity extends AppCompatActivity {
                             editor.commit();
 
                             // if the user already exists as the desired type of user
-                            if (userExist == Boolean.TRUE) {
-                                // Launch MenuActivity where the buttom navbar is located.
+                            if (userExist != null && userExist == Boolean.TRUE) {
+                                // Launch MenuActivity where the bottom navbar is located.
+                                UserESGetController.GetUserTask getUserTask = new UserESGetController.GetUserTask();
+                                getUserTask.execute(userName.getText().toString());
+                                User user = null;
+                                try {
+                                    user = (User) getUserTask.get();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
+                                if (user != null) {
+                                    editor.putString("USERID", user.getUserID());
+                                    editor.commit();
+                                }
                                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                                 startActivity(intent);
                                 finish();
-                                // if the user does not exist as the desired type of user or not at all
+                            // if the user does not exist as the desired type of user or not at all
                             } else if (userExist == Boolean.FALSE) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 Boolean isOpposite = Boolean.FALSE;
@@ -125,11 +137,13 @@ public class MainActivity extends AppCompatActivity {
                                         if (mode.contentEquals("Driver Mode")) {
                                             oppositeMode = "Rider Mode";
                                         }
-                                        builder.setMessage("No "+mode+" profile was found under the username of "+userName.getText().toString()+
-                                                ". Although a "+oppositeMode+" profile was found." + " Would you like to add additional "+mode+" info?");
+                                        builder.setMessage(
+                                                "No "+mode+" profile was found under the username of "
+                                                        +userName.getText().toString()+ ". Although a " +oppositeMode+
+                                                        " profile was found. Would you like to add additional " +mode+" info?");
                                     } else {
-                                        builder.setMessage("No profile was found under the username of "+userName.getText().toString()+
-                                                " Would you like to create a new profile?");
+                                        builder.setMessage("No profile was found under the username of "
+                                                +userName.getText().toString()+ " Would you like to create a new profile?");
                                     }
                                 } catch (ExecutionException e) {
                                     e.printStackTrace();
@@ -171,7 +185,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
     }
 }
