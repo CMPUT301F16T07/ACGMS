@@ -82,7 +82,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         super.onResume();
         View view = getView();
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userID = preferences.getString("USERID", null);
 
         ArrayList<Request> requestedList;
@@ -139,7 +138,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_requested,container,false);
-        RelativeLayout.LayoutParams params;
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
 
@@ -147,7 +147,11 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         tableLayout.setVisibility(View.GONE);
 
         button1 = (Button) view.findViewById(R.id.show_filter);
-        button1.setOnClickListener(this);
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            button1.setOnClickListener(this);
+        } else {
+            button1.setVisibility(View.GONE);
+        }
 
         Button button2 = (Button) view.findViewById(R.id.request_cancel_button);
         button2.setOnClickListener(this);
