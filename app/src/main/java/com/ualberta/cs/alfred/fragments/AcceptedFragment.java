@@ -35,7 +35,7 @@ public class AcceptedFragment extends Fragment {
     private SharedPreferences preferences;
     private RequestFragmentsListController rFLC;
     private List<Pair<String, String>> listNeeded;
-    private String userName;
+    private String userID;
 
     public AcceptedFragment() {
         this.rFLC = new RequestFragmentsListController();
@@ -43,7 +43,7 @@ public class AcceptedFragment extends Fragment {
         this.requestAdapter = null;
         this.acceptedListView = null;
         this.preferences = null;
-        this.userName = null;
+        this.userID = null;
     }
 
     public static AcceptedFragment newInstance() {
@@ -59,16 +59,16 @@ public class AcceptedFragment extends Fragment {
         View view = getView();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userName = preferences.getString("USERNAME", null);
+        userID = preferences.getString("USERID", null);
         acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
         ArrayList<Request> acceptedRequestList;
 
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Accepted"));
-            acceptedRequestList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+            acceptedRequestList = rFLC.getRequestList(listNeeded).getWithDriver(userID);
         } else {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
-            acceptedRequestList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Accepted");
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userID));
+            acceptedRequestList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Accepted");
         }
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
         acceptedListView.setAdapter(requestAdapter);
@@ -77,8 +77,6 @@ public class AcceptedFragment extends Fragment {
         editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
         editor.commit();
         ListFragment.update(getContext());
-
-        acceptedListView.setAdapter(requestAdapter);
 
         acceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -84,7 +84,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
 
                 // Get user id from the user who requested a ride
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String userName = preferences.getString("USERNAME", null);
+                String userID = preferences.getString("USERID", null);
                 // Initialize request status
                 String Status = "Requested";
 
@@ -117,7 +117,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                                 x2 = endCoordinates.get(0).getLatitude();
                                 y2 = endCoordinates.get(0).getLongitude();
 
-                                makeRequest(Status,userName,start,end,x1,y1,x2,y2);
+                                makeRequest(Status,userID,start,end,x1,y1,x2,y2);
                             } else {
                                 // Error messages
                                 String errorMessage = "Unable to find start and/or destination Address";
@@ -139,7 +139,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                             String y2String = endInputOne.getText().toString();
                             y2 = Double.parseDouble(y2String);
 
-                            makeRequest(Status,userName,start,end,x1,y1,x2,y2);
+                            makeRequest(Status,userID,start,end,x1,y1,x2,y2);
                         } catch (NumberFormatException e) {
                             String errorMessage = "Invalid Coordinate/s";
                             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -204,7 +204,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         }
     }
 
-    private void makeRequest(String Status, String userName, String start, String end,
+    private void makeRequest(String Status, String userID, String start, String end,
                              double x1,double y1,double x2,double y2){
         // Address is defined as
         // Address(String location, double longitude, double latitude)
@@ -222,7 +222,8 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         // Create an instance of a request and store into elastic search
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
-        Request request = new Request(Status, startPoint, endPoint, (double) results[0], cost, userName);
+
+        Request request = new Request(Status, startPoint, endPoint, (double) results[0], cost, userID);
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
 

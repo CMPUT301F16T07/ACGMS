@@ -44,7 +44,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private SharedPreferences preferences;
     private RequestFragmentsListController rFLC;
     private List<Pair<String, String>> listNeeded;
-    private String userName;
+    private String userID;
 
 
     private Button button1;
@@ -67,7 +67,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         this.requestAdapter = null;
         this.requestedListView = null;
         this.preferences = null;
-        this.userName = null;
+        this.userID = null;
     }
 
     public static RequestedFragment newInstance() {
@@ -83,17 +83,17 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         View view = getView();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userName = preferences.getString("USERNAME", null);
+        userID = preferences.getString("USERID", null);
 
         ArrayList<Request> requestedList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"),
                     new Pair<String, String>("requestStatus", "Requested"));
-            requestedList = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
-            requestedList.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
+            requestedList = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
+            requestedList.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
         } else {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
-            requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userID));
+            requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
         }
 
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);

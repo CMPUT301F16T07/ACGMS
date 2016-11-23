@@ -174,11 +174,6 @@ public class SignUpActivity extends AppCompatActivity {
                     createUser();
                 }
                 Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
-                SharedPreferences preferences =
-                        PreferenceManager.getDefaultSharedPreferences(SignUpActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("USERNAME", userNameEditText.getText().toString());
-                editor.commit();
                 startActivity(intent);
                 finish();
             }
@@ -219,6 +214,7 @@ public class SignUpActivity extends AppCompatActivity {
         String phoneNumber = phoneNumberEditText.getText().toString();
         String email = emailEditText.getText().toString();
 
+        User user = null;
         if (Mode.contentEquals("Driver Mode")) {
             new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email, collectDriverInfo());
@@ -226,6 +222,14 @@ public class SignUpActivity extends AppCompatActivity {
             new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email,
                     new RiderInfo(creditCardNumberEditText.getText().toString()));
+        }
+        if (user != null) {
+            SharedPreferences preferences =
+                    PreferenceManager.getDefaultSharedPreferences(SignUpActivity.this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("USERNAME", finalUserName);
+            editor.putString("USERID", user.getUserID());
+            editor.commit();
         }
     }
 }
