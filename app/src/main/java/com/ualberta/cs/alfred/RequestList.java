@@ -10,7 +10,7 @@ import java.util.List;
  * Creates the type RequestList.
  *
  * @author ookmm
- * @version 1.2
+ * @version 1.3
  */
 public class RequestList {
 
@@ -55,7 +55,7 @@ public class RequestList {
 
         Request aRequest = null;
         for (Request r : requestList) {
-            if (requestID == r.getRequestID()) {
+            if (requestID.equals(r.getRequestID())) {
                 aRequest = r;
                 break;
             }
