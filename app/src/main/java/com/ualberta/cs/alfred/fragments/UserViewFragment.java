@@ -30,8 +30,10 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public UserViewFragment() {
     }
 
-    public static UserViewFragment newInstance() {
+    public static UserViewFragment newInstance(int position, String userID) {
         Bundle args = new Bundle();
+        args.putInt("index",position);
+        args.putString("userID", userID);
         UserViewFragment userViewFragment = new UserViewFragment();
         userViewFragment.setArguments(args);
         return userViewFragment;
@@ -42,15 +44,29 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String userName = preferences.getString("USERNAME", null);
-        String userMode = preferences.getString("MODE","None");
+        String userName = "";
+        String userMode = "";
+
+        int position = 0;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            position = bundle.getInt("index", 0);
+        }
+        if (position == 0) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            userName = preferences.getString("USERNAME", null);
+            userMode = preferences.getString("MODE", "None");
+        } else {
+            // Todo access the username of the person that click the driver profile.
+            userName = bundle.getString("userID");
+            userMode = "Driver";
+        }
 
         User user = new User("","","",new Date(),"","");
 
         try {
-            //retrieving rider's informatino from elasticsearch
-            UserESGetController.GetUserByIdTask getUser = new UserESGetController.GetUserByIdTask();
+            //retrieving rider's information from elasticsearch
+            UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
             user = getUser.execute(userName).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -66,7 +82,11 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
-        textView.setText(userName+" ("+userMode+")");
+        if (position == 0) {
+            textView.setText(userName + " (" + userMode + ")");
+        } else {
+            textView.setText(userName);
+        }
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);
         textView.setText(fullName);

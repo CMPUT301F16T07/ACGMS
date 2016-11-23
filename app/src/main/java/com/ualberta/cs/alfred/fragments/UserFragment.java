@@ -21,8 +21,9 @@ public class UserFragment extends Fragment {
     public UserFragment() {
     }
 
-    public static UserFragment newInstance() {
+    public static UserFragment newInstance(int position) {
         Bundle args = new Bundle();
+        args.putInt("index",position);
         UserFragment userFragment = new UserFragment();
         userFragment.setArguments(args);
         return userFragment;
@@ -32,8 +33,12 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
-
-        Fragment fragment = UserViewFragment.newInstance();
+        int position = 0;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            position = bundle.getInt("index", 0);
+        }
+        Fragment fragment = UserViewFragment.newInstance(position);
         replaceFragmentwithoutStack(fragment);
 
         return view;
