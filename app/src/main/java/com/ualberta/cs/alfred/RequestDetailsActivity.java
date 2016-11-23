@@ -48,12 +48,13 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     private MapView mapView;
     private GoogleMap googleMap;
-    private LatLng defaultLocation = new LatLng(53.5444,-113.4904);
     private DecimalFormat df = new DecimalFormat("0.00");
     private Request r;
     private ListView biddingDriversListView;
     private ArrayAdapter<String> biddingDriversAdapter;
     private String driverSelected;
+    private String mode;
+    private String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +62,25 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.request_details);
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
-        final String mode = preferences.getString("MODE", "None");
         final Intent intent = getIntent();
-        final String from = intent.getExtras().getString("FROM", "None");
+
+        // the mode and which request list this activity was called from will
+        // decide what cancel and confirm will do
+        mode = preferences.getString("MODE", "None");
+        from = intent.getExtras().getString("FROM", "None");
+
+        // which list the request will go to next
         String next = "None";
 
+        Button rideCompleteButton = (Button) findViewById(R.id.ride_complete_button);
+        rideCompleteButton.setVisibility(View.GONE);
         Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
         TableLayout tableLayout = (TableLayout) findViewById(R.id.tableView);
         final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
         biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
 
         if (from.contentEquals("Requested")) {
+            rideCompleteButton.setVisibility(View.GONE);
             // only the driver will be able to confirm anything in the first stage
             // the rider will only be able to cancel the request
             if (mode.contentEquals("Rider Mode")) {
@@ -103,6 +112,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             confirmButton.setVisibility(View.GONE);
             tableLayout.setColumnStretchable(0,true);
             tableLayout.setColumnCollapsed(1,true);
+            if (mode.contentEquals("Rider Mode")) {
+                rideCompleteButton.setVisibility(View.VISIBLE);
+            }
         }
 
         r = (Request) intent.getSerializableExtra("passedRequest");
@@ -174,12 +186,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                downgradeStatus();
                 if (mode.contentEquals("Rider Mode")) {
-                    RequestESDeleteController.DeleteRequestTask deleteRequestTask =
-                            new RequestESDeleteController.DeleteRequestTask();
-                    deleteRequestTask.execute(r.getRequestID());
+                    downgradeStatus();
                 } else {
-                    downgradeStatus(from);
+                    downgradeStatus();
                     RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
                     deleteItemFromListTask.execute(r.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
                 }
@@ -212,14 +223,47 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
-    public void downgradeStatus(String from) {
-        RequestESSetController.SetPropertyValueTask setPropertyValueTask =
-                new RequestESSetController.SetPropertyValueTask();
-        if (from.contentEquals("Pending")) {
-            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Requested");
+    public void downgradeStatus() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
+        builder.setCancelable(Boolean.TRUE);
+        if (mode.contentEquals("Rider Mode")) {
+            builder.setTitle("Delete or Downgrade the selected request?");
+            builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                            new RequestESDeleteController.DeleteRequestTask();
+                    deleteRequestTask.execute(r.getRequestID());
+                    finish();
+                }
+            });
         } else {
-            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+            builder.setTitle("Remove your bid from the selected request?");
         }
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setPositiveButton("Downgrade", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
+                RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
+                deleteItemFromListTask.execute(r.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
+                if ((r.getDriverIDList().size() - 1) > 0) {
+                    RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                            new RequestESSetController.SetPropertyValueTask();
+                    if (from.contentEquals("Pending")) {
+                        setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Requested");
+                    } else {
+                        setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+                    }
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void showDetails(Request request){
