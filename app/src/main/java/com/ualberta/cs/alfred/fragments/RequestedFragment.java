@@ -121,11 +121,11 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         requestAdapter.clear();
         List returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0)), userName).removeDriver(userName);
-            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1)), userName).returnArrayList());
+            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
+            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
             requestAdapter.addAll(returned);
         } else {
-            returned = rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Requested");
+            returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
             requestAdapter.addAll(returned);
         }
         SharedPreferences.Editor editor = preferences.edit();
