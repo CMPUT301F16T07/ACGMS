@@ -204,7 +204,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     case R.id.radioButtonKeyword:
                         // Todo do some querry with Keywords
                         retrievedRequest.execute(
-                                "requestStatus", "string", "Pending",
+                                "requestStatus", "string", "Requested",
                                 "_all", "string", filter
                         );
                         break;

@@ -50,7 +50,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         try {
             //retrieving rider's informatino from elasticsearch
-            UserESGetController.GetUserByIdTask getUser = new UserESGetController.GetUserByIdTask();
+            UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
             user = getUser.execute(userName).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
