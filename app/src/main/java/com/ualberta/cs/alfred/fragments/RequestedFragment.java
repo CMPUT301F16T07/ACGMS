@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
@@ -50,11 +51,15 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private TableLayout tableLayout;
     private RelativeLayout.LayoutParams params;
 
+    private EditText editText;
+
     // Custom Check View
     private RadioButton rb1;
     private RadioButton rb2;
     private RadioButton rb3;
     private RadioButton rb4;
+
+    private int searchType = R.id.radioButtonKeyword;
 
     public RequestedFragment() {
         this.rFLC = new RequestFragmentsListController();
@@ -107,8 +112,27 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Requested");
                 startActivity(intent);
+                updateRequestList();
             }
         });
+    }
+
+    public void updateRequestList() {
+        requestAdapter.clear();
+        List returned;
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
+            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
+            requestAdapter.addAll(returned);
+        } else {
+            returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
+            requestAdapter.addAll(returned);
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Requested", Integer.toString(returned.size()));
+        editor.commit();
+
+        requestAdapter.notifyDataSetChanged();
     }
 
     @Nullable
@@ -130,6 +154,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
         Button button3 = (Button) view.findViewById(R.id.request_done_button);
         button3.setOnClickListener(this);
+
+        editText = (EditText) view.findViewById(R.id.filter_input);
 
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
@@ -163,6 +189,57 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 tableLayout.setVisibility(View.GONE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
                 params.addRule(RelativeLayout.ABOVE,R.id.show_filter);
+
+                ArrayList<Request> requests = new ArrayList<>();
+
+                //Todo Search elastic Search by the given filter
+                RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequest =
+                        new RequestESGetController.GetRequestByMultiplePreferencesTask();
+
+                String filter = editText.getText().toString();
+
+                Toast.makeText(getContext(),filter,Toast.LENGTH_SHORT).show();
+
+                switch (searchType){
+                    case R.id.radioButtonKeyword:
+                        // Todo do some querry with Keywords
+                        retrievedRequest.execute(
+                                "requestStatus", "string", "Pending",
+                                "_all", "string", filter
+                        );
+                        break;
+                    case R.id.radioButtonAddress:
+                        // Todo do some querry with Keyword - Address
+                        retrievedRequest.execute(
+                                "requestStatus", "string", "Pending",
+                                "_all", "string", filter
+                        );
+                        break;
+                    case R.id.radioButtonCoordinates:
+                        // Todo do some querry with Keywords - Coordinates
+                        retrievedRequest.execute(
+                                "requestStatus", "string", "Pending",
+                                "_all", "string", filter
+                        );
+                        break;
+                    case R.id.radioButtonPrice:
+                        // Todo do some querry with Price
+                        break;
+                }
+                try {
+                    requests = retrievedRequest.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                requestedListView.setAdapter(requestAdapter);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("Requested", Integer.toString(requests.size()));
+                editor.commit();
+                requestAdapter.notifyDataSetChanged();
                 break;
         }
 
@@ -179,24 +256,28 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     rb2.setChecked(false);
                     rb3.setChecked(false);
                     rb4.setChecked(false);
+                    searchType = R.id.radioButtonKeyword;
                     break;
                 case R.id.radioButtonAddress:
                     editText.setHint(R.string.search_address_text);
                     rb1.setChecked(false);
                     rb3.setChecked(false);
                     rb4.setChecked(false);
+                    searchType = R.id.radioButtonAddress;
                     break;
                 case R.id.radioButtonCoordinates:
                     editText.setHint(R.string.search_coordinate_text);
                     rb1.setChecked(false);
                     rb2.setChecked(false);
                     rb4.setChecked(false);
+                    searchType = R.id.radioButtonCoordinates;
                     break;
                 case R.id.radioButtonPrice:
                     editText.setHint(R.string.search_price);
                     rb1.setChecked(false);
                     rb2.setChecked(false);
                     rb3.setChecked(false);
+                    searchType = R.id.radioButtonPrice;
                     break;
             }
         }

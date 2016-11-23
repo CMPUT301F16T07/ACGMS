@@ -223,7 +223,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
 
-        Request request = new Request(Status, startPoint, endPoint, (double) results[0], cost, userID);
+        Request request = new Request(Status, startPoint, endPoint, distance, cost, userID);
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
 

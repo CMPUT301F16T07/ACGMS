@@ -44,6 +44,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String userName = preferences.getString("USERNAME", null);
+        String userID = preferences.getString("USERID", null);
         String userMode = preferences.getString("MODE","None");
 
         User user = new User("","","",new Date(),"","");
@@ -51,7 +52,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         try {
             //retrieving rider's informatino from elasticsearch
             UserESGetController.GetUserByIdTask getUser = new UserESGetController.GetUserByIdTask();
-            user = getUser.execute(userName).get();
+            user = getUser.execute(userID).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
