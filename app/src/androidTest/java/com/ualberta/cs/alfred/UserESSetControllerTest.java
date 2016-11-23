@@ -13,10 +13,16 @@ import java.util.concurrent.ExecutionException;
  */
 public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new User es set controller test.
+     */
     public UserESSetControllerTest() {
         super(MainActivity.class);
     }
 
+    /**
+     * Test set basic user info.
+     */
     public void testSetBasicUserInfo () {
 
         /**
@@ -36,6 +42,9 @@ public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
 
     }
 
+    /**
+     * Test set multiple basic user info.
+     */
     public void testSetMultipleBasicUserInfo () {
 
         /**
