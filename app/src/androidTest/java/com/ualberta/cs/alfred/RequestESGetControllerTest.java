@@ -14,6 +14,9 @@ import java.util.concurrent.ExecutionException;
  */
 public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new Request es get controller test.
+     */
     public RequestESGetControllerTest() {
 
         super(MainActivity.class);
@@ -114,19 +117,20 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         retrievedRequest.execute("riderID", "string", "rider011");
         */
 
-        /*
+
         // Get open requests by keyword
-        String keyword = "South";
+        String keyword = "116";
         retrievedRequest.execute(
                 "requestStatus", "string", "Pending",
                 "_all", "string", keyword
         );
-        */
 
+        /*
         // Get all requests
         retrievedRequest.execute(
                 "match_all", "all", "{}"
         );
+        */
 
         try {
             ArrayList<Request> requests = retrievedRequest.get();
@@ -225,6 +229,63 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
         retrievedRequest.execute(
                 "match_all", "all", "{}", orderBy
         );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test get request by multiple preferences close to a certain location.
+     */
+    public void testGetRequestByLocationTask() {
+
+        RequestESGetController.GetRequestByLocationTask retrievedRequest =
+                new RequestESGetController.GetRequestByLocationTask();
+
+
+        // Get all requests within this distance
+        String distance = "20000km";
+
+        double longitude = -113.530152;
+        String longitudeAsString = String.valueOf(longitude);
+
+        double latitude = 53.5416253;
+        String latitudeAsString = String.valueOf(latitude);
+
+        String coordinates = String.format("[%s, %s]", longitudeAsString, latitudeAsString);
+
+        /*
+        // Find all Pending requests where Rider ID is AViOEboRdE2DZPCrf9nT within 20000km
+        retrievedRequest.execute(
+                "riderID", "string", "AViOEboRdE2DZPCrf9nT",
+                "requestStatus", "string", "Accepted",
+                distance, coordinates
+        );
+        */
+
+
+        // Get all requests within 20000km distance
+        retrievedRequest.execute(
+                "match_all", "all", "{}",
+                distance, coordinates
+        );
+
 
         try {
             ArrayList<Request> requests = retrievedRequest.get();

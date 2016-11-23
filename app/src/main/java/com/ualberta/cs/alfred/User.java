@@ -10,7 +10,7 @@ import io.searchbox.annotations.JestId;
  * when a user logs in to the local device.
  *
  * @author mmcote
- * @version 1.0
+ * @version 1.1
  *
  * @see RiderInfo
  * @see DriverInfo
