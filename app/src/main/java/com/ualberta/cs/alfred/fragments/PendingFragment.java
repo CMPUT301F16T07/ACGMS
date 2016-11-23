@@ -37,7 +37,7 @@ public class PendingFragment extends Fragment {
     private SharedPreferences preferences;
     private RequestFragmentsListController rFLC;
     private List<Pair<String, String>> listNeeded;
-    private String userName;
+    private String userID;
 
     public PendingFragment() {
         this.rFLC = new RequestFragmentsListController();
@@ -45,7 +45,7 @@ public class PendingFragment extends Fragment {
         this.requestAdapter = null;
         this.pendingListView = null;
         this.preferences = null;
-        this.userName = null;
+        this.userID = null;
     }
 
     public static PendingFragment newInstance() {
@@ -61,15 +61,15 @@ public class PendingFragment extends Fragment {
         View view = getView();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userName = preferences.getString("USERNAME", null);
+        userID = preferences.getString("USERID", null);
 
         ArrayList<Request> pendingList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"));
-            pendingList = rFLC.getRequestList(listNeeded, userName).getWithDriver(userName);
+            pendingList = rFLC.getRequestList(listNeeded).getWithDriver(userID);
         } else {
-            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userName));
-            pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded, userName).getSpecificRequestList("Pending");
+            this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userID));
+            pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Pending");
         }
         requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
         pendingListView = (ListView) view.findViewById(R.id.pendingListView);
