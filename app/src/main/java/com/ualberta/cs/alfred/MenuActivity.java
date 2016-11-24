@@ -1,15 +1,28 @@
 package com.ualberta.cs.alfred;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
+import android.view.Menu;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.BottomBarFragment;
+import com.ualberta.cs.alfred.fragments.AcceptedFragment;
 import com.ualberta.cs.alfred.fragments.HomeFragment;
 import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserFragment;
+
+import java.util.GregorianCalendar;
 
 
 /**
@@ -64,6 +77,24 @@ public class MenuActivity extends AppCompatActivity {
 
         // Change the show / hide animation duration.
         unreadMessages.setAnimationDuration(200);
-    }
 
+
+        // Define a time value of 5 seconds
+        Long alertTime = new GregorianCalendar().getTimeInMillis();
+
+        // Define our intention of executing AlertReceiver
+        Intent alertIntent = new Intent(this, AlertReciever.class);
+
+        // Allows you to schedule for your application to do something at a later date
+        // even if it is in he background or isn't active
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        PendingIntent alertPendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // set() schedules an alarm to trigger
+        // Trigger for alertIntent to fire in 5 seconds
+        // FLAG_UPDATE_CURRENT : Update the Intent if active
+        alarmManager.setInexactRepeating(AlarmManager.RTC,
+                SystemClock.elapsedRealtime() + 1000*5,
+                1000*5, alertPendingIntent);
+
+    }
 }
