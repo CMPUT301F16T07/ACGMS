@@ -43,7 +43,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String userName = preferences.getString("USERNAME", null);
+        //String userName = preferences.getString("USERNAME", null);
+
         String userID = preferences.getString("USERID", null);
         String userMode = preferences.getString("MODE","None");
 
@@ -62,6 +63,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         String emailAddress = user.getEmail();
+        String userName = user.getUserName();
         String phoneNumber= user.getPhoneNumber();
 
 
