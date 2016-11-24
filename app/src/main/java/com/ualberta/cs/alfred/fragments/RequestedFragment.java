@@ -119,16 +119,16 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Requested");
                 startActivityForResult(intent,0);
-                //updateRequestList();
+                updateRequestList();
             }
         });
     }
 
     // Catch a onFinish Statement of both clickable activities to update the list.
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        updateRequestList();
-    }
+    //public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //    super.onActivityResult(requestCode, resultCode, data);
+    //    updateRequestList();
+    //}
 
     public void updateRequestList() {
         requestAdapter.clear();
@@ -214,7 +214,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 button1.setVisibility(View.VISIBLE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
                 params.addRule(RelativeLayout.ABOVE,R.id.show_filter);
-                updateRequestList();
+                //updateRequestList();
                 break;
 
             case R.id.request_cancel_button:
@@ -242,6 +242,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
 
                 String filter = "";
+                String address;
                 String distance = "0km";
                 String coordinates = "[0,0]";
 
@@ -259,26 +260,26 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     case R.id.radioButtonAddress:
                         // Todo do some querry with Keyword - Address
 //                        distance = "1000000000km"; // Wide Range
-//                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
 
-                        filter = filterInput1.getText().toString(); //+", "+
-                                //filterInput2.getText().toString();
-//                        List<android.location.Address> addressCoordinates;
-//                        try {
-//                            addressCoordinates = geocoder.getFromLocationName(address, 1);
-//                            if (addressCoordinates.size() > 0) {
-//                                String latitude = String.valueOf(addressCoordinates.get(0).getLatitude());
-//                                String longitude = String.valueOf(addressCoordinates.get(0).getLongitude());
-//                                coordinates = String.format("[%s, %s]", longitude, latitude);
-//                            }
-//
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
+                        address = filterInput1.getText().toString() + ", "+
+                                filterInput2.getText().toString();
+                        List<android.location.Address> addressCoordinates;
+                        try {
+                            addressCoordinates = geocoder.getFromLocationName(address, 1);
+                            if (addressCoordinates.size() > 0) {
+                                String latitude = String.valueOf(addressCoordinates.get(0).getLatitude());
+                                String longitude = String.valueOf(addressCoordinates.get(0).getLongitude());
+                                coordinates = String.format("[%s, %s]", longitude, latitude);
+                            }
 
-                        retrievedRequestKeyword.execute(
-                                "requestStatus", "string", "Pending",
-                                "_all", "string", filter
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        retrievedRequestCoordinates.execute(
+                                "match_all", "all", "{}",
+                                coordinates
                         );
 
                         break;

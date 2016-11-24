@@ -36,6 +36,12 @@
     <string name="end_text">End</string>
     <string name="add_coordinate_text">Add by Coordinate</string>
     <string name="add_address_text">Add by Address</string>
+
+    <string name="search_coordinate_text">Search by Coordinates</string>
+    <string name="search_keyword_text">Search by Keyword</string>
+    <string name="search_address_text">Search by Address</string>
+    <string name="search_price_text"> Search by $/KM</string>
+
     <string name="request_text">Request</string>
     <string name="address_text">Address</string>
     <string name="city_text">City</string>
@@ -47,10 +53,5 @@
     <string name="cancel_text">CANCEL</string>
     <string name="price_text">$/KM</string>
     <string name="activity_maps">Map</string>
-
-    <string name="search_coordinate_text">Search by Coordinates</string>
-    <string name="search_keyword_text">Search by Keyword</string>
-    <string name="search_address_text">Search by Address</string>
-    <string name="search_price_text"> Search by $/KM</string>
 
 </resources>
