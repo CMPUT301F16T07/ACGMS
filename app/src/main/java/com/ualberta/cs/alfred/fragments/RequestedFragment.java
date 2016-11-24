@@ -103,8 +103,14 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
             requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
         }
 
-        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
-        requestedListView.setAdapter(requestAdapter);
+
+        try {
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            requestedListView.setAdapter(requestAdapter);
+        } catch (Exception e) {
+            Toast.makeText(getContext(),"There's a problem with one of the request",Toast.LENGTH_SHORT).show();
+        }
+
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Requested", Integer.toString(requestedList.size()));

@@ -144,6 +144,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                             y2 = Double.parseDouble(y2String);
 
                             makeRequest(Status,userID,start,end,x1,y1,x2,y2);
+
                         } catch (NumberFormatException e) {
                             String errorMessage = "Invalid Coordinate/s";
                             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -223,6 +224,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         GMapV2Direction md = new GMapV2Direction();
         Document doc = md.getDocument(startPoint,endPoint,
                GMapV2Direction.MODE_DRIVING);
+
         double distance = md.getDistanceValue(doc) / 1000;
 
 
@@ -232,17 +234,22 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         // Create an instance of a request and store into elastic search
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
-        Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
 
-        // Notify save
-        Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+        if (startPointAddress == null ||  endPointAddress == null || userID == null) {
+            Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
+            // Notify save
+            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+
+        } else {
+            Toast.makeText(getActivity(),"Unable to Request Ride",Toast.LENGTH_SHORT).show();
+        }
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
         // go to list
-        MenuActivity.bottomBar.selectTabAtPosition(1,true);
+        //MenuActivity.bottomBar.selectTabAtPosition(1,true);
     }
 
 }
