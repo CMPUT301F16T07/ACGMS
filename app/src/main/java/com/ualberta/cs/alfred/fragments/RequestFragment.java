@@ -163,13 +163,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
             //LatLng(53.5444,-113.4904)
             case R.id.radioButtonAddress:
                 textView = (TextView) view.findViewById(R.id.start_input1_text);
-                textView.setText(R.string.home_address_text);
+                textView.setText(R.string.address_text);
                 textView = (TextView) view.findViewById(R.id.start_input2_text);
-                textView.setText(R.string.home_city_text);
+                textView.setText(R.string.city_text);
                 textView = (TextView) view.findViewById(R.id.end_input1_text);
-                textView.setText(R.string.home_address_text);
+                textView.setText(R.string.address_text);
                 textView = (TextView) view.findViewById(R.id.end_input2_text);
-                textView.setText(R.string.home_city_text);
+                textView.setText(R.string.city_text);
 
                 editText = (EditText) view.findViewById(R.id.start_input_1);
                 editText.setHint("1 Sir Winston Churchill SQ");
@@ -185,13 +185,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
 
             case R.id.radioButtonCoordinates:
                 textView = (TextView) view.findViewById(R.id.start_input1_text);
-                textView.setText(R.string.home_latitude_text);
+                textView.setText(R.string.latitude_text);
                 textView = (TextView) view.findViewById(R.id.start_input2_text);
-                textView.setText(R.string.home_longitude_text);
+                textView.setText(R.string.longitude_text);
                 textView = (TextView) view.findViewById(R.id.end_input1_text);
-                textView.setText(R.string.home_latitude_text);
+                textView.setText(R.string.latitude_text);
                 textView = (TextView) view.findViewById(R.id.end_input2_text);
-                textView.setText(R.string.home_longitude_text);
+                textView.setText(R.string.longitude_text);
 
                 editText = (EditText) view.findViewById(R.id.start_input_1);
                 editText.setHint("53.5444");

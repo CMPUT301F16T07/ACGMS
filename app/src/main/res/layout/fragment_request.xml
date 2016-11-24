@@ -5,7 +5,7 @@
 
 
     <Button
-        android:text="@string/home_confirm_text"
+        android:text="@string/confirm_text"
         android:layout_width="match_parent"
         android:layout_height="73dp"
         android:id="@+id/request_done_button"
@@ -26,7 +26,7 @@
 
 
         <TextView
-            android:text="@string/home_start_text"
+            android:text="@string/start_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/start_text"
@@ -40,7 +40,7 @@
             android:layout_marginBottom="10dp">
 
             <TextView
-                android:text="@string/home_address_text"
+                android:text="@string/address_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/start_input1_text"
@@ -68,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp">
             <TextView
-                android:text="@string/home_city_text"
+                android:text="@string/city_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/start_input2_text"
@@ -92,7 +92,7 @@
         </TableRow>
 
         <TextView
-            android:text="@string/home_end_text"
+            android:text="@string/end_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/end_text"
@@ -105,7 +105,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp">
             <TextView
-                android:text="@string/home_address_text"
+                android:text="@string/address_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/end_input1_text"
@@ -133,7 +133,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp">
             <TextView
-                android:text="@string/home_city_text"
+                android:text="@string/city_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/end_input2_text"
@@ -166,13 +166,13 @@
                 android:id="@+id/radioGroup"
                 android:layout_column="1">
                 <RadioButton
-                    android:text="@string/home_request_address_text"
+                    android:text="@string/add_address_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/radioButtonAddress"
                     android:checked="true"/>
                 <RadioButton
-                    android:text="@string/home_request_coordinate_text"
+                    android:text="@string/add_coordinate_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/radioButtonCoordinates" />
