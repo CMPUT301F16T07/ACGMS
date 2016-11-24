@@ -71,7 +71,6 @@ public class RequestFragmentsListController {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
         editor.putString(argType, Integer.toString(returnList.size()));
         editor.commit();
     }
