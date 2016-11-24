@@ -17,12 +17,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.Address;
+import com.ualberta.cs.alfred.GMapV2Direction;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESAddController;
 import com.ualberta.cs.alfred.RequestList;
+
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.List;
@@ -208,22 +212,28 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                              double x1,double y1,double x2,double y2){
         // Address is defined as
         // Address(String location, double longitude, double latitude)
-        Address startPoint = new Address(start, y1, x1);
-        Address endPoint = new Address(end, y2, x2);
+        Address startPointAddress = new Address(start, y1, x1);
+        Address endPointAddress = new Address(end, y2, x2);
 
-        float[] results = new float[1];
-        Location.distanceBetween(x1,y1,x2,y2,results);
+        LatLng  startPoint = new LatLng(x1,y1);
+        LatLng  endPoint = new LatLng(x2,y2);
+
 
         // Calculate Distance
-        double distance = results[0]/1000;
+        GMapV2Direction md = new GMapV2Direction();
+        Document doc = md.getDocument(startPoint,endPoint,
+               GMapV2Direction.MODE_DRIVING);
+        double distance = md.getDistanceValue(doc) / 1000;
+
+
         // round to the nearest cent
         double cost = Math.round( (distance/2) * 100.0 ) / 100.0 ;
 
         // Create an instance of a request and store into elastic search
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
+        Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
 
-        Request request = new Request(Status, startPoint, endPoint, distance, cost, userID);
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
 
