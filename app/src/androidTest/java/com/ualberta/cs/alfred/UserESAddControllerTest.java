@@ -73,7 +73,7 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
     public void testAddDriver() {
 
         /**
-         * Step 1: Basic user infor
+         * Step 1: Basic user info
          */
         String u1FirstName = "Abram";
         String u1LastName = "Hindle";
@@ -125,8 +125,8 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
      */
     public void testAddNewDriverRatingTask() {
 
-        String userID = "AViVCADtdE2DZPCrf9o_";
-        double newRating = 4;
+        String userID = "AViYHrkNdE2DZPCrf9qf";
+        double newRating = 3;
         String newRatingAsString = String.valueOf(newRating);
 
 
