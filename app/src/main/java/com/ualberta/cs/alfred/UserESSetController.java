@@ -115,7 +115,7 @@ public class UserESSetController {
      *
      * For example: Update user's firstname and lastname. See test cases for use.
      *
-     * Note: This function is only non-nested properties.
+     * Note: This function is only for non-nested properties.
      */
     public static class SetMultiplePropertyValueTask extends AsyncTask<String, Void, Void> {
         @Override
@@ -144,6 +144,7 @@ public class UserESSetController {
                     switch (valueType.toLowerCase()) {
 
                         case "string" :
+                        case "date" :
                             keyValue = String.format("\"%s\" : \"%s\"", key, value);
                             stringBuilder.append(keyValue);
                             break;
@@ -154,8 +155,8 @@ public class UserESSetController {
                             stringBuilder.append(keyValue);
                             break;
 
-                        case "date" :
-                            keyValue = String.format("\"%s\" : \"%s\"", key, value);
+                        case "boolean" :
+                            keyValue = String.format("\"%s\" : %s", key, value);
                             stringBuilder.append(keyValue);
                             break;
 
