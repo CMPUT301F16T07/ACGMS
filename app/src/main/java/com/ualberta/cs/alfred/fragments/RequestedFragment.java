@@ -125,16 +125,16 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 intent.putExtra("passedRequest",r);
                 intent.putExtra("FROM", "Requested");
                 startActivityForResult(intent,0);
-                updateRequestList();
+                //updateRequestList();
             }
         });
     }
 
     // Catch a onFinish Statement of both clickable activities to update the list.
-    //public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    //    super.onActivityResult(requestCode, resultCode, data);
-    //    updateRequestList();
-    //}
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateRequestList();
+    }
 
     public void updateRequestList() {
         requestAdapter.clear();
@@ -218,9 +218,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
             case R.id.revert_filter:
                 button1.setVisibility(View.VISIBLE);
+                button4.setVisibility(View.GONE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
                 params.addRule(RelativeLayout.ABOVE,R.id.show_filter);
-                //updateRequestList();
+                updateRequestList();
                 break;
 
             case R.id.request_cancel_button:
@@ -257,7 +258,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         // Todo do some querry with Keywords
                         filter = filterInput1.getText().toString();
                         retrievedRequestKeyword.execute(
-                                "requestStatus", "string", "Pending",
+                                "requestStatus", "string", "Requested",
                                 "_all", "string", filter
                         );
 
@@ -284,7 +285,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         }
 
                         retrievedRequestCoordinates.execute(
-                                "match_all", "all", "{}",
+                                "match_all", "all", "{}","Requested",
                                 coordinates
                         );
 
@@ -313,7 +314,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         }
 
                         retrievedRequestCoordinates.execute(
-                                "match_all", "all", "{}",
+                                "match_all", "Requested", "{}",
                                 distance, coordinates
                         );
 
@@ -323,10 +324,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 }
 
                 try {
-                    if (searchType == R.id.radioButtonKeyword ||
-                            searchType == R.id.radioButtonAddress) {
+                    if (searchType == R.id.radioButtonKeyword ) {
                         requests = retrievedRequestKeyword.get();
-                    } else if (searchType == R.id.radioButtonCoordinates) {
+                    } else if (searchType == R.id.radioButtonCoordinates ||
+                            searchType == R.id.radioButtonAddress) {
                         requests = retrievedRequestCoordinates.get();
                     }
                 } catch (InterruptedException e) {

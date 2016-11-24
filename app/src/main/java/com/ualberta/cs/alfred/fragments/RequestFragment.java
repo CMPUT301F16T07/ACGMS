@@ -235,13 +235,16 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
 
-        if (startPointAddress == null ||  endPointAddress == null || userID == null) {
+        if (startPointAddress == null) {
+            Toast.makeText(getActivity(), "Invalid Start Point", Toast.LENGTH_SHORT).show();
+        } else if (endPointAddress == null) {
+            Toast.makeText(getActivity(), "Invalid End Point", Toast.LENGTH_SHORT).show();
+        } else if (userID == null) {
+            Toast.makeText(getActivity(), "Invalid User ID", Toast.LENGTH_SHORT).show();
+        } else {
             Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
             // Notify save
             Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
-
-        } else {
-            Toast.makeText(getActivity(),"Unable to Request Ride",Toast.LENGTH_SHORT).show();
         }
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
