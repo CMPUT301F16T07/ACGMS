@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
  * Test cases for Adding item to a Users
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  * @see
  */
 public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
@@ -24,7 +24,7 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
 
         String u1FirstName = "Donald";
         String u1LastName = "Trump";
-        String u1UserName = "dtrump3";
+        String u1UserName = "dtrump";
 
         // Create date
         GregorianCalendar gc = new GregorianCalendar(2001, Calendar.JUNE, 13);
@@ -75,21 +75,21 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
         /**
          * Step 1: Basic user infor
          */
-        String u1FirstName = "Taylor";
-        String u1LastName = "Swift";
-        String u1UserName = "tswift";
+        String u1FirstName = "Abram";
+        String u1LastName = "Hindle";
+        String u1UserName = "ahindle";
 
         // Create date
-        GregorianCalendar gc = new GregorianCalendar(1987, Calendar.JUNE, 13);
+        GregorianCalendar gc = new GregorianCalendar(1970, Calendar.JANUARY, 13);
         Date u1DateOfBirth = gc.getTime();
 
-        String u1PhoneNumber = "403-777-5555";
-        String u1Email = "tswift@example.com";
+        String u1PhoneNumber = "780-333-5555";
+        String u1Email = "ahindle@example.com";
 
         /**
          * Step 2: Create a driver licenceNumber
          */
-        String licenceNumber = "AB0005";
+        String licenceNumber = "CMPUT301";
 
         /**
          * Step 3: Create a vehicle
@@ -116,5 +116,24 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
                 u1Email, driverInfo);
 
         assert(true);
+    }
+
+    /**
+     * Test adding new driver rating
+     *
+     * @method AddNewDriverRatingTask()
+     */
+    public void testAddNewDriverRatingTask() {
+
+        String userID = "AViVCADtdE2DZPCrf9o_";
+        double newRating = 4;
+        String newRatingAsString = String.valueOf(newRating);
+
+
+        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask =
+                new UserESAddController.AddNewDriverRatingTask();
+
+        addNewDriverRatingTask.execute(userID, newRatingAsString);
+        assert (true);
     }
 }

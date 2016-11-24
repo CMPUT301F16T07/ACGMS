@@ -12,7 +12,7 @@ import io.searchbox.params.Parameters;
  * This handles the setting of items to User
  *
  * @author ookmm
- * @version 1.0
+ * @version 1.1
  */
 public class UserESSetController {
 
