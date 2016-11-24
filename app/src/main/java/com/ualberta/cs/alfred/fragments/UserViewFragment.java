@@ -1,5 +1,6 @@
 package com.ualberta.cs.alfred.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.RequestDetailsActivity;
+import com.ualberta.cs.alfred.SendEmailActivity;
 import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserESGetController;
 
@@ -26,6 +29,8 @@ import java.util.concurrent.ExecutionException;
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
+    private String emailAddress;
+    private String phoneNumber;
 
     public UserViewFragment() {
     }
@@ -76,8 +81,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
 
         String fullName = user.getFirstName() + " " + user.getLastName();
-        String emailAddress = user.getEmail();
-        String phoneNumber= user.getPhoneNumber();
+        emailAddress = user.getEmail();
+        phoneNumber= user.getPhoneNumber();
 
 
         //setting the textviews to what we want to show
@@ -97,21 +102,31 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         textView = (TextView) view.findViewById(R.id.textview8);
         textView.setText(phoneNumber);
 
-        Button editButton = (Button) view.findViewById(R.id.edit_user_button);
-        editButton.setOnClickListener(this);
+        Button emailButton = (Button) view.findViewById(R.id.email_user_button);
+        emailButton.setOnClickListener(this);
+        Button callButton = (Button) view.findViewById(R.id.call_user_button);
+        callButton.setOnClickListener(this);
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
-            case R.id.edit_user_button:
-                Fragment fragment = new UserEditFragment().newInstance();
-                replaceFragmentwithStack(fragment);
+            case R.id.email_user_button:
+                //start email activity to send email
+                Intent intent = new Intent(getActivity(), SendEmailActivity.class);
+                intent.putExtra("to",emailAddress);
+                startActivity(intent);
+                break;
+            case R.id.call_user_button:
+                //start call
                 break;
         }
+
     }
+
 
     private void replaceFragmentwithStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();

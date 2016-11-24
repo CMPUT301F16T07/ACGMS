@@ -177,8 +177,9 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="Cancel"
+            android:text="Cancel Request"
             android:id="@+id/cancel_request_button"
+            android:backgroundTint="@color/colorAccent"
             android:layout_column="0"/>
         <Button
             android:layout_width="fill_parent"
