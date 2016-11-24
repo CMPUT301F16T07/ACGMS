@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for setting item to a request
  *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  * @see UserESSetController
  */
 public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {

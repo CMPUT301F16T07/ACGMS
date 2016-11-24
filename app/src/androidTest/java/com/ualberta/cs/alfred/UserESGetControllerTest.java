@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for getting item from User
  *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  * @see UserESGetController
  */
 public class UserESGetControllerTest extends ActivityInstrumentationTestCase2 {
@@ -56,4 +56,43 @@ public class UserESGetControllerTest extends ActivityInstrumentationTestCase2 {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test get driver rating.
+     *
+     * @Method GetUserByIdTask
+     */
+    public void testGetDriverRating() {
+
+        UserESGetController.GetUserByIdTask retrievedUser =
+                new UserESGetController.GetUserByIdTask();
+
+        // Find user
+        retrievedUser.execute("AViVCADtdE2DZPCrf9o_");
+
+        try {
+            User user = retrievedUser.get();
+
+            System.out.println("====================");
+            System.out.println("User ID: " + user.getUserID());
+            System.out.println("Username: " + user.getUserName());
+            System.out.println("First name: " + user.getFirstName());
+            System.out.println("Last name: " + user.getLastName());
+            System.out.println("Phone: " + user.getPhoneNumber());
+            System.out.println("Email: " + user.getEmail());
+            if (user.getIsRider()) {
+                System.out.println("Credit card: " + user.getRiderInfo().getCreditCardNumber());
+            } else if (user.getIsDriver()) {
+                System.out.println("Driver licence number: " + user.getDriverInfo().getLicenceNumber());
+                System.out.println("Rating is: " + user.getDriverInfo().getDriverRating().getRating());
+            }
+            System.out.println("====================");
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
