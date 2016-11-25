@@ -10,4 +10,5 @@ public class AppSettings {
     static public final String REQUEST_PENDING ="Pending";
     static public final String REQUEST_ACCEPTED ="Accepted";
     static public final String REQUEST_REQUESTED ="Requested";
+    static public final String REQUEST_COMPLETED ="Completed";
 }

@@ -260,12 +260,12 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
 
 
         // Get all requests within this distance
-        String distance = "20000km";
+        String distance = "5km";
 
-        double longitude = -113.530152;
+        double longitude = -113.5263186;
         String longitudeAsString = String.valueOf(longitude);
 
-        double latitude = 53.5416253;
+        double latitude = 53.5232189;
         String latitudeAsString = String.valueOf(latitude);
 
         String coordinates = String.format("[%s, %s]", longitudeAsString, latitudeAsString);
