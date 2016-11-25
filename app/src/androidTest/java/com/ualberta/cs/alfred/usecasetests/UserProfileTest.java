@@ -267,4 +267,42 @@ public class UserProfileTest {
         assert (true);
     }
 
+    /**
+     * US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and
+     * show its contact information.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testShowContactInformation() throws Exception {
+        /**
+         * Get user contact information by username
+         */
+        String u1UserName = "jtrudeau";
+
+        UserESGetController.GetUserTask retrievedUser =
+                new UserESGetController.GetUserTask();
+
+        // Find user
+        retrievedUser.execute(u1UserName);
+
+        try {
+            User user = retrievedUser.get();
+            if (user != null) {
+                System.out.println("=========== USER INFO ==========");
+                System.out.println("Phone number: " + user.getPhoneNumber());
+                System.out.println("Email: " + user.getEmail());
+                System.out.println("======= END OF USER INFO =======");
+            }
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
 }
