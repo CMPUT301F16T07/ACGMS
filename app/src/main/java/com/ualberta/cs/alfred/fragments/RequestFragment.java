@@ -2,7 +2,6 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,13 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.ualberta.cs.alfred.Address;
+import com.ualberta.cs.alfred.ConnectivityChecker;
 import com.ualberta.cs.alfred.GMapV2Direction;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
-import com.ualberta.cs.alfred.RequestESAddController;
-import com.ualberta.cs.alfred.RequestList;
 
 import org.w3c.dom.Document;
 
@@ -232,7 +231,26 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         // Create an instance of a request and store into elastic search
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
-        Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
+        if (ConnectivityChecker.isConnected(getActivity())){
+            Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
+        }
+        else{
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = preferences.edit();
+            Gson sAddressGson = new Gson();
+            String sAddress = sAddressGson.toJson(startPointAddress);
+            Gson eAddressGson = new Gson();
+            String eAddress = eAddressGson.toJson(endPointAddress);
+            editor.putString("RSTATUS", Status.toString());
+            editor.putString("RSTARTADDRESS",sAddress);
+            editor.putString("RENDADDRESS", eAddress);
+            editor.putLong("RDISTANCE", (long) distance);
+            editor.putLong("RCOST", (long) cost);
+            editor.putString("RUSERID", userID);
+            editor.commit();
+
+
+        }
 
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();

@@ -76,6 +76,7 @@ public class AcceptedFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
         editor.commit();
+
         ListFragment.update(getContext());
 
         acceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
