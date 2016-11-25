@@ -70,7 +70,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
 
         /* Step 4: Create request any number of request with the newly retrieved rider userId */
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("South side", -65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", -50.56500, 89.56888);
         double req1Cost = 90.30;
@@ -82,7 +82,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         assert(true);
 
         // Create request #2
-        String req2Status = "Accepted";
+        String req2Status = AppSettings.REQUEST_ACCEPTED;
         Address req2SrcAddr = new Address("Airport", -51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", -20.56500, 12.56888);;
         double req2Cost = 30.30;
@@ -94,7 +94,7 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         assert(true);
 
         // Create request #3
-        String req3Status = "Pending";
+        String req3Status = AppSettings.REQUEST_PENDING;
         Address req3SrcAddr = new Address("Airport", -51.56777, 30.34555);
         Address req3DestAddr = new Address("South Campus", -51.56500, 30.56888);;
         double req3Cost = 30.30;
