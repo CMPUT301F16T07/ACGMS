@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shelley on 2016-11-24.
+ * Resources: https://www.youtube.com/watch?v=V1tAL0kjjuU
  */
 public class SendEmailActivity extends AppCompatActivity {
 
