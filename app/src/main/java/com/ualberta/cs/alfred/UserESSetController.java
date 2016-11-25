@@ -12,7 +12,7 @@ import io.searchbox.params.Parameters;
  * This handles the setting of items to User
  *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  */
 public class UserESSetController {
 
@@ -68,14 +68,26 @@ public class UserESSetController {
 
                 case "double" :
 
-                    double requestNewValueAsDouble = Double.parseDouble(userNewValue);
+                    double userNewValueAsDouble = Double.parseDouble(userNewValue);
                     query = String.format(
                             "{\n" +
                                     "\"doc\" : {\n" +
                                     "\"%s\" : %s \n" +
                                     "}\n" +
                                     "}",
-                            userProperty, requestNewValueAsDouble);
+                            userProperty, userNewValueAsDouble);
+                    break;
+
+                case "int" :
+
+                    int userNewValueAsInt = Integer.parseInt(userNewValue);
+                    query = String.format(
+                            "{\n" +
+                                    "\"doc\" : {\n" +
+                                    "\"%s\" : %s \n" +
+                                    "}\n" +
+                                    "}",
+                            userProperty, userNewValueAsInt);
                     break;
 
                 case "boolean" :
@@ -152,6 +164,12 @@ public class UserESSetController {
                         case "double" :
                             double valueAsDouble = Double.parseDouble(value);
                             keyValue = String.format("\"%s\" : %s", key, valueAsDouble);
+                            stringBuilder.append(keyValue);
+                            break;
+
+                        case "int" :
+                            int valueAsInt = Integer.parseInt(value);
+                            keyValue = String.format("\"%s\" : %s", key, valueAsInt);
                             stringBuilder.append(keyValue);
                             break;
 

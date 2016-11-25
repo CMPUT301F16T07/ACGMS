@@ -301,8 +301,68 @@ public class UserProfileTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * US 03.04.01 (added 2016-11-14)
+     * As a driver, in my profile I can provide details about the vehicle I drive.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testProvideVehicleDetails() throws Exception {
+        /**
+         * Get user ID
+         */
+        String u1UserName = "bclinton";
+        String userID = null;
 
+        UserESGetController.GetUserTask retrievedUser =
+                new UserESGetController.GetUserTask();
 
+        // Find user
+        retrievedUser.execute(u1UserName);
+
+        try {
+            User user = retrievedUser.get();
+            userID = user.getUserID();
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Add some vehicle information
+         */
+        String userPropertyFirstLevel = "driverInfo";
+        String userPropertySecondLevel = "vehicle";
+
+        String nestedObject1Property = "color";
+        String nestedObject1ValueType = "string";
+        String nestedObject1Value = "Red";
+
+        String nestedObject2Property = "type";
+        String nestedObject2ValueType = "string";
+        String nestedObject2Value = "Sedan";
+
+        String nestedObject3Property = "make";
+        String nestedObject3ValueType = "string";
+        String nestedObject3Value = "Toyota";
+
+        String nestedObject4Property = "model";
+        String nestedObject4ValueType = "string";
+        String nestedObject4Value = "Corolla";
+
+        UserESSetController.SetDoublyNestedObjectPropertyValueTask setDoubleNestedObject =
+                new UserESSetController.SetDoublyNestedObjectPropertyValueTask();
+
+        setDoubleNestedObject.execute(userID, userPropertyFirstLevel, userPropertySecondLevel,
+                nestedObject1Property, nestedObject1ValueType, nestedObject1Value,
+                nestedObject2Property, nestedObject2ValueType, nestedObject2Value,
+                nestedObject3Property, nestedObject3ValueType, nestedObject3Value,
+                nestedObject4Property, nestedObject4ValueType, nestedObject4Value);
+        assert (true);
     }
 }
