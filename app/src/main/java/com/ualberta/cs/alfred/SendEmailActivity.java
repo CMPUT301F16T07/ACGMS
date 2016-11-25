@@ -59,8 +59,19 @@ public class SendEmailActivity extends AppCompatActivity {
         toEmail.setText(to);
         emailMessage.setText(myUsername+" sent a message to you.");
 
-        sendButton.setOnClickListener();
-        //TODO: set up onclicklistener
+        //TODO: set up onclicklisteners
+        sendButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 }
