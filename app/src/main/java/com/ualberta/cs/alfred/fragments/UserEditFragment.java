@@ -130,7 +130,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
                     fm.popBackStack();
                 }
 
-                Fragment fragment = UserViewFragment.newInstance();
+                Fragment fragment = this.newInstance();//changed from UserEditFragment.newInstance()
                 replaceFragmentwithoutStack(fragment);
                 break;
         }

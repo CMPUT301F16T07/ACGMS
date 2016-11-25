@@ -1,5 +1,7 @@
 package com.ualberta.cs.alfred;
 
+//import android.app.Fragment;
+//import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ualberta.cs.alfred.fragments.ListFragment;
+import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 
 import org.w3c.dom.Document;
@@ -162,6 +169,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setNeutralButton("View Profile", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // Todo open the driver profile
+                        // pass username to fragment???
+                        Fragment fragment = UserViewFragment.newInstance(1,possibleDriver);
+                        MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                        replaceFragmentwithStack(fragment);
 
                     }
                 });
@@ -301,6 +313,15 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         startLoc.setText(request.getSourceAddress().getLocation());
         endLoc.setText(request.getDestinationAddress().getLocation());
     }
+
+    private void replaceFragmentwithStack(Fragment fragment) {
+        FragmentTransaction transaction;
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.user_container, fragment); //in request details
+        transaction.commit();
+    }
+
 
     @Override
     public void onMapReady(GoogleMap mMap) {
