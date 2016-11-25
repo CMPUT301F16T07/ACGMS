@@ -10,7 +10,7 @@ import java.util.List;
  * Creates the type RequestList.
  *
  * @author ookmm
- * @version 1.2
+ * @version 1.3
  */
 public class RequestList {
 
@@ -55,7 +55,7 @@ public class RequestList {
 
         Request aRequest = null;
         for (Request r : requestList) {
-            if (requestID == r.getRequestID()) {
+            if (requestID.equals(r.getRequestID())) {
                 aRequest = r;
                 break;
             }
@@ -103,15 +103,15 @@ public class RequestList {
     /**
      * removes a driver
      *
-     * @param userName the username of the driver
+     * @param userID the username of the driver
      *
      *
      */
-    public ArrayList<Request> removeDriver(String userName) {
+    public ArrayList<Request> removeDriver(String userID) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {
             if (request.getDriverIDList() != null) {
-                if (!request.getDriverIDList().contains(userName)) {
+                if (!request.getDriverIDList().contains(userID)) {
                     tempRequestList.add(request);
                 }
             }

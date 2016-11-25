@@ -49,6 +49,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
+
         String userName = "";
         String userMode = "";
 
@@ -67,12 +68,14 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             userMode = "Driver";
         }
 
+
         User user = new User("","","",new Date(),"","");
 
         try {
             //retrieving rider's information from elasticsearch
             UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
             user = getUser.execute(userName).get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

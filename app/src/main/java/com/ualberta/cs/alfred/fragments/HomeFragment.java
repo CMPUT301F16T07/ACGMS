@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private GoogleMap googleMap;
 
     public HomeFragment() {
+        System.out.println();
     }
 
     public static HomeFragment newInstance() {

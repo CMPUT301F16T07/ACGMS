@@ -8,15 +8,21 @@ import java.util.concurrent.ExecutionException;
  * Test cases for setting item to a request
  *
  * @author ookmm
- * @version 1.1
+ * @version 1.2
  * @see UserESSetController
  */
 public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new User es set controller test.
+     */
     public UserESSetControllerTest() {
         super(MainActivity.class);
     }
 
+    /**
+     * Test set basic user info.
+     */
     public void testSetBasicUserInfo () {
 
         /**
@@ -36,6 +42,9 @@ public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
 
     }
 
+    /**
+     * Test set multiple basic user info.
+     */
     public void testSetMultipleBasicUserInfo () {
 
         /**
@@ -114,5 +123,59 @@ public class UserESSetControllerTest extends ActivityInstrumentationTestCase2 {
                 nestedObject1Property, nestedObject1ValueType, nestedObject1Value,
                 nestedObject2Property, nestedObject2ValueType, nestedObject2Value);
         assert (true);
+    }
+
+    /**
+     * Test set isDriver or isRider info ONLY.
+     *
+     * @method: SetPropertyValueTask()
+     */
+    public void testSetUserMode () {
+
+        /**
+         * Make user a driver
+         */
+        String userID = "AViYJ-ezdE2DZPCrf9ql";
+
+        String userProperty = "isDriver";
+        String userPropertyType = "boolean";
+        String userNewValue = "true";
+
+        UserESSetController.SetPropertyValueTask setPropertyValueTask =
+                new UserESSetController.SetPropertyValueTask();
+
+        setPropertyValueTask.execute(userID, userProperty, userPropertyType, userNewValue);
+        assert (true);
+
+    }
+
+    /**
+     * Test set isDriver or isRider info WITH OTHER PROPERTIES.
+     *
+     * @method: SetMultiplePropertyValueTask()
+     */
+    public void testSetUserModeAndOtherProperties() {
+
+        /**
+         * Make a user a driver and update their phone number.
+         */
+        String userID = "AViYJ-ezdE2DZPCrf9ql";
+
+        String userProperty1 = "phoneNumber";
+        String userPropertyType1 = "string";
+        String userNewValue1 = "780-440-5566";
+
+        String userProperty2 = "isDriver";
+        String userPropertyType2 = "boolean";
+        String userNewValue2 = "true";
+
+        UserESSetController.SetMultiplePropertyValueTask setMultiplePropertyValueTask =
+                new UserESSetController.SetMultiplePropertyValueTask();
+
+        setMultiplePropertyValueTask.execute(userID,
+                userProperty1, userPropertyType1, userNewValue1,
+                userProperty2, userPropertyType2, userNewValue2);
+        assert (true);
+
     }
 }

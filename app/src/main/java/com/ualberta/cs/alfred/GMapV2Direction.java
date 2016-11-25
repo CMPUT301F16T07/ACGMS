@@ -115,7 +115,7 @@ public class GMapV2Direction {
          */
     }
 
-    public int getDistanceValue(Document doc) {
+    public double getDistanceValue(Document doc) {
         try {
             NodeList nl1 = doc.getElementsByTagName("distance");
             Node node1 = null;
@@ -123,7 +123,7 @@ public class GMapV2Direction {
             NodeList nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
             Log.i("DistanceValue", node2.getTextContent());
-            return Integer.parseInt(node2.getTextContent());
+            return Double.parseDouble(node2.getTextContent());
         } catch (Exception e) {
             return -1;
         }

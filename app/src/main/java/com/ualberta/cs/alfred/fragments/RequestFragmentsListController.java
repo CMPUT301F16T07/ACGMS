@@ -18,13 +18,12 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class RequestFragmentsListController {
-    public RequestList getRequestList(List<Pair<String, String>> queries, String userID) {
+    public RequestList getRequestList(List<Pair<String, String>> queries) {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
         are pending that do not include the driver on the bidlist of the request.
          */
         RequestList requestedList = new RequestList();
         try {
-            // TODO: Enumerate through queries for we can do the different queries
             for (Pair<String, String> query : queries) {
                 RequestESGetController.GetRequestTask getRequested = new RequestESGetController.GetRequestTask();
                 getRequested.execute(query.first, query.second);
@@ -65,14 +64,13 @@ public class RequestFragmentsListController {
         SharedPreferences.Editor editor = preferences.edit();
 
         try {
-            getRequestTask.execute("riderID", preferences.getString("USERNAME", null));
+            getRequestTask.execute("riderID", preferences.getString("USERID", null));
             returnList = (ArrayList<Request>) new RequestList(getRequestTask.get()).getSpecificRequestList(argType);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
         editor.putString(argType, Integer.toString(returnList.size()));
         editor.commit();
     }
@@ -98,16 +96,16 @@ public class RequestFragmentsListController {
         try {
             if (argType.equals("Requested")) {
                 getPending.execute("requestStatus", "Pending");
-                returnList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERNAME", null));
+                returnList = new RequestList(getPending.get()).removeDriver(preferences.getString("USERID", null));
                 getRequested.execute("requestStatus", "Requested");
                 returnList.addAll(getRequested.get());
             } else if (argType.equals("Pending")) {
                 getPending.execute("requestStatus", "Pending");
-                returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERNAME", null));
+                returnList = new RequestList(getPending.get()).getWithDriver(preferences.getString("USERID", null));
 
             } else if (argType.equals("Accepted")) {
                 getAccepted.execute("requestStatus", "Accepted");
-                returnList = new RequestList(getAccepted.get()).getWithDriver(preferences.getString("USERNAME", null));
+                returnList = new RequestList(getAccepted.get()).getWithDriver(preferences.getString("USERID", null));
 
             } else {
                 returnList = new ArrayList<Request>();

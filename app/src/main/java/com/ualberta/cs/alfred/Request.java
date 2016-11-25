@@ -30,7 +30,6 @@ public class Request implements Serializable{
     private ArrayList<String> driverIDList;
     private String riderID;
     private Date requestDate;
-    private DecimalFormat df = new DecimalFormat("0.00");
 
     /**
      * constructor for creating a new Request
@@ -251,8 +250,7 @@ public class Request implements Serializable{
      */
     @Override
     public String toString(){
-        //return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
-        //        this.getDestinationAddress().getLocation()+"\n"+Double.toString(this.getDistance());
+        DecimalFormat df = new DecimalFormat("0.00");
         return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
                 this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
     }
