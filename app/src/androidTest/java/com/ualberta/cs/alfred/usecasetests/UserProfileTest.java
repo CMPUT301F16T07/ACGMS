@@ -9,6 +9,7 @@ import com.ualberta.cs.alfred.DriverInfo;
 import com.ualberta.cs.alfred.RiderInfo;
 import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserESGetController;
+import com.ualberta.cs.alfred.UserESSetController;
 import com.ualberta.cs.alfred.Vehicle;
 
 import org.junit.Test;
@@ -213,6 +214,57 @@ public class UserProfileTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * US 03.02.01
+     * As a user, I want to edit the contact information in my profile.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testEditUserContactInformation() throws Exception {
+
+        /**
+         * Get user ID
+         */
+        String u1UserName = "jtrudeau";
+        String userID = null;
+
+        UserESGetController.GetUserTask retrievedUser =
+                new UserESGetController.GetUserTask();
+
+        // Find user
+        retrievedUser.execute(u1UserName);
+
+        try {
+            User user = retrievedUser.get();
+            userID = user.getUserID();
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Updating user phone number and email.
+         */
+        String userProperty1 = "phoneNumber";
+        String userPropertyType1 = "string";
+        String userNewValue1 = "613-333-7777";
+
+        String userProperty2 = "email";
+        String userPropertyType2 = "string";
+        String userNewValue2 = "jtrudeau@gmail.com";
+
+        UserESSetController.SetMultiplePropertyValueTask setMultiplePropertyValueTask =
+                new UserESSetController.SetMultiplePropertyValueTask();
+
+        setMultiplePropertyValueTask.execute(userID,
+                userProperty1, userPropertyType1, userNewValue1,
+                userProperty2, userPropertyType2, userNewValue2);
+        assert (true);
     }
 
 }
