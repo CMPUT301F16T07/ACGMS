@@ -192,6 +192,25 @@ public class RequestsTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * US 01.03.01
+     * As a rider, I want to be notified if my request is accepted.
+     *
+     */
+    // TODO: Micheal's
+
+
+    /**
+     * US 01.04.01
+     * As a rider, I want to cancel requests.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCancelRequest() throws Exception {
 
     }
+
 }
