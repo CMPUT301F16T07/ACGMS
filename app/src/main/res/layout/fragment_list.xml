@@ -7,29 +7,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout">
-        <Button
-            android:text="@string/list_requested"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="@dimen/list_type_button"
-            android:background="@color/requested"
-            android:id="@+id/button_requested" />
+            <Button
+                android:text="@string/list_requested"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="@dimen/list_type_button"
+                android:background="@color/colorPrimary"
+                android:id="@+id/button_requested" />
 
-        <Button
-            android:text="@string/list_pending"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="@dimen/list_type_button"
-            android:background="@color/pending"
-            android:id="@+id/button_pending" />
+            <Button
+                android:text="@string/list_pending"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="@dimen/list_type_button"
+                android:background="@color/colorPrimary"
+                android:id="@+id/button_pending" />
 
-        <Button
-            android:text="@string/list_accepted"
-            android:layout_width="0dp"
-            android:layout_weight=".33"
-            android:layout_height="@dimen/list_type_button"
-            android:background="@color/accepted"
-            android:id="@+id/button_accepted" />
+            <Button
+                android:text="@string/list_accepted"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="@dimen/list_type_button"
+                android:background="@color/colorPrimary"
+                android:id="@+id/button_accepted" />
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"

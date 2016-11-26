@@ -251,7 +251,21 @@ public class Request implements Serializable{
     @Override
     public String toString(){
         DecimalFormat df = new DecimalFormat("0.00");
-        return this.getRequestID()+"\n"+this.getSourceAddress().getLocation() +"-->"+
-                this.getDestinationAddress().getLocation()+"\n"+df.format(new Double(this.getDistance()));
+        String source = this.getSourceAddress().getLocation();
+        String destination = this.getDestinationAddress().getLocation();
+        String from = "FROM: ";
+        String to = "TO: ";
+        String distance = df.format(new Double(this.getDistance()));
+        String cost = df.format(new Double(this.getCost()));
+        String unit = "km";
+
+//        String theRequest = String.format("%s %s\n" +
+//                "%s %s\n" +
+//                "%s %s\n" +
+//                "%s%s\n" +
+//                "$%s",from, source, to, destination, distance, unit, cost);
+        String theRequest = from+source+"\n"+to+destination+"\n"+distance+unit+"\n"+"$"+cost;
+
+        return theRequest;
     }
 }

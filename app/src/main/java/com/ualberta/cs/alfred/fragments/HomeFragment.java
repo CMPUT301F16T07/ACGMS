@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
