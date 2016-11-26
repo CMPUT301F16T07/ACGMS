@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 
@@ -41,6 +42,7 @@ import org.w3c.dom.Document;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -251,11 +253,26 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         rideCompleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestESSetController.SetPropertyValueTask setPropertyValueTask =
-                        new RequestESSetController.SetPropertyValueTask();
-                setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "String", driverSelected);
-                setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Completed");
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                builder.setTitle("You arrived and are ready to pay?");
+                builder.setMessage("Please confirm that you have arrived at your location.");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        RequestESSetController.SetPropertyValueTask setRequestedStatus =
+                                new RequestESSetController.SetPropertyValueTask();
+                        setRequestedStatus.execute(passedRequest.getRequestID(), "requestStatus", "string", "Awaiting Payment");
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -342,6 +359,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         LatLngBounds bound = builder.build();
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound,600,600,5));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
         //LatLng midPoint = calculateMidPoint(x1,y1,x2,y2);
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(midPoint,10));
 

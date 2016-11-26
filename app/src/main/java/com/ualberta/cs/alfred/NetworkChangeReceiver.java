@@ -3,7 +3,9 @@ package com.ualberta.cs.alfred;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,7 +31,15 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         if (wifi.isAvailable() || mobile.isAvailable()) {
             Toast.makeText(context,"wifi available, uploading request to server",Toast.LENGTH_SHORT).show();
             //if network is connected again, execute everything in our offline request buffer
-            LocalDataManager.executeOfflineRequests(context);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String mode =preferences.getString("MODE",null);
+            if (mode.equals("Rider Mode")){
+                LocalDataManager.executeOfflineRequests(context);
+            }
+            else if (mode.equals("Driver Mode")){
+                //process accepting requests
+            }
+
 
             Log.d("Network Available ", "Flag No 1");
         }

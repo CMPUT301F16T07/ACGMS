@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ualberta.cs.alfred.GeoCoder;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 
@@ -39,15 +40,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private static HomeFragment homeFragment = new HomeFragment();
 
     public HomeFragment() {
         System.out.println();
     }
 
     public static HomeFragment newInstance() {
-        Bundle args = new Bundle();
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(args);
+
         return homeFragment;
     }
 
@@ -56,6 +56,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
+        // Initialize a singleton of geoCoder
+        GeoCoder geoCoder = GeoCoder.getInstance();
+        geoCoder.geoSetArguments(getContext());
 
         // disable the StrictMode policy in onCreate. Needed for routing
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
