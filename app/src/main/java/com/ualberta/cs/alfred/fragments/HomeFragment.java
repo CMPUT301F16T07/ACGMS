@@ -179,6 +179,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         googleMap = mMap;
         LatLng defaultLocation = new LatLng(53.5444,-113.4904);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
 
         LatLng house = new LatLng(0,0);
