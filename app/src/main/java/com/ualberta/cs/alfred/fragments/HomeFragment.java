@@ -40,15 +40,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private static HomeFragment homeFragment = new HomeFragment();
 
     public HomeFragment() {
         System.out.println();
     }
 
     public static HomeFragment newInstance() {
-        Bundle args = new Bundle();
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(args);
+
         return homeFragment;
     }
 

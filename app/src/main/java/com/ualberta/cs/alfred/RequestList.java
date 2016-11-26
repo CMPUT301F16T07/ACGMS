@@ -38,6 +38,16 @@ public class RequestList {
     }
 
     /**
+     * Adds list into a list
+     *
+     * @return request list
+     */
+    public List mergeRequestList(ArrayList<Request> list) {
+        this.requestList.addAll(list);
+        return requestList;
+    }
+
+    /**
      * Gets request list.
      *
      * @return the request list
@@ -78,6 +88,23 @@ public class RequestList {
         });
 
         return this.requestList;
+    }
+
+    /**
+     *  Gets a request list sorted by price
+     */
+    public List<Request> sortByPrice() {
+
+        List<Request> list = new ArrayList<>();
+        list.addAll(requestList);
+
+        Collections.sort(list, new Comparator<Request>() {
+            @Override
+            public int compare(Request r1, Request r2) {
+                return Double.compare(r1.getCost()/r1.getDistance(), r2.getCost()/r2.getDistance());
+            }
+        });
+        return list;
     }
 
     /**

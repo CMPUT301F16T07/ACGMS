@@ -43,6 +43,8 @@ import java.util.Locale;
  */
 
 public class RequestFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+
+
     // Variable for edit text view
     private EditText startInputOne;
     private EditText startInputTwo;
@@ -57,9 +59,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
     }
 
     public static RequestFragment newInstance() {
-        Bundle args = new Bundle();
         RequestFragment requestFragment = new RequestFragment();
-        requestFragment.setArguments(args);
         return requestFragment;
     }
 
