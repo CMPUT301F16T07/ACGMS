@@ -342,6 +342,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         LatLngBounds bound = builder.build();
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound,600,600,5));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
         //LatLng midPoint = calculateMidPoint(x1,y1,x2,y2);
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(midPoint,10));
 
