@@ -164,12 +164,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setNeutralButton("View Profile", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Todo open the driver profile
-                        // pass username to fragment???
+
                         Fragment fragment = UserViewFragment.newInstance(1,possibleDriver);
                         MenuActivity.bottomBar.selectTabAtPosition(1,true);
                         replaceFragmentwithStack(fragment);
-
+                        // Todo open the driver profile
                     }
                 });
                 AlertDialog dialog = builder.create();

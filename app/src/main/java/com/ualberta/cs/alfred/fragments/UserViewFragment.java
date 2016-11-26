@@ -49,8 +49,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
-
         String userName = "";
+        String otherUserID = "";
         String userMode = "";
 
         int position = 0;
@@ -63,8 +63,20 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             userName = preferences.getString("USERNAME", null);
             userMode = preferences.getString("MODE", "None");
         } else {
-            // Todo access the username of the person that click the driver profile.
-            userName = bundle.getString("userID");
+            // Todo access username of the driver that was clicked
+            otherUserID = bundle.getString("userID");
+            User otherUser = new User("","","",new Date(),"","");
+            try {
+                //retrieving rider's username from elasticsearch with userID
+                UserESGetController.GetUserByIdTask getUserByID = new UserESGetController.GetUserByIdTask();
+                otherUser = getUserByID.execute(otherUserID).get();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            userName = otherUser.getUserName();
             userMode = "Driver";
         }
 
