@@ -89,10 +89,79 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 grabMode();
-                editor.putString("USERNAME", userName.getText().toString());
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-                finish();
+
+                // check if the username exists in the current elastic search server
+                LoginController loginController = new LoginController(userName.getText().toString(), mode);
+                Boolean userExist = null;
+                try {
+                    userExist = loginController.checkUser();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                // if the user already exists as the desired type of user
+                if (userExist != null && userExist == Boolean.TRUE) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("The user already exists in the mode requested.");
+                    builder.setMessage("Please log in above.");
+                    builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else if (userExist == Boolean.FALSE) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    Boolean isOpposite = Boolean.FALSE;
+                    String oppositeMode = "Driver Mode";
+                    try {
+                        if (loginController.checkOpposite()) {
+                            isOpposite = Boolean.TRUE;
+                            if (mode.contentEquals("Driver Mode")) {
+                                oppositeMode = "Rider Mode";
+                            }
+                            builder.setMessage(
+                                    "No " + mode + " profile was found under the username of "
+                                            + userName.getText().toString() + ". Although a " + oppositeMode +
+                                            " profile was found. Would you like to add additional " + mode + " info?");
+                        } else {
+                            builder.setMessage("No profile was found under the username of "
+                                    + userName.getText().toString() + " Would you like to create a new profile?");
+                        }
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    builder.setTitle(mode + " not found");
+                    builder.setCancelable(Boolean.FALSE);
+                    final Boolean finalIsOpposite = isOpposite;
+                    final String finalOppositeMode = oppositeMode;
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                            if (finalIsOpposite) {
+                                intent.putExtra("OPPOSITE", finalOppositeMode);
+                            }
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            userName.setText("");
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
             }
         });
 

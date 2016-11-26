@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -230,6 +231,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 new UserESSetController.SetDoublyNestedObjectPropertyValueTask();
 
                         setDoubleNestedObject.execute(userID, userPropertyFirstLevel, userPropertySecondLevel,
+                                nestedObject0Property, nestedObject0ValueType, nestedObject0Value,
                                 nestedObject1Property, nestedObject1ValueType, nestedObject1Value,
                                 nestedObject2Property, nestedObject2ValueType, nestedObject2Value,
                                 nestedObject3Property, nestedObject3ValueType, nestedObject3Value,
@@ -237,6 +239,16 @@ public class SignUpActivity extends AppCompatActivity {
                                 nestedObject5Property, nestedObject5ValueType, nestedObject5Value,
                                 nestedObject6Property, nestedObject6ValueType, nestedObject6Value.toString()
                         );
+
+
+                        String userProperty = "isDriver";
+                        String userPropertyType = "boolean";
+                        String userNewValue = "true";
+
+                        UserESSetController.SetPropertyValueTask setPropertyValueTask =
+                                new UserESSetController.SetPropertyValueTask();
+
+                        setPropertyValueTask.execute(userID, userProperty, userPropertyType, userNewValue);
                     }
                 } else {
                     createUser();
