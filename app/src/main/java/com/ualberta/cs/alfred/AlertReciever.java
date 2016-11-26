@@ -121,6 +121,5 @@ public class AlertReciever extends BroadcastReceiver {
                 }
             }
         }
-        Toast.makeText(context, "Hello"+mode, Toast.LENGTH_SHORT).show();
     }
 }
