@@ -39,7 +39,45 @@
             android:stretchColumns="0,1"
             android:padding="10dp">
 
-        <TableRow
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:text="Requesting Rider:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:text="bobby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/requestingRider"
+                    android:textColor="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:text="Selected Driver: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selectedDriverHeading"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:text="Omar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/selectedDriver"
+                    android:textColor="@android:color/black" />
+            </TableRow>
+
+            <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <TextView
@@ -153,9 +191,20 @@
                 android:textColor="#000000"/>
             </TableRow>
             </TableLayout>
-        <ListView
+
+        <TextView
+            android:text="Bidding Drivers (please select a driver):"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/biddingDriversHeader"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/black"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
             android:id="@+id/biddingDriversListView">
 
         </ListView>

@@ -34,11 +34,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
 import com.ualberta.cs.alfred.fragments.SettingsFragment;
 import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private String driverSelected;
     private String mode;
     private String from;
+    private ArrayList<String> driverIDs;
+    private ArrayList<String> driverUsernameArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +80,33 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         // which list the request will go to next
         String next = "None";
 
+        // the driver elements should only show for the rider pending list and accepted for both
+        // modes
+        TextView requestingRider = (TextView) findViewById(R.id.requestingRider);
+        requestingRider.setText(preferences.getString("USERNAME", null));
+        TextView selectedDriverHeading = (TextView) findViewById(R.id.selectedDriverHeading);
+        selectedDriverHeading.setVisibility(View.GONE);
+        final TextView selectedDriver = (TextView) findViewById(R.id.selectedDriver);
+        selectedDriver.setVisibility(View.GONE);
+
+        // buttons that will be availible to requests, availibility of a request is dependent on
+        // the list that it came from
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableView);
         Button rideCompleteButton = (Button) findViewById(R.id.ride_complete_button);
         rideCompleteButton.setVisibility(View.GONE);
         Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableView);
         final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
-        biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
 
+        // the list of bidding drivers that will only show to the rider in the pending list
+        biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
+        TextView biddingDriversHeader = (TextView) findViewById(R.id.biddingDriversHeader);
+        biddingDriversHeader.setVisibility(View.GONE);
+
+        // the request passed from the list
+        passedRequest = (Request) intent.getSerializableExtra("passedRequest");
+
+
+        // if from requested list
         if (from.contentEquals("Requested")) {
             rideCompleteButton.setVisibility(View.GONE);
             // only the driver will be able to confirm anything in the first stage
@@ -97,6 +121,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 tableLayout.setColumnCollapsed(0,true);
             }
             next = "Pending";
+        // if from pending list
         } else if (from.contentEquals("Pending")) {
             // the cancel button needs to remain for both the driver and rider
             // since they both should be able to cancel a request or bid
@@ -110,6 +135,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 tableLayout.setColumnStretchable(1,true);
             }
             next = "Accepted";
+        // if from accepted list
         } else if (from.contentEquals("Accepted")) {
             // finally the trip is in progress and now the all both can do is
             // cancel the trip
@@ -121,18 +147,42 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             }
         }
 
-        passedRequest = (Request) intent.getSerializableExtra("passedRequest");
+        if ((mode.contentEquals("Rider Mode") && from.contentEquals("Pending")) ||
+                from.contentEquals("Accepted") || from.contentEquals("Awaiting Payment") ||
+                        from.contentEquals("Completed")) {
+            selectedDriverHeading.setVisibility(View.VISIBLE);
+            selectedDriver.setVisibility(View.VISIBLE);
+        }
 
-        if (mode.contentEquals("Rider Mode") &&
-                (passedRequest.getRequestStatus().contentEquals("Pending") ||
-                        passedRequest.getRequestStatus().contentEquals("Accepted"))) {
-            ArrayList<String> driverArray = passedRequest.getDriverIDList();
-            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, driverArray);
+        if (mode.contentEquals("Rider Mode") && from.contentEquals("Pending")) {
+            biddingDriversHeader.setVisibility(View.VISIBLE);
+            driverIDs = passedRequest.getDriverIDList();
+            RequestFragmentsListController rFLC = new RequestFragmentsListController();
+            driverUsernameArray = rFLC.getCorrespondingDriverUsernames(driverIDs);
+            biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.driver_row, driverUsernameArray);
             biddingDriversListView.setAdapter(biddingDriversAdapter);
-            if (driverArray.size() > 0) {
-                driverSelected = driverArray.get(0);
+            if (driverIDs.size() > 0) {
+                driverSelected = driverIDs.get(0);
+                selectedDriver.setText(driverUsernameArray.get(0));
             } else {
                 driverSelected = "Error";
+                selectedDriver.setText("");
+            }
+        } else if (from.contentEquals("Accepted") || from.contentEquals("Awaiting Payment") || from.contentEquals("Completed")) {
+            UserESGetController.GetUserByIdTask getUserByIdTask = new UserESGetController.GetUserByIdTask();
+            getUserByIdTask.execute(passedRequest.getDriverID());
+            User user = null;
+            try {
+                user = getUserByIdTask.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            if (user != null) {
+                selectedDriver.setText(user.getUserName());
+            } else {
+                selectedDriver.setText("Error retrieving selected driver.");
             }
         }
 
@@ -140,7 +190,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
-                final String possibleDriver = (String) biddingDriversListView.getItemAtPosition(position);
+                final String possibleDriverUsername = (String) biddingDriversListView.getItemAtPosition(position);
+                final String possibleDriver = driverIDs.get(driverUsernameArray.indexOf(possibleDriverUsername));
                 if (!driverSelected.contentEquals(possibleDriver)) {
                     builder.setTitle("Change selected driver?");
                     builder.setCancelable(Boolean.TRUE);
@@ -148,6 +199,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             driverSelected = possibleDriver;
+                            selectedDriver.setText(possibleDriverUsername);
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -188,6 +240,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                     RequestESAddController.AddItemToListTask addItemToListTask =
                             new RequestESAddController.AddItemToListTask();
                     addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", preferences.getString("USERID", null));
+                }
+                if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
+                    RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
+                    setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
                 }
                 finish();
             }
@@ -230,15 +286,16 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                                 RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
                                 deleteItemFromListTask.execute(passedRequest.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
                             } else {
-                                //TODO: Clear the driverlist
-                            }
-                            if ((passedRequest.getDriverIDList().size() - 1) <= 0) {
                                 RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                                         new RequestESSetController.SetPropertyValueTask();
                                 if (from.contentEquals("Pending")) {
                                     setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Requested");
+                                    // TODO: Clear Driver List
                                 } else {
                                     setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Pending");
+                                    UserESSetController.SetPropertyValueTask removeDriverID = new UserESSetController.SetPropertyValueTask();
+                                    removeDriverID.execute(passedRequest.getRequestID(), "driverID", "String", "");
+                                    // TODO: Clear Driver List
                                 }
                                 finish();
                             }
