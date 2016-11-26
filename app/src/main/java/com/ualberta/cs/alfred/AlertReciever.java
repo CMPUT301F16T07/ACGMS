@@ -8,11 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
-import android.view.Menu;
-import android.widget.Toast;
 
-import com.ualberta.cs.alfred.fragments.AcceptedFragment;
-import com.ualberta.cs.alfred.fragments.PendingFragment;
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
 
 import java.util.ArrayList;
@@ -98,6 +94,7 @@ public class AlertReciever extends BroadcastReceiver {
                 notificationManager.notify(uniqueID, notification.build());
             }
         }
-        Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(context, "Hello"+mode, Toast.LENGTH_SHORT).show();
     }
 }

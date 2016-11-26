@@ -21,9 +21,9 @@ public class GeoCoder {
     private Geocoder geoCoder;
     private String address;
     private String latitudeString;
-    private String LongitudeString;
+    private String longitudeString;
     private Double latitudeValue;
-    private Double LongitudeValue;
+    private Double longitudeValue;
 
     private List<android.location.Address> addressCoordinates;
 
@@ -35,7 +35,7 @@ public class GeoCoder {
         return instance;
     }
 
-    public void geoSetArguments(Context context,String address) {
+    public void geoSetArguments(Context context) {
         this.geoCoder = new Geocoder(context, Locale.getDefault());
     }
 
@@ -44,32 +44,24 @@ public class GeoCoder {
     }
 
     public void calculateCoordinatesString(){
-        ArrayList<String> coordinates = new ArrayList<>();
         try {
             addressCoordinates = geoCoder.getFromLocationName(address, 1);
             if (addressCoordinates.size() > 0) {
-                String latitude = String.valueOf(addressCoordinates.get(0).getLatitude());
-                String longitude = String.valueOf(addressCoordinates.get(0).getLongitude());
-                coordinates.add(latitude);
-                coordinates.add(longitude);
+                latitudeString = String.valueOf(addressCoordinates.get(0).getLatitude());
+                longitudeString = String.valueOf(addressCoordinates.get(0).getLongitude());
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void calculateCoordinatesValue(){
-        ArrayList<Double> coordinates = new ArrayList<>();
         try {
             addressCoordinates = geoCoder.getFromLocationName(address, 1);
             if (addressCoordinates.size() > 0) {
-                Double latitude = addressCoordinates.get(0).getLatitude();
-                Double longitude = addressCoordinates.get(0).getLongitude();
-                coordinates.add(latitude);
-                coordinates.add(longitude);
+                latitudeValue = addressCoordinates.get(0).getLatitude();
+                longitudeValue = addressCoordinates.get(0).getLongitude();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +72,7 @@ public class GeoCoder {
     }
 
     public String getLongitudeString() {
-        return LongitudeString;
+        return longitudeString;
     }
 
     public Double getLatitudeValue() {
@@ -88,6 +80,6 @@ public class GeoCoder {
     }
 
     public Double getLongitudeValue() {
-        return LongitudeValue;
+        return longitudeValue;
     }
 }

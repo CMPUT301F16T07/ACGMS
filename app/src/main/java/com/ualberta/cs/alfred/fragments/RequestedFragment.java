@@ -24,6 +24,8 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.ualberta.cs.alfred.GeoCoder;
+import com.ualberta.cs.alfred.ConnectivityChecker;
+import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
@@ -31,13 +33,10 @@ import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 09/11/16.
@@ -107,12 +106,19 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
             requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
         }
 
+        //determine if there is connectivity. If there is, save the data for future use
+        //if not, load from a previoiusly saved image
+        if (ConnectivityChecker.isConnected(getContext())){
 
-        try {
+            LocalDataManager.saveRRequestList(requestedList,preferences.getString("MODE", null),getContext());
+
             requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
             requestedListView.setAdapter(requestAdapter);
-        } catch (Exception e) {
-            Toast.makeText(getContext(),"There's a problem with one of the request",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            requestedList = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            requestedListView.setAdapter(requestAdapter);
         }
 
 
@@ -224,7 +230,28 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 tableLayout.setVisibility(View.GONE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
                 params.addRule(RelativeLayout.ABOVE, R.id.revert_filter);
+
+                ArrayList<Request> requestsRequested = new ArrayList<>();
                 parseInput();
+
+                //determine if there is connectivity. If there is, save the data for future use
+                //if not, load from a previoiusly saved image
+                if (ConnectivityChecker.isConnected(getContext())){
+
+                    LocalDataManager.saveRRequestList(requestsRequested,preferences.getString("MODE",null),getContext());
+                    modifyAdapter(requestsRequested);
+                }
+                else{
+                    requestsRequested = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
+                    modifyAdapter(requestsRequested);
+
+                }
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("Requested", Integer.toString(requestsRequested.size()));
+                editor.commit();
+                requestAdapter.notifyDataSetChanged();
+
+                break;
         }
     }
 
@@ -311,7 +338,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     Toast.makeText(getContext(), "Input is Empty", Toast.LENGTH_SHORT).show();
                 } else {
                     GeoCoder geoCoder = GeoCoder.getInstance();
-                    geoCoder.geoSetArguments(getContext(), address);
                     geoCoder.calculateCoordinatesString();
                     String coordinates = String.format("[%s, %s]",
                             geoCoder.getLongitudeString(), geoCoder.getLatitudeString());
@@ -392,7 +418,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         modifyAdapter(requestList);
 
     }
-
 
     private void modifyAdapter(ArrayList<Request> list) {
         requestAdapter.clear();
