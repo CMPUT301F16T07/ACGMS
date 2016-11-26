@@ -27,7 +27,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Accepted";
+        String req1Status = AppSettings.REQUEST_ACCEPTED;
         Address req1SrcAddr = new Address("North side", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 45.30;
@@ -71,7 +71,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -91,7 +91,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -112,7 +112,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -132,7 +132,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -152,7 +152,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -172,7 +172,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -195,7 +195,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -216,7 +216,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2 {
         /**
          * Create request #1
          */
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
