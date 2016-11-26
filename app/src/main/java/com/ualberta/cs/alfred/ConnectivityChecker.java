@@ -10,7 +10,7 @@ import android.net.NetworkInfo;
 
 
 /**
- *
+ *Checks for network connectivity
  */
 
 public class ConnectivityChecker {
