@@ -1,13 +1,18 @@
 package com.ualberta.cs.alfred;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -96,6 +101,29 @@ public class AlertReciever extends BroadcastReceiver {
                 // Builds the notification and issues it
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.notify(uniqueID, notification.build());
+            }
+            Boolean awaitingPaymentOpen = preferences.getBoolean("awaitingPaymentOpen", true);
+            if (awaitingPaymentOpen == false) {
+                RequestESGetController.GetRequestTask getAwaitingPayment = new RequestESGetController.GetRequestTask();
+                ArrayList<Request> awaitingPaymentList = null;
+                getAwaitingPayment.execute("requestStatus", "Awaiting Payment");
+                try {
+                    awaitingPaymentList = new RequestList(getAwaitingPayment.get()).getWithDriver(preferences.getString("USERID", null));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                if (awaitingPaymentList != null && awaitingPaymentList.size() > 0) {
+                    Intent i = new Intent(context, AlertDialogActivity.class);
+                    i.putExtra("REQUESTID", awaitingPaymentList.get(0).getRequestID());
+                    i.putExtra("REQUESTCOST", Double.toString(awaitingPaymentList.get(0).getCost()));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("awaitingPaymentOpen", true);
+                    editor.commit();
+                    context.startActivity(i);
+                }
             }
         }
         Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
