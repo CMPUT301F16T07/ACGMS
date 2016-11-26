@@ -7,20 +7,15 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,18 +24,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ualberta.cs.alfred.Address;
-import com.ualberta.cs.alfred.BuildConfig;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
-import com.ualberta.cs.alfred.Request;
-
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
@@ -179,6 +168,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         googleMap = mMap;
         LatLng defaultLocation = new LatLng(53.5444,-113.4904);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
 
         LatLng house = new LatLng(0,0);

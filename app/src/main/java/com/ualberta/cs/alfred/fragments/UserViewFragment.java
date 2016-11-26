@@ -49,7 +49,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
-
         String userName = "";
         String userMode = "";
 
@@ -67,7 +66,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             userName = bundle.getString("userID");
             userMode = "Driver";
         }
-
 
         User user = new User("","","",new Date(),"","");
 
@@ -87,13 +85,25 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         emailAddress = user.getEmail();
         phoneNumber= user.getPhoneNumber();
 
+        Button editButton = (Button) view.findViewById(R.id.edit_button);
+        editButton.setOnClickListener(this);
+        Button emailButton = (Button) view.findViewById(R.id.email_user_button);
+        emailButton.setOnClickListener(this);
+        Button callButton = (Button) view.findViewById(R.id.call_user_button);
+        callButton.setOnClickListener(this);
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
         if (position == 0) {
             textView.setText(userName + " (" + userMode + ")");
+            emailButton.setVisibility(View.GONE);
+            callButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.VISIBLE);
         } else {
             textView.setText(userName);
+            emailButton.setVisibility(View.VISIBLE);
+            callButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.GONE);
         }
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);
@@ -105,10 +115,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         textView = (TextView) view.findViewById(R.id.textview8);
         textView.setText(phoneNumber);
 
-        Button emailButton = (Button) view.findViewById(R.id.email_user_button);
-        emailButton.setOnClickListener(this);
-        Button callButton = (Button) view.findViewById(R.id.call_user_button);
-        callButton.setOnClickListener(this);
 
         return view;
     }
@@ -126,6 +132,8 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             case R.id.call_user_button:
                 //start call
                 break;
+            case R.id.edit_button:
+                //TODO: user edit fragment
         }
 
     }

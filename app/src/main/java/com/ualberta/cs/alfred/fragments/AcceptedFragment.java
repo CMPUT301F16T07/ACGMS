@@ -17,7 +17,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 
-
+import com.ualberta.cs.alfred.ConnectivityChecker;
+import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
@@ -81,12 +82,25 @@ public class AcceptedFragment extends Fragment {
             this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userID));
             acceptedRequestList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Accepted");
         }
-        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
-        acceptedListView.setAdapter(requestAdapter);
+        //determine if there is connectivity. If there is, save the data for future use
+        //if not, load from a previoiusly saved image
+        if (ConnectivityChecker.isConnected(getContext())){
+            LocalDataManager.saveRAcceptedList(acceptedRequestList,preferences.getString("MODE",null),getContext());
+
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
+            acceptedListView.setAdapter(requestAdapter);
+        }
+        else{
+            acceptedRequestList = LocalDataManager.loadRAcceptedList(preferences.getString("MODE", null), getContext());
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
+            acceptedListView.setAdapter(requestAdapter);
+
+        }
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
         editor.commit();
+
         ListFragment.update(getContext());
 
         acceptedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
