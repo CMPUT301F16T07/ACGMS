@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.ualberta.cs.alfred.Address;
-import com.ualberta.cs.alfred.ConnectivityChecker;
 import com.ualberta.cs.alfred.GMapV2Direction;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
@@ -228,29 +227,29 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         // round to the nearest cent
         double cost = Math.round( (distance/2) * 100.0 ) / 100.0 ;
 
+/////////////////////////////////////
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson sAddressGson = new Gson();
+        String sAddress = sAddressGson.toJson(startPointAddress);
+        Gson eAddressGson = new Gson();
+        String eAddress = eAddressGson.toJson(endPointAddress);
+        editor.putString("RSTATUS", Status.toString());
+        editor.putString("RSTARTADDRESS",sAddress);
+        editor.putString("RENDADDRESS", eAddress);
+        editor.putLong("RDISTANCE", (long) distance);
+        editor.putLong("RCOST", (long) cost);
+        editor.putString("RUSERID", userID);
+        editor.commit();
+        String stat = preferences.getString("RSTATUS",null);
+        Toast.makeText(getActivity(),"stats is "+stat,Toast.LENGTH_SHORT).show();
+////////////////////////////////////
         // Create an instance of a request and store into elastic search
         //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
         //              double distance, double cost, String riderID)
-        if (ConnectivityChecker.isConnected(getActivity())){
-            Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
-        }
-        else{
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = preferences.edit();
-            Gson sAddressGson = new Gson();
-            String sAddress = sAddressGson.toJson(startPointAddress);
-            Gson eAddressGson = new Gson();
-            String eAddress = eAddressGson.toJson(endPointAddress);
-            editor.putString("RSTATUS", Status.toString());
-            editor.putString("RSTARTADDRESS",sAddress);
-            editor.putString("RENDADDRESS", eAddress);
-            editor.putLong("RDISTANCE", (long) distance);
-            editor.putLong("RCOST", (long) cost);
-            editor.putString("RUSERID", userID);
-            editor.commit();
+        Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
 
 
-        }
 
         // Notify save
         Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();

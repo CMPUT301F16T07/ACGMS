@@ -42,7 +42,6 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         Toast.makeText(context,"calling uploadRequest"+Status,Toast.LENGTH_SHORT).show();
 
         if (!Status.equals("null")){
-
             Gson sAddressGson = new Gson();
             String sAddressJson = preferences.getString("RSTARTADDRESS", null);
             Address startPointAddress = sAddressGson.fromJson(sAddressJson, Address.class);
@@ -54,7 +53,6 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             String userID = preferences.getString("RUSERID", null);
             Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
        }
-        Log.d("Upload called", "Flag #2");
 
 
         editor.putString("RSTATUS", null);

@@ -21,17 +21,16 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.ualberta.cs.alfred.ConnectivityChecker;
+import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESGetController;
-import com.ualberta.cs.alfred.RequestList;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -95,8 +94,20 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
             requestedList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
         }
 
-        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
-        requestedListView.setAdapter(requestAdapter);
+        //determine if there is connectivity. If there is, save the data for future use
+        //if not, load from a previoiusly saved image
+        if (ConnectivityChecker.isConnected(getContext())){
+
+            LocalDataManager.saveRRequestList(requestedList,preferences.getString("MODE", null),getContext());
+
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            requestedListView.setAdapter(requestAdapter);
+        }
+        else{
+            requestedList = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
+            requestedListView.setAdapter(requestAdapter);
+        }
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Requested", Integer.toString(requestedList.size()));
@@ -237,9 +248,20 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
+                //determine if there is connectivity. If there is, save the data for future use
+                //if not, load from a previoiusly saved image
+                if (ConnectivityChecker.isConnected(getContext())){
+                    LocalDataManager.saveRRequestList(requests,preferences.getString("MODE",null),getContext());
 
-                requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
-                requestedListView.setAdapter(requestAdapter);
+                    requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                    requestedListView.setAdapter(requestAdapter);
+                }
+                else{
+                    requests = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
+                    requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                    requestedListView.setAdapter(requestAdapter);
+
+                }
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("Requested", Integer.toString(requests.size()));
                 editor.commit();

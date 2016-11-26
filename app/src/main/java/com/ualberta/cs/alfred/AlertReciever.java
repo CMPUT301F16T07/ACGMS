@@ -94,6 +94,7 @@ public class AlertReciever extends BroadcastReceiver {
                 notificationManager.notify(uniqueID, notification.build());
             }
         }
-        //Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(context, "Hello"+mode, Toast.LENGTH_SHORT).show();
     }
 }
