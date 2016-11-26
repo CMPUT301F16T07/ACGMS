@@ -1,5 +1,6 @@
 package com.ualberta.cs.alfred.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ualberta.cs.alfred.R;
+import com.ualberta.cs.alfred.RequestDetailsActivity;
+import com.ualberta.cs.alfred.SendEmailActivity;
 import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserESGetController;
 
@@ -26,12 +29,16 @@ import java.util.concurrent.ExecutionException;
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
+    private String emailAddress;
+    private String phoneNumber;
 
     public UserViewFragment() {
     }
 
-    public static UserViewFragment newInstance() {
+    public static UserViewFragment newInstance(int position, String userID) {
         Bundle args = new Bundle();
+        args.putInt("index",position);
+        args.putString("userID", userID);
         UserViewFragment userViewFragment = new UserViewFragment();
         userViewFragment.setArguments(args);
         return userViewFragment;
@@ -42,17 +49,31 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String userName = preferences.getString("USERNAME", null);
-        String userID = preferences.getString("USERID", null);
-        String userMode = preferences.getString("MODE","None");
+        String userName = "";
+        String userMode = "";
+
+        int position = 0;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            position = bundle.getInt("index", 0);
+        }
+        if (position == 0) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            userName = preferences.getString("USERNAME", null);
+            userMode = preferences.getString("MODE", "None");
+        } else {
+            // Todo access the username of the person that click the driver profile.
+            userName = bundle.getString("userID");
+            userMode = "Driver";
+        }
 
         User user = new User("","","",new Date(),"","");
 
         try {
-            //retrieving rider's informatino from elasticsearch
-            UserESGetController.GetUserByIdTask getUser = new UserESGetController.GetUserByIdTask();
-            user = getUser.execute(userID).get();
+            //retrieving rider's information from elasticsearch
+            UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
+            user = getUser.execute(userName).get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -61,13 +82,29 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
 
         String fullName = user.getFirstName() + " " + user.getLastName();
-        String emailAddress = user.getEmail();
-        String phoneNumber= user.getPhoneNumber();
+        emailAddress = user.getEmail();
+        phoneNumber= user.getPhoneNumber();
 
+        Button editButton = (Button) view.findViewById(R.id.edit_button);
+        editButton.setOnClickListener(this);
+        Button emailButton = (Button) view.findViewById(R.id.email_user_button);
+        emailButton.setOnClickListener(this);
+        Button callButton = (Button) view.findViewById(R.id.call_user_button);
+        callButton.setOnClickListener(this);
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
-        textView.setText(userName+" ("+userMode+")");
+        if (position == 0) {
+            textView.setText(userName + " (" + userMode + ")");
+            emailButton.setVisibility(View.GONE);
+            callButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.VISIBLE);
+        } else {
+            textView.setText(userName);
+            emailButton.setVisibility(View.VISIBLE);
+            callButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.GONE);
+        }
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);
         textView.setText(fullName);
@@ -78,21 +115,29 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         textView = (TextView) view.findViewById(R.id.textview8);
         textView.setText(phoneNumber);
 
-        Button editButton = (Button) view.findViewById(R.id.edit_user_button);
-        editButton.setOnClickListener(this);
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
-            case R.id.edit_user_button:
-                Fragment fragment = new UserEditFragment().newInstance();
-                replaceFragmentwithStack(fragment);
+            case R.id.email_user_button:
+                //start email activity to send email
+                Intent intent = new Intent(getActivity(), SendEmailActivity.class);
+                intent.putExtra("to",emailAddress);
+                startActivity(intent);
                 break;
+            case R.id.call_user_button:
+                //start call
+                break;
+            case R.id.edit_button:
+                //TODO: user edit fragment
         }
+
     }
+
 
     private void replaceFragmentwithStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();

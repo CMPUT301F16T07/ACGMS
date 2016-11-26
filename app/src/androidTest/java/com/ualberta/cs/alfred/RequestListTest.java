@@ -43,7 +43,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
 
 
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -56,7 +56,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         aList.addRequest(req1);
 
         // Create request #2
-        String req2Status = "Accepted";
+        String req2Status = AppSettings.REQUEST_ACCEPTED;
         Address req2SrcAddr = new Address("West Ed", 51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
         double req2Cost = 30.30;
@@ -96,7 +96,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         RequestList aList = new RequestList();
 
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -113,7 +113,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         }
 
         // Create request #2
-        String req2Status = "Accepted";
+        String req2Status = AppSettings.REQUEST_ACCEPTED;
         Address req2SrcAddr = new Address("West Ed", 51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
         double req2Cost = 30.30;
@@ -130,7 +130,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         }
 
         // Create request #3
-        String req3Status = "Completed";
+        String req3Status = AppSettings.REQUEST_REQUESTED;
         Address req3SrcAddr = new Address("City Center", 60.56779, 10.34522);
         Address req3DestAddr = new Address("Whyte Ave", 30.56500, 21.56999);
         double req3Cost = 12.33;
@@ -166,7 +166,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         RequestList aList = new RequestList();
 
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -179,7 +179,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         aList.addRequest(req1);
 
         // Create request #2
-        String req2Status = "Accepted";
+        String req2Status = AppSettings.REQUEST_ACCEPTED;
         Address req2SrcAddr = new Address("West Ed", 51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
         double req2Cost = 30.30;
@@ -192,21 +192,21 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         aList.addRequest(req2);
 
         // Create a request with Pending requests only
-        List<Request> testSpecReqList1 = aList.getSpecificRequestList("Pending");
+        List<Request> testSpecReqList1 = aList.getSpecificRequestList(AppSettings.REQUEST_PENDING);
 
         // Get every single pending request from the list and check its status
         for (Request r : testSpecReqList1) {
             String rStatus = r.getRequestStatus();
-            assertTrue("Request status is not the same", rStatus.equals("Pending"));
+            assertTrue("Request status is not the same", rStatus.equals(AppSettings.REQUEST_PENDING));
         }
 
         // Create a request with Accepted requests only
-        List<Request> testSpecReqList2 = aList.getSpecificRequestList("Accepted");
+        List<Request> testSpecReqList2 = aList.getSpecificRequestList(AppSettings.REQUEST_ACCEPTED);
 
         // Get every single accepted request from the list and check its status
         for (Request r : testSpecReqList2) {
             String rStatus = r.getRequestStatus();
-            assertTrue("Request status is not the same", rStatus.equals("Accepted"));
+            assertTrue("Request status is not the same", rStatus.equals(AppSettings.REQUEST_ACCEPTED));
         }
     }
 
@@ -218,7 +218,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         RequestList aList = new RequestList();
 
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -241,7 +241,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         RequestList aList = new RequestList();
 
         // Create request #1
-        String req1Status = "Pending";
+        String req1Status = AppSettings.REQUEST_PENDING;
         Address req1SrcAddr = new Address("U of A", 65.56777, 79.34555);
         Address req1DestAddr = new Address("Downtown", 50.56500, 89.56888);;
         double req1Cost = 12.30;
@@ -254,7 +254,7 @@ public class RequestListTest extends ActivityInstrumentationTestCase2 {
         aList.addRequest(req1);
 
         // Create request #2
-        String req2Status = "Accepted";
+        String req2Status = AppSettings.REQUEST_ACCEPTED;
         Address req2SrcAddr = new Address("West Ed", 51.56777, 30.34555);
         Address req2DestAddr = new Address("South Campus", 20.56500, 12.56888);;
         double req2Cost = 30.30;

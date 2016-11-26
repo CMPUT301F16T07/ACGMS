@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="@color/colorWhite">
 
 
     <ListView
@@ -23,6 +23,15 @@
         android:textSize="@dimen/button_text"
         style="@style/Widget.AppCompat.Button"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:id="@+id/revert_filter"
+        android:text="Revert Filter"
+        android:layout_alignParentBottom="true"
+        android:textSize="@dimen/button_text"
+        style="@style/Widget.AppCompat.Button"/>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
@@ -31,18 +40,54 @@
         android:padding="10dp"
         android:id="@+id/filter_table"
         android:background="#ffffff"
-        tools:elevation="10dp">
+        tools:elevation="10dp"
+        android:stretchColumns="0,1,2">
 
-        <EditText
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/filter_input"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:hint="@string/search_keyword_text"
-            android:layout_height="45dp"
-            android:background="@color/colorHighlight"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/filter_input1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:hint="@string/keyword_text"
+                android:layout_height="45dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/filter_input2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:hint="@string/keyword_text"
+                android:layout_height="45dp"
+                android:background="@color/colorHighlight"/>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/filter_input3"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:hint="@string/keyword_text"
+                android:layout_height="45dp"
+                android:background="@color/colorHighlight"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+        </LinearLayout>
 
         <TableRow
             android:layout_width="match_parent"
@@ -53,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginTop="3dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="0dp"
                     android:layout_marginBottom="3dp">
                     <TableRow
                         android:layout_height="match_parent"
@@ -74,7 +119,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content">
                         <RadioButton
-                            android:text="@string/search_price"
+                            android:text="@string/search_price_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonPrice" />
@@ -94,7 +139,7 @@
             android:layout_gravity="bottom">
 
         <Button
-            android:text="@string/home_confirm_text"
+            android:text="@string/confirm_text"
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="55dp"
@@ -102,7 +147,7 @@
             android:textSize="@dimen/button_text"
             style="@style/Widget.AppCompat.Button" />
         <Button
-            android:text="@string/home_cancel_text"
+            android:text="@string/cancel_text"
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="55dp"

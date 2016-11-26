@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     private static Button requestedButton;
     private static Button pendingButton;
     private static Button acceptedButton;
+
 
     public ListFragment() {
     }
@@ -51,6 +53,10 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         Fragment fragment;
         Bundle bundle = this.getArguments();
 
+        requestedButton = (Button) view.findViewById(R.id.button_requested);
+        pendingButton = (Button) view.findViewById(R.id.button_pending);
+        acceptedButton = (Button) view.findViewById(R.id.button_accepted);
+        Drawable border = getResources().getDrawable(R.drawable.button_border);
 
         if (bundle != null) {
             int position = bundle.getInt("index",0);
@@ -59,21 +65,27 @@ public class ListFragment extends Fragment implements View.OnClickListener {
                 case 0:
                     fragment = RequestedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
+//                    acceptedButton.setBackground(noBorder);
+                        requestedButton.setBackground(border);
+//                    pendingButton.setBackground(noBorder);
                     break;
                 case 1:
                     fragment = PendingFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
+//                    requestedButton.setBackground(noBorder);
+                        pendingButton.setBackground(border);
+//                    acceptedButton.setBackground(noBorder);
                     break;
                 case 2:
                     fragment = AcceptedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
+//                    requestedButton.setBackground(border);
+                        acceptedButton.setBackground(border);
+//                    pendingButton.setBackground(border);
                     break;
             }
         }
 
-        requestedButton = (Button) view.findViewById(R.id.button_requested);
-        pendingButton = (Button) view.findViewById(R.id.button_pending);
-        acceptedButton = (Button) view.findViewById(R.id.button_accepted);
 
         pendingButton.setOnClickListener(this);
         requestedButton.setOnClickListener(this);
@@ -85,22 +97,32 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Bundle bundle = this.getArguments();
-
+        Drawable border = getResources().getDrawable(R.drawable.button_border);
+        Drawable noBorder = getResources().getDrawable(R.drawable.button_solid);
         Fragment fragment = null;
         switch (v.getId()) {
             case R.id.button_pending:
                 fragment = PendingFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
+                requestedButton.setBackground(noBorder);
+                pendingButton.setBackground(border);
+                acceptedButton.setBackground(noBorder);
                 break;
 
             case R.id.button_requested:
                 fragment = RequestedFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
+                acceptedButton.setBackground(noBorder);
+                requestedButton.setBackground(border);
+                pendingButton.setBackground(noBorder);
                 break;
 
             case R.id.button_accepted:
                 fragment = AcceptedFragment.newInstance();
                 replaceFragmentwithoutStack(fragment);
+                requestedButton.setBackground(noBorder);
+                acceptedButton.setBackground(border);
+                pendingButton.setBackground(noBorder);
                 break;
         }
     }

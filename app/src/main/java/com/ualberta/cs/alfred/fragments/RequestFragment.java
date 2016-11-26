@@ -142,6 +142,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                             y2 = Double.parseDouble(y2String);
 
                             makeRequest(Status,userID,start,end,x1,y1,x2,y2);
+
                         } catch (NumberFormatException e) {
                             String errorMessage = "Invalid Coordinate/s";
                             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -161,13 +162,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
             //LatLng(53.5444,-113.4904)
             case R.id.radioButtonAddress:
                 textView = (TextView) view.findViewById(R.id.start_input1_text);
-                textView.setText(R.string.home_address_text);
+                textView.setText(R.string.address_text);
                 textView = (TextView) view.findViewById(R.id.start_input2_text);
-                textView.setText(R.string.home_city_text);
+                textView.setText(R.string.city_text);
                 textView = (TextView) view.findViewById(R.id.end_input1_text);
-                textView.setText(R.string.home_address_text);
+                textView.setText(R.string.address_text);
                 textView = (TextView) view.findViewById(R.id.end_input2_text);
-                textView.setText(R.string.home_city_text);
+                textView.setText(R.string.city_text);
 
                 editText = (EditText) view.findViewById(R.id.start_input_1);
                 editText.setHint("1 Sir Winston Churchill SQ");
@@ -183,13 +184,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
 
             case R.id.radioButtonCoordinates:
                 textView = (TextView) view.findViewById(R.id.start_input1_text);
-                textView.setText(R.string.home_latitude_text);
+                textView.setText(R.string.latitude_text);
                 textView = (TextView) view.findViewById(R.id.start_input2_text);
-                textView.setText(R.string.home_longitude_text);
+                textView.setText(R.string.longitude_text);
                 textView = (TextView) view.findViewById(R.id.end_input1_text);
-                textView.setText(R.string.home_latitude_text);
+                textView.setText(R.string.latitude_text);
                 textView = (TextView) view.findViewById(R.id.end_input2_text);
-                textView.setText(R.string.home_longitude_text);
+                textView.setText(R.string.longitude_text);
 
                 editText = (EditText) view.findViewById(R.id.start_input_1);
                 editText.setHint("53.5444");
@@ -221,45 +222,34 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         GMapV2Direction md = new GMapV2Direction();
         Document doc = md.getDocument(startPoint,endPoint,
                GMapV2Direction.MODE_DRIVING);
+
         double distance = md.getDistanceValue(doc) / 1000;
 
 
         // round to the nearest cent
         double cost = Math.round( (distance/2) * 100.0 ) / 100.0 ;
 
-/////////////////////////////////////
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson sAddressGson = new Gson();
-        String sAddress = sAddressGson.toJson(startPointAddress);
-        Gson eAddressGson = new Gson();
-        String eAddress = eAddressGson.toJson(endPointAddress);
-        editor.putString("RSTATUS", Status.toString());
-        editor.putString("RSTARTADDRESS",sAddress);
-        editor.putString("RENDADDRESS", eAddress);
-        editor.putLong("RDISTANCE", (long) distance);
-        editor.putLong("RCOST", (long) cost);
-        editor.putString("RUSERID", userID);
-        editor.commit();
-        String stat = preferences.getString("RSTATUS",null);
-        Toast.makeText(getActivity(),"stats is "+stat,Toast.LENGTH_SHORT).show();
-////////////////////////////////////
-        // Create an instance of a request and store into elastic search
-        //    public Request(String requestStatus, Address sourceAddress, Address destinationAddress,
-        //              double distance, double cost, String riderID)
-        Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
 
 
 
-        // Notify save
-        Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+        if (startPointAddress == null) {
+            Toast.makeText(getActivity(), "Invalid Start Point", Toast.LENGTH_SHORT).show();
+        } else if (endPointAddress == null) {
+            Toast.makeText(getActivity(), "Invalid End Point", Toast.LENGTH_SHORT).show();
+        } else if (userID == null) {
+            Toast.makeText(getActivity(), "Invalid User ID", Toast.LENGTH_SHORT).show();
+        } else {
+            Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
+            // Notify save
+            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+        }
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
         // go to list
-        MenuActivity.bottomBar.selectTabAtPosition(1,true);
+        //MenuActivity.bottomBar.selectTabAtPosition(1,true);
     }
 
 }

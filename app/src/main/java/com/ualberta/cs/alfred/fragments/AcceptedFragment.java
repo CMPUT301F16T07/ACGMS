@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -58,6 +60,15 @@ public class AcceptedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         View view = getView();
+
+        //change button colors
+//        Button requestedBtn = (Button) view.findViewById(R.id.button_requested);
+//        Button pendingBtn = (Button) view.findViewById(R.id.button_pending);
+//        Button acceptedBtn = (Button) view.findViewById(R.id.button_accepted);
+//        requestedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//        Drawable border = getResources().getDrawable(R.drawable.button_border);
+//        acceptedBtn.setBackground(border);
+//        pendingBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userID = preferences.getString("USERID", null);

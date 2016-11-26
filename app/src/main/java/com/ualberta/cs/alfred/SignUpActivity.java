@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Activity responsible for allowing users to sign up
@@ -161,15 +162,82 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (oppositeExists != null) {
-                    Toast.makeText(SignUpActivity.this, "Update user is to be done", Toast.LENGTH_LONG);
-//                    if (oppositeExists.contentEquals("Driver Mode")) {
-//                        UserElasticSearchController.UpdateUser<RiderInfo> updateUser = new UserElasticSearchController.UpdateUser<RiderInfo>(userName, "riderInfo");
-//                        RiderInfo riderInfo = new RiderInfo(creditCardNumberEditText.getText().toString());
-//                        updateUser.execute(riderInfo);
-//                    } else if (oppositeExists.contentEquals("Rider Mode")) {
-//                        UserElasticSearchController.UpdateUser<DriverInfo> updateUser = new UserElasticSearchController.UpdateUser<DriverInfo>(userName, "driverInfo");
-//                        updateUser.execute(collectDriverInfo());
-//                    }
+                    UserESGetController.GetUserTask retrievedUser = new UserESGetController.GetUserTask();
+                    User user = null;
+                    try {
+                        user = retrievedUser.execute(userName).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    String userID = user.getUserID();
+                    UserESSetController.SetNestedObjectPropertyValueTask setNestedObjectPropertyValueTask =
+                            new UserESSetController.SetNestedObjectPropertyValueTask();
+                    if (oppositeExists.contentEquals("Driver Mode")) {
+                        String surroundingObject = "riderInfo";
+                        String creditCardNumberProperty = "creditCardNumber";
+                        String creditCardNumberType = "string";
+                        String creditCardNumberValue = creditCardNumberEditText.getText().toString();
+
+                        setNestedObjectPropertyValueTask.execute(userID, surroundingObject,
+                                creditCardNumberProperty, creditCardNumberType, creditCardNumberValue);
+                    } else if (oppositeExists.contentEquals("Rider Mode")) {
+                        String surroundingObject = "driverInfo";
+                        DriverInfo driverInfo = collectDriverInfo();
+                        String licenceNumberProperty = "licenceNumber";
+                        String licenceNumberType = "string";
+                        String licenceNumberInput = driverInfo.getLicenceNumber();
+
+                        setNestedObjectPropertyValueTask.execute(userID, surroundingObject,
+                                licenceNumberProperty, licenceNumberType, licenceNumberInput);
+
+                        Vehicle vehicle = driverInfo.getVehicle();
+
+                        String userPropertyFirstLevel = "driverInfo";
+                        String userPropertySecondLevel = "vehicle";
+
+                        String nestedObject0Property = "serialNumber";
+                        String nestedObject0ValueType = "string";
+                        String nestedObject0Value = vehicle.getSerialNumber();
+
+                        String nestedObject1Property = "color";
+                        String nestedObject1ValueType = "string";
+                        String nestedObject1Value = vehicle.getColor();
+
+                        String nestedObject2Property = "type";
+                        String nestedObject2ValueType = "string";
+                        String nestedObject2Value = vehicle.getType();
+
+                        String nestedObject3Property = "plateNumber";
+                        String nestedObject3ValueType = "string";
+                        String nestedObject3Value = vehicle.getPlateNumber();
+
+                        String nestedObject4Property = "make";
+                        String nestedObject4ValueType = "string";
+                        String nestedObject4Value = vehicle.getMake();
+
+                        String nestedObject5Property = "model";
+                        String nestedObject5ValueType = "string";
+                        String nestedObject5Value = vehicle.getModel();
+
+                        String nestedObject6Property = "year";
+                        String nestedObject6ValueType = "int";
+                        Integer nestedObject6Value = vehicle.getYear();
+
+
+                        UserESSetController.SetDoublyNestedObjectPropertyValueTask setDoubleNestedObject =
+                                new UserESSetController.SetDoublyNestedObjectPropertyValueTask();
+
+                        setDoubleNestedObject.execute(userID, userPropertyFirstLevel, userPropertySecondLevel,
+                                nestedObject1Property, nestedObject1ValueType, nestedObject1Value,
+                                nestedObject2Property, nestedObject2ValueType, nestedObject2Value,
+                                nestedObject3Property, nestedObject3ValueType, nestedObject3Value,
+                                nestedObject4Property, nestedObject4ValueType, nestedObject4Value,
+                                nestedObject5Property, nestedObject5ValueType, nestedObject5Value,
+                                nestedObject6Property, nestedObject6ValueType, nestedObject6Value.toString()
+                        );
+                    }
                 } else {
                     createUser();
                 }

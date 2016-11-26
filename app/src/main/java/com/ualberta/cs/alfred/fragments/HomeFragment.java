@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -69,15 +70,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         String userMode = preferences.getString("MODE", null);
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
-        requestedButton.setBackgroundColor(0xfff08080);
         requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
-        pendingButton.setBackgroundColor(0xfffffd00);
         pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
-        acceptedButton.setBackgroundColor(0xff90ee90);
         acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
@@ -170,6 +168,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         googleMap = mMap;
         LatLng defaultLocation = new LatLng(53.5444,-113.4904);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
 
         LatLng house = new LatLng(0,0);
