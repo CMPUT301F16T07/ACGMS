@@ -36,6 +36,7 @@ public class RequestList {
     public RequestList(ArrayList<Request> requestList) {
         this.requestList = requestList;
     }
+
     /**
      * Gets request list.
      *
