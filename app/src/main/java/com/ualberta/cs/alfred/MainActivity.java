@@ -113,17 +113,18 @@ public class MainActivity extends AppCompatActivity {
                             // grab the corresponding user information based on a query using the
                             // username to check if the user even exists
                             int selected = driverRider.getCheckedRadioButtonId();
-                            grabMode();
-                            // check if the username exists in the current elastic search server
-                            LoginController loginController = new LoginController(userName.getText().toString(), mode);
-                            Boolean userExist = null;
-                            try {
-                                userExist = loginController.checkUser();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+
+                        }
+                        grabMode();
+                        // check if the username exists in the current elastic search server
+                        LoginController loginController = new LoginController(userName.getText().toString(), mode);
+                        Boolean userExist = null;
+                        try {
+                            userExist = loginController.checkUser();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
 
                         // if the user already exists as the desired type of user

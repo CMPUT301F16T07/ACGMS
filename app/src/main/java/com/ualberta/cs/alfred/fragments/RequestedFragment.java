@@ -28,18 +28,13 @@ import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESGetController;
+import com.ualberta.cs.alfred.RequestList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 09/11/16.
@@ -371,29 +366,23 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         // Todo do some querry wiih Price
                         break;
                 }
-                try {
-                    requests = retrievedRequest.get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+
                 //determine if there is connectivity. If there is, save the data for future use
                 //if not, load from a previoiusly saved image
                 if (ConnectivityChecker.isConnected(getContext())){
-                    LocalDataManager.saveRRequestList(requests,preferences.getString("MODE",null),getContext());
+                    LocalDataManager.saveRRequestList(requestsRequested,preferences.getString("MODE",null),getContext());
 
-                    requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                    requestAdapter = new ArrayAdapter<Request>(v.getContext(), R.layout.custom_row, requestsRequested);
                     requestedListView.setAdapter(requestAdapter);
                 }
                 else{
-                    requests = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
-                    requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requests);
+                    requestsRequested = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
+                    requestAdapter = new ArrayAdapter<>(v.getContext(), R.layout.custom_row, requestsRequested);
                     requestedListView.setAdapter(requestAdapter);
 
                 }
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("Requested", Integer.toString(requests.size()));
+                editor.putString("Requested", Integer.toString(requestsRequested.size()));
                 editor.commit();
                 requestAdapter.notifyDataSetChanged();
 
