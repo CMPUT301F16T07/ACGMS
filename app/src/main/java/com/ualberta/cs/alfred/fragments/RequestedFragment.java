@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -62,7 +63,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private RadioButton rb1;
     private RadioButton rb2;
     private RadioButton rb3;
-    private RadioButton rb4;
+
+    // Sort CheckBox
+    private CheckBox checkBox;
+    private boolean isSorted;
 
     // Custom Filter Input View
     private EditText filterInput1;
@@ -78,12 +82,11 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         this.requestedListView = null;
         this.preferences = null;
         this.userID = null;
+        this.isSorted = false;
     }
 
     public static RequestedFragment newInstance() {
-        Bundle args = new Bundle();
         RequestedFragment requestedFragment = new RequestedFragment();
-        requestedFragment.setArguments(args);
         return requestedFragment;
     }
 
@@ -180,6 +183,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         filterInput2 = (EditText) view.findViewById(R.id.filter_input2);
         filterInput3 = (EditText) view.findViewById(R.id.filter_input3);
 
+
         // Defualt View
         filterInput2.setVisibility(View.GONE);
         filterInput3.setVisibility(View.GONE);
@@ -189,12 +193,14 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
         rb3 = (RadioButton) view.findViewById(R.id.radioButtonCoordinates);
-        rb4 = (RadioButton) view.findViewById(R.id.radioButtonPrice);
 
         rb1.setOnCheckedChangeListener(this);
         rb2.setOnCheckedChangeListener(this);
         rb3.setOnCheckedChangeListener(this);
-        rb4.setOnCheckedChangeListener(this);
+
+        checkBox = (CheckBox) view.findViewById(R.id.checkboxPrice);
+        checkBox.setOnCheckedChangeListener(this);
+
         return view;
     }
 
@@ -239,16 +245,18 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 if (ConnectivityChecker.isConnected(getContext())){
 
                     LocalDataManager.saveRRequestList(requestsRequested,preferences.getString("MODE",null),getContext());
-                    modifyAdapter(requestsRequested);
+                    //modifyAdapter(requestsRequested);
                 }
                 else{
                     requestsRequested = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
-                    modifyAdapter(requestsRequested);
+                    //modifyAdapter(requestsRequested);
 
                 }
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("Requested", Integer.toString(requestsRequested.size()));
                 editor.commit();
+                requestsRequested.clear();
+                requestAdapter.addAll(requestsRequested);
                 requestAdapter.notifyDataSetChanged();
 
                 break;
@@ -265,7 +273,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput1.setHint(R.string.keyword_text);
                     rb2.setChecked(false);
                     rb3.setChecked(false);
-                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
@@ -278,7 +285,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput2.setHint(R.string.city_text);
                     rb1.setChecked(false);
                     rb3.setChecked(false);
-                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.GONE);
@@ -292,27 +298,21 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput3.setHint(R.string.distance_text);
                     rb1.setChecked(false);
                     rb2.setChecked(false);
-                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.VISIBLE);
 
                     searchType = R.id.radioButtonCoordinates;
                     break;
-                case R.id.radioButtonPrice:
-                    filterInput1.setHint(R.string.price_text);
-                    rb1.setChecked(false);
-                    rb2.setChecked(false);
-                    rb3.setChecked(false);
 
-                    filterInput2.setVisibility(View.GONE);
-                    filterInput3.setVisibility(View.GONE);
-
-                    searchType = R.id.radioButtonPrice;
+                case R.id.checkboxPrice:
+                    updateRequestList();
+                    this.isSorted = true;
                     break;
             }
         }
     }
+
 
     // Parse the user given filters
     // Sends the input for execution
@@ -368,8 +368,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     }
 
                 }
-            case R.id.radioButtonPrice:
-                // Todo do some querry wiih Price
                 break;
         }
 
@@ -386,7 +384,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
                 new RequestESGetController.GetRequestByLocationTask();
 
-        ArrayList<Request> requestList = new ArrayList<>();
+        RequestList requestList = new RequestList();
         try {
             if (type == 0) {
                 retrievedRequestedKeyword.execute(
@@ -397,8 +395,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         "requestStatus", "string", "Pending",
                         "_all", "string", filter
                 );
-                requestList = retrievedRequestedKeyword.get();
-                requestList.addAll(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+                requestList.mergeRequestList(retrievedRequestedKeyword.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+
             } else {
                 retrievedRequestedCoordinates.execute(
                         "requestStatus", "string", "Requested",
@@ -408,8 +407,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                         "requestStatus", "string", "Pending",
                         distance, coordinates
                 );
-                ArrayList<Request> requestsRequest = retrievedRequestedCoordinates.get();
-                requestsRequest.addAll(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
+                requestList.mergeRequestList(retrievedRequestedCoordinates.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,9 +418,15 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     }
 
-    private void modifyAdapter(ArrayList<Request> list) {
+    private void modifyAdapter(RequestList list) {
         requestAdapter.clear();
-        requestAdapter.addAll(list);
+        List<Request> requestList;
+        if (isSorted) {
+            requestList = list.sortByPrice();
+        } else {
+            requestList = list.getRequestList();
+        }
+        requestAdapter.addAll(requestList);
         requestAdapter.notifyDataSetChanged();
 
     }

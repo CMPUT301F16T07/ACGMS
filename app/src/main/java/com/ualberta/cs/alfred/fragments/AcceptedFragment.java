@@ -50,9 +50,7 @@ public class AcceptedFragment extends Fragment {
     }
 
     public static AcceptedFragment newInstance() {
-        Bundle args = new Bundle();
         AcceptedFragment acceptedFragment = new AcceptedFragment();
-        acceptedFragment.setArguments(args);
         return acceptedFragment;
     }
 

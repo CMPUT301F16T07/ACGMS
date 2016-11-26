@@ -48,9 +48,7 @@ public class PendingFragment extends Fragment {
     }
 
     public static PendingFragment newInstance() {
-        Bundle args = new Bundle();
         PendingFragment pendingFragment = new PendingFragment();
-        pendingFragment.setArguments(args);
         return pendingFragment;
     }
 
