@@ -267,7 +267,6 @@ public class RequestESGetControllerTest extends ActivityInstrumentationTestCase2
 
         double latitude = 53.5232189;
         String latitudeAsString = String.valueOf(latitude);
-
         String coordinates = String.format("[%s, %s]", longitudeAsString, latitudeAsString);
 
         /*

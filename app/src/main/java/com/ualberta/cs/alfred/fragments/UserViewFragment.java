@@ -80,7 +80,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             userMode = "Driver";
         }
 
-
         User user = new User("","","",new Date(),"","");
 
         try {

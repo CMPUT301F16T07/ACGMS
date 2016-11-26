@@ -125,7 +125,7 @@ public class GMapV2Direction {
             Log.i("DistanceValue", node2.getTextContent());
             return Double.parseDouble(node2.getTextContent());
         } catch (Exception e) {
-            return -1;
+            return 0;
         }
         /*
          * NodeList nl1 = doc.getElementsByTagName("distance"); Node node1 =

@@ -36,6 +36,17 @@ public class RequestList {
     public RequestList(ArrayList<Request> requestList) {
         this.requestList = requestList;
     }
+
+    /**
+     * Adds list into a list
+     *
+     * @return request list
+     */
+    public List mergeRequestList(ArrayList<Request> list) {
+        this.requestList.addAll(list);
+        return requestList;
+    }
+
     /**
      * Gets request list.
      *
@@ -80,14 +91,31 @@ public class RequestList {
     }
 
     /**
+     *  Gets a request list sorted by price
+     */
+    public ArrayList<Request> sortByPrice() {
+
+        ArrayList<Request> list = new ArrayList<>();
+        list.addAll(requestList);
+
+        Collections.sort(list, new Comparator<Request>() {
+            @Override
+            public int compare(Request r1, Request r2) {
+                return Double.compare(r1.getCost()/r1.getDistance(), r2.getCost()/r2.getDistance());
+            }
+        });
+        return list;
+    }
+
+    /**
      * Gets specific request list.
      *
      * @param requestStatus the request status
      * @return the specific request list
      */
-    public List<Request> getSpecificRequestList(String requestStatus) {
+    public ArrayList<Request> getSpecificRequestList(String requestStatus) {
 
-        List<Request> specificRequestList = new ArrayList<Request>();
+        ArrayList<Request> specificRequestList = new ArrayList<Request>();
 
         if (requestList != null) {
             for (Request r : requestList) {

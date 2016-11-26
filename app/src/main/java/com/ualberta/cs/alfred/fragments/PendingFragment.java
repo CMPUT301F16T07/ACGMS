@@ -13,20 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TableLayout;
 
+import com.ualberta.cs.alfred.ConnectivityChecker;
+import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
-import com.ualberta.cs.alfred.RequestESGetController;
-import com.ualberta.cs.alfred.RequestList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 09/11/16.
@@ -51,9 +48,7 @@ public class PendingFragment extends Fragment {
     }
 
     public static PendingFragment newInstance() {
-        Bundle args = new Bundle();
         PendingFragment pendingFragment = new PendingFragment();
-        pendingFragment.setArguments(args);
         return pendingFragment;
     }
 
@@ -82,9 +77,26 @@ public class PendingFragment extends Fragment {
             this.listNeeded = Arrays.asList(new Pair<String, String>("riderID", userID));
             pendingList = (ArrayList<Request>) rFLC.getRequestList(listNeeded).getSpecificRequestList("Pending");
         }
-        requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
-        pendingListView = (ListView) view.findViewById(R.id.pendingListView);
-        pendingListView.setAdapter(requestAdapter);
+
+        //determine if there is connectivity. If there is, save the data for future use
+        //if not, load from a previoiusly saved image
+        if (ConnectivityChecker.isConnected(getContext())){
+
+            LocalDataManager.saveRPendingList(pendingList,preferences.getString("MODE", null),getContext());
+
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+            pendingListView = (ListView) view.findViewById(R.id.pendingListView);
+            pendingListView.setAdapter(requestAdapter);
+        }
+        else{
+            pendingList = LocalDataManager.loadRPendingList(preferences.getString("MODE", null), getContext());
+            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, pendingList);
+            pendingListView = (ListView) view.findViewById(R.id.pendingListView);
+            pendingListView.setAdapter(requestAdapter);
+        }
+
+
+
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Pending", Integer.toString(pendingList.size()));
