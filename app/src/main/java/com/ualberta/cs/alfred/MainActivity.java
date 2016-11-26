@@ -38,7 +38,6 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity {
     private Button loginButton;
     private EditText userName;
-    private EditText password;
     private RadioGroup driverRider;
 
     @Override
@@ -168,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        password.setText("");
                                         userName.setText("");
                                     }
                                 });
