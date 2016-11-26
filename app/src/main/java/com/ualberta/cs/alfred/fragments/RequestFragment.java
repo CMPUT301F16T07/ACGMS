@@ -129,7 +129,6 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                             offlineRequestList = LocalDataManager.loadPartialRequests(getContext());
                             offlineRequestList.add(partialRequest);
                             LocalDataManager.savePartialRequests(offlineRequestList,getContext());
-                            
                         }
                     }
 
