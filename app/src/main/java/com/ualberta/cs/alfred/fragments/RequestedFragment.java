@@ -433,11 +433,18 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     public void updateRequestList() {
         requestAdapter.clear();
-        List returned;
+
+        RequestList requestList;
+        ArrayList<Request> returned;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
             returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
-            requestAdapter.addAll(returned);
+            if (isSorted) {
+                requestList = new RequestList(returned);
+                requestAdapter.addAll(requestList.sortByPrice());
+            } else {
+                requestAdapter.addAll(returned);
+            }
         } else {
             returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
             requestAdapter.addAll(returned);

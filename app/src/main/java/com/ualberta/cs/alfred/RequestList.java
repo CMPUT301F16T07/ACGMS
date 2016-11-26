@@ -93,9 +93,9 @@ public class RequestList {
     /**
      *  Gets a request list sorted by price
      */
-    public List<Request> sortByPrice() {
+    public ArrayList<Request> sortByPrice() {
 
-        List<Request> list = new ArrayList<>();
+        ArrayList<Request> list = new ArrayList<>();
         list.addAll(requestList);
 
         Collections.sort(list, new Comparator<Request>() {
@@ -113,9 +113,9 @@ public class RequestList {
      * @param requestStatus the request status
      * @return the specific request list
      */
-    public List<Request> getSpecificRequestList(String requestStatus) {
+    public ArrayList<Request> getSpecificRequestList(String requestStatus) {
 
-        List<Request> specificRequestList = new ArrayList<Request>();
+        ArrayList<Request> specificRequestList = new ArrayList<Request>();
 
         if (requestList != null) {
             for (Request r : requestList) {
