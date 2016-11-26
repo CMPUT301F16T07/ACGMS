@@ -16,7 +16,6 @@ public class ESSettings {
     static final String INDEX_NAME = "alfred";
     static final String REQUEST_TYPE_NAME = "request";
     static final String USER_TYPE_NAME = "user";
-    static final String DRIVER_TYPE_NAME = "driverinfo";
     static JestDroidClient client;
 
     /**

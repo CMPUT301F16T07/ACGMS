@@ -50,6 +50,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private String userID;
 
 
+
     private Button button1;
     private Button button4;
     private TableLayout tableLayout;
@@ -89,6 +90,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         View view = getView();
+
 
         userID = preferences.getString("USERID", null);
 

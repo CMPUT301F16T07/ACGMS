@@ -118,13 +118,24 @@
     </RelativeLayout>
 
     <Button
-        android:text="Edit User"
+    android:text="Call"
+    android:layout_width="match_parent"
+    android:id="@+id/call_user_button"
+    android:textSize="@dimen/button_text"
+    android:layout_height="73dp"
+    android:layout_gravity="bottom"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Email"
         android:layout_width="match_parent"
-        android:id="@+id/edit_user_button"
+        android:id="@+id/email_user_button"
         android:textSize="@dimen/button_text"
         android:layout_height="73dp"
         android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/call_user_button"
         android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>
