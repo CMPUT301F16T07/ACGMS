@@ -8,7 +8,7 @@
     <string name="main_info">Start in</string>
     <string name="main_mode1">Driver Mode</string>
     <string name="main_mode2">Rider Mode</string>
-    <string name="main_button">LOGIN or SIGNUP</string>
+    <string name="main_button">LOGIN</string>
 
 
     <string name="list_requested">REQUESTED</string>
