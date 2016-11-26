@@ -21,7 +21,6 @@ import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.ConnectivityChecker;
 import com.ualberta.cs.alfred.GMapV2Direction;
 import com.ualberta.cs.alfred.LocalDataManager;
-import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.PartialRequests;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
@@ -130,13 +129,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                             offlineRequestList = LocalDataManager.loadPartialRequests(getContext());
                             offlineRequestList.add(partialRequest);
                             LocalDataManager.savePartialRequests(offlineRequestList,getContext());
-
-                            makeRequest(Status,userID,start,end,x1,y1,x2,y2);
-
-                        } catch (NumberFormatException e) {
-                            String errorMessage = "Invalid Coordinate/s";
-                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-
+                            
                         }
                     }
 
