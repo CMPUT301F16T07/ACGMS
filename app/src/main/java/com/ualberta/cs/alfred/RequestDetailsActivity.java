@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -28,7 +27,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -36,16 +34,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ualberta.cs.alfred.fragments.ListFragment;
 import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 
 import org.w3c.dom.Document;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -56,7 +51,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private MapView mapView;
     private GoogleMap googleMap;
     private DecimalFormat df = new DecimalFormat("0.00");
-    private Request r;
+    private Request passedRequest;
     private ListView biddingDriversListView;
     private ArrayAdapter<String> biddingDriversAdapter;
     private String driverSelected;
@@ -124,12 +119,12 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             }
         }
 
-        r = (Request) intent.getSerializableExtra("passedRequest");
+        passedRequest = (Request) intent.getSerializableExtra("passedRequest");
 
         if (mode.contentEquals("Rider Mode") &&
-                (r.getRequestStatus().contentEquals("Pending") ||
-                        r.getRequestStatus().contentEquals("Accepted"))) {
-            ArrayList<String> driverArray = r.getDriverIDList();
+                (passedRequest.getRequestStatus().contentEquals("Pending") ||
+                        passedRequest.getRequestStatus().contentEquals("Accepted"))) {
+            ArrayList<String> driverArray = passedRequest.getDriverIDList();
             biddingDriversAdapter = new ArrayAdapter<>(RequestDetailsActivity.this, R.layout.custom_row, driverArray);
             biddingDriversListView.setAdapter(biddingDriversAdapter);
             if (driverArray.size() > 0) {
@@ -187,10 +182,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             public void onClick(View v) {
                 upgradeStatus(from);
                 String userID = preferences.getString("USERID", null);
-                if (mode.contentEquals("Driver Mode") && userID != null && !r.getDriverIDList().contains(userID)) {
+                if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
                     RequestESAddController.AddItemToListTask addItemToListTask =
                             new RequestESAddController.AddItemToListTask();
-                    addItemToListTask.execute(r.getRequestID(), "driverIDList", preferences.getString("USERID", null));
+                    addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", preferences.getString("USERID", null));
                 }
                 finish();
             }
@@ -212,7 +207,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                         public void onClick(DialogInterface dialog, int which) {
                             RequestESDeleteController.DeleteRequestTask deleteRequestTask =
                                     new RequestESDeleteController.DeleteRequestTask();
-                            deleteRequestTask.execute(r.getRequestID());
+                            deleteRequestTask.execute(passedRequest.getRequestID());
                             finish();
                         }
                     });
@@ -231,17 +226,17 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                             if (mode.contentEquals("Driver Mode")) {
                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
                                 RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
-                                deleteItemFromListTask.execute(r.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
+                                deleteItemFromListTask.execute(passedRequest.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
                             } else {
                                 //TODO: Clear the driverlist
                             }
-                            if ((r.getDriverIDList().size() - 1) <= 0) {
+                            if ((passedRequest.getDriverIDList().size() - 1) <= 0) {
                                 RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                                         new RequestESSetController.SetPropertyValueTask();
                                 if (from.contentEquals("Pending")) {
-                                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Requested");
+                                    setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Requested");
                                 } else {
-                                    setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+                                    setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Pending");
                                 }
                                 finish();
                             }
@@ -256,12 +251,15 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         rideCompleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Decide what happens when a ride gets completed
+                RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                        new RequestESSetController.SetPropertyValueTask();
+                setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "String", driverSelected);
+                setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Completed");
                 finish();
             }
         });
 
-        showDetails(r);
+        showDetails(passedRequest);
 
         mapView = (MapView) this.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -280,9 +278,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                 new RequestESSetController.SetPropertyValueTask();
         if (from.contentEquals("Pending")) {
-            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Accepted");
+            setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Accepted");
         } else {
-            setPropertyValueTask.execute(r.getRequestID(), "requestStatus", "String", "Pending");
+            setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Pending");
         }
     }
 
@@ -328,10 +326,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         googleMap = mMap;
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
 
-        double x1 = r.getSourceAddress().getLatitude();
-        double y1 = r.getSourceAddress().getLongitude();
-        double x2 = r.getDestinationAddress().getLatitude();
-        double y2 = r.getDestinationAddress().getLongitude();
+        double x1 = passedRequest.getSourceAddress().getLatitude();
+        double y1 = passedRequest.getSourceAddress().getLongitude();
+        double x2 = passedRequest.getDestinationAddress().getLatitude();
+        double y2 = passedRequest.getDestinationAddress().getLongitude();
 
 
         LatLng startPoint = new LatLng(x1,y1);
