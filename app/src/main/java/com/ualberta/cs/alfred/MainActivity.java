@@ -3,8 +3,6 @@ package com.ualberta.cs.alfred;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -16,7 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -171,6 +168,22 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
+                        // first check if the user is even connected to the internet. if the user
+                        // is not connected to the internet then the user will not be able to log
+                        // in and access the app. From this screen the only way to have some
+                        // functionality within the app is to signup a new account.
+
+                        // This line creates a connectivity manager which queries for information on
+                        // the connectivity status of the device
+//                        ConnectivityManager cm = (ConnectivityManager) MainActivity.this.getSystemService(MainActivity.this.CONNECTIVITY_SERVICE);
+//                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+                        if (ConnectivityChecker.isConnected(MainActivity.this)) {
+                            // grab the corresponding user information based on a query using the
+                            // username to check if the user even exists
+                            int selected = driverRider.getCheckedRadioButtonId();
+
+                        }
                         grabMode();
                         // check if the username exists in the current elastic search server
                         LoginController loginController = new LoginController(userName.getText().toString(), mode);

@@ -15,14 +15,9 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.widget.Toast;
-
-import com.ualberta.cs.alfred.fragments.AcceptedFragment;
-import com.ualberta.cs.alfred.fragments.PendingFragment;
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
@@ -126,6 +121,6 @@ public class AlertReciever extends BroadcastReceiver {
                 }
             }
         }
-        Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Hello"+mode, Toast.LENGTH_SHORT).show();
     }
 }
