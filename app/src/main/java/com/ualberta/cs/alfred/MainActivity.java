@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = (Button) findViewById(R.id.main_button);
         userName = (EditText) findViewById(R.id.username_input);
-        password = (EditText) findViewById(R.id.password_input);
         driverRider = (RadioGroup) findViewById(R.id.radioGroup);
     }
 
