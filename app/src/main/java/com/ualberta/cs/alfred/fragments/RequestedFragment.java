@@ -2,6 +2,8 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -47,6 +49,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private String userID;
 
 
+
     private Button button1;
     private TableLayout tableLayout;
     private RelativeLayout.LayoutParams params;
@@ -81,6 +84,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         View view = getView();
+
 
         userID = preferences.getString("USERID", null);
 

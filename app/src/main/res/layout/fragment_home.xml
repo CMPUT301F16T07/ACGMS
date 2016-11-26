@@ -11,26 +11,32 @@
         android:layout_marginBottom="8dp">
         <Button
             android:text="@string/list_requested"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
-            android:background="@color/requested"
+            android:background="@color/colorPrimary"
             android:id="@+id/button_requested" />
 
         <Button
             android:text="@string/list_pending"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
-            android:background="@color/pending"
+            android:background="@color/colorPrimary"
             android:id="@+id/button_pending" />
 
         <Button
             android:text="@string/list_accepted"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
-            android:background="@color/accepted"
+            android:background="@color/colorPrimary"
             android:id="@+id/button_accepted" />
     </LinearLayout>
 

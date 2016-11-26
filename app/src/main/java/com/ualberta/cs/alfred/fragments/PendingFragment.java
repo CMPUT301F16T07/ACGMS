@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ public class PendingFragment extends Fragment {
     private List<Pair<String, String>> listNeeded;
     private String userID;
 
+
     public PendingFragment() {
         this.rFLC = new RequestFragmentsListController();
         this.listNeeded = null;
@@ -59,6 +61,15 @@ public class PendingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         View view = getView();
+
+        //changed button colors
+//        Button requestedBtn = (Button) findViewById(R.id.button_requested);
+//        Button pendingBtn = (Button) view.findViewById(R.id.button_pending);
+//        Button acceptedBtn = (Button) view.findViewById(R.id.button_accepted);
+//        requestedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//        Drawable border = getResources().getDrawable(R.drawable.button_border);
+//        pendingBtn.setBackground(border);
+//        acceptedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userID = preferences.getString("USERID", null);
@@ -90,6 +101,7 @@ public class PendingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
     }
 
     @Nullable
