@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.RatingCompat;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.ualberta.cs.alfred.GeoCoder;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
@@ -138,24 +140,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         updateRequestList();
     }
 
-    public void updateRequestList() {
-        requestAdapter.clear();
-        List returned;
-        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
-            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
-            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
-            requestAdapter.addAll(returned);
-        } else {
-            returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
-            requestAdapter.addAll(returned);
-        }
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Requested", Integer.toString(returned.size()));
-        editor.commit();
-
-        requestAdapter.notifyDataSetChanged();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -208,6 +192,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
+    // Handles Click
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -215,14 +200,14 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 button1.setVisibility(View.GONE);
                 tableLayout.setVisibility(View.VISIBLE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
-                params.addRule(RelativeLayout.ABOVE,R.id.filter_table);
+                params.addRule(RelativeLayout.ABOVE, R.id.filter_table);
                 break;
 
             case R.id.revert_filter:
                 button1.setVisibility(View.VISIBLE);
                 button4.setVisibility(View.GONE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
-                params.addRule(RelativeLayout.ABOVE,R.id.show_filter);
+                params.addRule(RelativeLayout.ABOVE, R.id.show_filter);
                 updateRequestList();
                 break;
 
@@ -231,153 +216,16 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 tableLayout.setVisibility(View.GONE);
 
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
-                params.addRule(RelativeLayout.ABOVE,R.id.show_filter);
+                params.addRule(RelativeLayout.ABOVE, R.id.show_filter);
                 break;
 
             case R.id.request_done_button:
                 button4.setVisibility(View.VISIBLE);
                 tableLayout.setVisibility(View.GONE);
                 params = (RelativeLayout.LayoutParams) requestedListView.getLayoutParams();
-                params.addRule(RelativeLayout.ABOVE,R.id.revert_filter);
-
-                ArrayList<Request> requestsRequested = new ArrayList<>();
-                ArrayList<Request> requestsPending = new ArrayList<>();
-
-                //Todo Search elastic Search by the given filter
-                RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestKeyword =
-                        new RequestESGetController.GetRequestByMultiplePreferencesTask();
-                RequestESGetController.GetRequestByLocationTask retrievedRequestCoordinates =
-                        new RequestESGetController.GetRequestByLocationTask();
-
-                String filter = "";
-                String address;
-                String distance = "10km";
-                String coordinates = "[0,0]";
-
-                switch (searchType){
-                    case R.id.radioButtonKeyword:
-                        // Todo do some querry with Keywords
-                        filter = filterInput1.getText().toString();
-
-                        try {
-                            retrievedRequestKeyword.execute(
-                                    "requestStatus", "string", "Requested",
-                                    "_all", "string", filter
-                            );
-                            requestsRequested = retrievedRequestKeyword.get();
-
-                            retrievedRequestKeyword.execute(
-                                    "requestStatus", "string", "Pending",
-                                    "_all", "string", filter
-                            );
-                            requestsPending = new RequestList(retrievedRequestKeyword.get()).removeDriver(userID);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        break;
-
-                    case R.id.radioButtonAddress:
-                        // Todo do some querry with Keyword - Address
-//                        distance = "1000000000km"; // Wide Range
-                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-                        address = filterInput1.getText().toString() + ", "+
-                                filterInput2.getText().toString();
-                        List<android.location.Address> addressCoordinates;
-                        try {
-                            addressCoordinates = geocoder.getFromLocationName(address, 1);
-                            if (addressCoordinates.size() > 0) {
-                                String latitude = String.valueOf(addressCoordinates.get(0).getLatitude());
-                                String longitude = String.valueOf(addressCoordinates.get(0).getLongitude());
-                                coordinates = String.format("[%s, %s]", longitude, latitude);
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            retrievedRequestKeyword.execute(
-                                    "requestStatus", "string", "Requested",
-                                    "5km", coordinates
-                            );
-                            requestsRequested = retrievedRequestKeyword.get();
-
-                            retrievedRequestKeyword.execute(
-                                    "requestStatus", "string", "Pending",
-                                    "5km", coordinates
-                            );
-                            requestsPending = new RequestList(retrievedRequestKeyword.get()).removeDriver(userID);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        break;
-                    case R.id.radioButtonCoordinates:
-                        // Todo do some querry with Keywords - Coordinates
-                        if (filterInput3.getText().toString().contentEquals("")) {
-                            distance = "40km";
-                        } else {
-                            distance = filterInput3.getText().toString() + "km";
-                        }
-
-                        try {
-                            String latitude = filterInput1.getText().toString();
-                            String longitude = filterInput2.getText().toString();
-
-                            Double.parseDouble(latitude);
-                            Double.parseDouble(longitude);
-
-                            coordinates = String.format("[%s, %s]", longitude, latitude);
-
-                        } catch (NumberFormatException e) {
-                            String errorMessage = "Invalid Filter Input";
-                            Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-                        }
-
-                        try {
-                            retrievedRequestCoordinates.execute(
-                                    "requestStatus", "string", "Requested",
-                                    distance, coordinates
-                            );
-                            requestsRequested = retrievedRequestCoordinates.get();
-
-                            retrievedRequestCoordinates.execute(
-                                    "requestStatus", "string", "Pending",
-                                    distance, coordinates
-                            );
-                            requestsPending = new RequestList(retrievedRequestCoordinates.get()).removeDriver(userID);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                    case R.id.radioButtonPrice:
-                        // Todo do some querry wiih Price
-                        break;
-                }
-
-                modifyAdapter(requestsRequested,requestsPending);
-                break;
+                params.addRule(RelativeLayout.ABOVE, R.id.revert_filter);
+                parseInput();
         }
-
-    }
-
-    private void modifyAdapter(ArrayList<Request> list1, ArrayList <Request> list2) {
-        requestAdapter.clear();
-        requestAdapter.addAll(list1);
-//        if (list1.size() != 0) {
-//            requestAdapter.addAll(list1);
-//        }
-//        if (list2.size() != 0) {
-//            requestAdapter.addAll(list2);
-//        }
-        requestAdapter.notifyDataSetChanged();
-
     }
 
     // Custom Radio button
@@ -437,5 +285,137 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     break;
             }
         }
+    }
+
+    // Parse the user given filters
+    // Sends the input for execution
+    private void parseInput() {
+        //Todo Search elastic Search by the given filter
+        switch (searchType) {
+            case R.id.radioButtonKeyword:
+                // Todo do some querry with Keywords
+                String filter = filterInput1.getText().toString();
+                if (filter.matches("")) {
+                    Toast.makeText(getContext(), "Input is Empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    executeQuery("","",filter,0);
+                }
+                break;
+
+            case R.id.radioButtonAddress:
+                // Todo do some querry with Keyword - Address
+                String address = filterInput1.getText().toString();
+                String city = filterInput2.getText().toString();
+
+                if (address.matches("") || city.matches("")) {
+                    Toast.makeText(getContext(), "Input is Empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    GeoCoder geoCoder = GeoCoder.getInstance();
+                    geoCoder.geoSetArguments(getContext(), address);
+                    geoCoder.calculateCoordinatesString();
+                    String coordinates = String.format("[%s, %s]",
+                            geoCoder.getLongitudeString(), geoCoder.getLatitudeString());
+                    executeQuery("2km", coordinates,"",1);
+                }
+                break;
+
+            case R.id.radioButtonCoordinates:
+                String latitude = filterInput1.getText().toString();
+                String longitude = filterInput2.getText().toString();
+                if (latitude.matches("") || longitude.matches("")) {
+                    Toast.makeText(getContext(), "Input is Empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        double x = Double.parseDouble(latitude);
+                        double y = Double.parseDouble(longitude);
+                        String coordinates = String.format("[%s, %s]",y,x);
+                        String distance = "";
+                        if (filterInput3.getText().toString().matches("")){
+                            distance = "10km";
+                        } else {
+                            distance = filterInput3.getText().toString() + "km";
+                            executeQuery(distance,coordinates,"",1);
+                        }
+                    } catch (NumberFormatException e) {
+                        String errorMessage = "Invalid Filter Input";
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            case R.id.radioButtonPrice:
+                // Todo do some querry wiih Price
+                break;
+        }
+
+    }
+
+    // Execute Query on the parsed input
+    private void executeQuery (String distance, String coordinates,String filter,int type) {
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestedKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedPendingKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByLocationTask retrievedRequestedCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+        RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+
+        ArrayList<Request> requestList = new ArrayList<>();
+        try {
+            if (type == 0) {
+                retrievedRequestedKeyword.execute(
+                        "requestStatus", "string", "Requested",
+                        "_all", "string", filter
+                );
+                retrievedPendingKeyword.execute(
+                        "requestStatus", "string", "Pending",
+                        "_all", "string", filter
+                );
+                requestList = retrievedRequestedKeyword.get();
+                requestList.addAll(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+            } else {
+                retrievedRequestedCoordinates.execute(
+                        "requestStatus", "string", "Requested",
+                        distance, coordinates
+                );
+                retrievedPendingCoordinates.execute(
+                        "requestStatus", "string", "Pending",
+                        distance, coordinates
+                );
+                ArrayList<Request> requestsRequest = retrievedRequestedCoordinates.get();
+                requestsRequest.addAll(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        modifyAdapter(requestList);
+
+    }
+
+
+    private void modifyAdapter(ArrayList<Request> list) {
+        requestAdapter.clear();
+        requestAdapter.addAll(list);
+        requestAdapter.notifyDataSetChanged();
+
+    }
+
+    public void updateRequestList() {
+        requestAdapter.clear();
+        List returned;
+        if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
+            returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
+            returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
+            requestAdapter.addAll(returned);
+        } else {
+            returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
+            requestAdapter.addAll(returned);
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Requested", Integer.toString(returned.size()));
+        editor.commit();
+
+        requestAdapter.notifyDataSetChanged();
     }
 }
