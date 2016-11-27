@@ -38,7 +38,7 @@ public class UserFragment extends Fragment {
         if (bundle != null) {
             position = bundle.getInt("index", 0);
         }
-        Fragment fragment = UserViewFragment.newInstance(position,"");
+        Fragment fragment = UserViewFragment.newInstance(position);
         replaceFragmentwithoutStack(fragment);
 
         return view;

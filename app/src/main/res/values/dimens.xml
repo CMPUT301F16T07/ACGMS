@@ -4,13 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="main_text">15dp</dimen>
+    <dimen name="main_text">18sp</dimen>
     <dimen name="home_text">20dp</dimen>
     <dimen name="user_text">15dp</dimen>
     <dimen name="user_dynamic_text">20dp</dimen>
-    <dimen name="input_box">25dp</dimen>
-    <dimen name="button_box">30dp</dimen>
+    <dimen name="input_box">30dp</dimen>
+    <dimen name="button_box">35dp</dimen>
     <dimen name="button_text">20dp</dimen>
+    <dimen name="large_button_box">65dp</dimen>
 
 
     <dimen name="list_type_button">100dp</dimen>

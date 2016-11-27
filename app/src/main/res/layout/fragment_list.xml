@@ -10,7 +10,7 @@
             <Button
                 android:text="@string/list_requested"
                 android:textColor="@color/colorWhite"
-                android:textSize="15dp"
+                android:textSize="@dimen/main_text"
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="@dimen/list_type_button"
@@ -20,7 +20,7 @@
             <Button
                 android:text="@string/list_pending"
                 android:textColor="@color/colorWhite"
-                android:textSize="15dp"
+                android:textSize="@dimen/main_text"
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="@dimen/list_type_button"
@@ -30,7 +30,7 @@
             <Button
                 android:text="@string/list_accepted"
                 android:textColor="@color/colorWhite"
-                android:textSize="15dp"
+                android:textSize="@dimen/main_text"
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="@dimen/list_type_button"
