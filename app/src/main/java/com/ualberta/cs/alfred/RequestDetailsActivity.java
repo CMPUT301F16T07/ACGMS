@@ -77,13 +77,31 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         mode = preferences.getString("MODE", "None");
         from = intent.getExtras().getString("FROM", "None");
 
+        // the request passed from the list
+        passedRequest = (Request) intent.getSerializableExtra("passedRequest");
+
         // which list the request will go to next
         String next = "None";
 
         // the driver elements should only show for the rider pending list and accepted for both
         // modes
         TextView requestingRider = (TextView) findViewById(R.id.requestingRider);
-        requestingRider.setText(preferences.getString("USERNAME", null));
+        UserESGetController.GetUserByIdTask getRiderByID = new UserESGetController.GetUserByIdTask();
+        getRiderByID.execute(passedRequest.getRiderID());
+        User user = null;
+        try {
+            user = getRiderByID.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (user != null) {
+            requestingRider.setText(user.getUserName());
+        } else {
+            requestingRider.setText("Error retreiving username.");
+        }
+
         TextView selectedDriverHeading = (TextView) findViewById(R.id.selectedDriverHeading);
         selectedDriverHeading.setVisibility(View.GONE);
         final TextView selectedDriver = (TextView) findViewById(R.id.selectedDriver);
@@ -101,10 +119,6 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
         TextView biddingDriversHeader = (TextView) findViewById(R.id.biddingDriversHeader);
         biddingDriversHeader.setVisibility(View.GONE);
-
-        // the request passed from the list
-        passedRequest = (Request) intent.getSerializableExtra("passedRequest");
-
 
         // if from requested list
         if (from.contentEquals("Requested")) {
@@ -145,6 +159,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             if (mode.contentEquals("Rider Mode")) {
                 rideCompleteButton.setVisibility(View.VISIBLE);
             }
+        } else if (from.contentEquals("Awaiting Payment") || from.contentEquals("Completed")) {
+            confirmButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
         }
 
         if ((mode.contentEquals("Rider Mode") && from.contentEquals("Pending")) ||
@@ -171,7 +188,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         } else if (from.contentEquals("Accepted") || from.contentEquals("Awaiting Payment") || from.contentEquals("Completed")) {
             UserESGetController.GetUserByIdTask getUserByIdTask = new UserESGetController.GetUserByIdTask();
             getUserByIdTask.execute(passedRequest.getDriverID());
-            User user = null;
+            User driver = null;
             try {
                 user = getUserByIdTask.get();
             } catch (InterruptedException e) {
@@ -284,7 +301,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                             if (mode.contentEquals("Driver Mode")) {
                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RequestDetailsActivity.this);
                                 RequestESDeleteController.DeleteItemFromListTask deleteItemFromListTask = new RequestESDeleteController.DeleteItemFromListTask();
-                                deleteItemFromListTask.execute(passedRequest.getRequestID(), "driverIDList", "String", preferences.getString("USERNAME", null));
+                                deleteItemFromListTask.execute(passedRequest.getRequestID(), "driverIDList", "String", preferences.getString("USERID", null));
+                                if (from.contentEquals("Accepted")) {
+                                    UserESSetController.SetPropertyValueTask removeDriverID = new UserESSetController.SetPropertyValueTask();
+                                    removeDriverID.execute(passedRequest.getRequestID(), "driverID", "String", "");
+                                }
                             } else {
                                 RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                                         new RequestESSetController.SetPropertyValueTask();
@@ -297,8 +318,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                                     removeDriverID.execute(passedRequest.getRequestID(), "driverID", "String", "");
                                     // TODO: Clear Driver List
                                 }
-                                finish();
                             }
+                            finish();
                         }
                     });
                 }
@@ -369,14 +390,25 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         // get and display request ID
         requestID.setText(request.getRequestID());
         //get and display request status
-        status.setText(request.getRequestStatus());
-        if (request.getRequestStatus().contentEquals("Accepted")){
-            status.setTextColor(0xff008000);
+        if (!from.contentEquals("Completed")) {
+            status.setText(from);
+            if (from.contentEquals("Accepted")){
+                status.setTextColor(0xff008000);
+            }
+            else if (from.contentEquals("Pending")){
+                status.setTextColor(0xffffd700);
+            }
+            else status.setTextColor(0xffff0000);
+        } else {
+            String currentStatus = request.getRequestStatus();
+            status.setText(currentStatus);
+            if (request.getRequestStatus().contentEquals("Awaiting Payment")) {
+                status.setTextColor(0xffff0032);
+            } else {
+                status.setTextColor(0xffff0065);
+            }
         }
-        else if (request.getRequestStatus().contentEquals("Pending")){
-            status.setTextColor(0xffffd700);
-        }
-        else status.setTextColor(0xffff0000);
+
         //get and display estimated price
         estPrice.setText(Double.toString(request.getCost()));
         //get and display distance

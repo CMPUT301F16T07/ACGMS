@@ -209,4 +209,16 @@ public class RequestList {
     public int getCount() {
         return requestList.size();
     }
+
+    public ArrayList<Request> getWithDriverAsSelected(String userID) {
+        ArrayList<Request> tempRequestList = new ArrayList<>();
+        for (Request request : requestList) {
+            if (request.getDriverID() != null) {
+                if (request.getDriverID().contentEquals(userID)) {
+                    tempRequestList.add(request);
+                }
+            }
+        }
+        return tempRequestList;
+    }
 }
