@@ -52,7 +52,7 @@ public class SendEmailActivity extends AppCompatActivity {
         toEmail.setText(to);
         emailMessage.setText(myUsername+" sent a message to you.");
 
-        //TODO: set up onclicklisteners
+
         sendButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
