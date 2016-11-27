@@ -28,4 +28,5 @@
         android:textIsSelectable="false"
         android:layout_above="@+id/imageView"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

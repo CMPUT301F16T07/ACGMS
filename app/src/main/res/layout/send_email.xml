@@ -59,7 +59,8 @@
         android:layout_weight="0.81"
         android:background="@color/colorHighlight"
         android:text="my message"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:gravity="top"/>
 
     <Button
         android:layout_width="match_parent"

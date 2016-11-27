@@ -10,4 +10,9 @@
     <color name="requested">#ebf5fb</color>
     <color name="pending">#d6eaf8</color>
     <color name="accepted">#aed6f1</color>
+
+    <color name="lightRed">#f5b7b1</color>
+    <color name="lightYellow">#f7dc6f</color>
+    <color name="lightGreen">#abebc6</color>
+
 </resources>
