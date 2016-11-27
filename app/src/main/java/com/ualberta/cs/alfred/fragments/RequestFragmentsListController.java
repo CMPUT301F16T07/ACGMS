@@ -8,6 +8,8 @@ import android.util.Pair;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
+import com.ualberta.cs.alfred.User;
+import com.ualberta.cs.alfred.UserESGetController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,5 +119,27 @@ public class RequestFragmentsListController {
         }
         editor.putString(argType, Integer.toString(returnList.size()));
         editor.commit();
+    }
+
+    public ArrayList<String> getCorrespondingDriverUsernames(ArrayList<String> driverIDs) {
+        ArrayList<String> driverUsernames = new ArrayList<>();
+        for (String id : driverIDs) {
+            UserESGetController.GetUserByIdTask getUserByIdTask = new UserESGetController.GetUserByIdTask();
+            getUserByIdTask.execute(id);
+            User user = null;
+            try {
+                user = getUserByIdTask.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (user != null) {
+                driverUsernames.add(user.getUserName());
+            }
+        }
+        return driverUsernames;
     }
 }

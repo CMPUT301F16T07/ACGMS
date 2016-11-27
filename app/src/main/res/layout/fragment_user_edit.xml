@@ -19,7 +19,8 @@
             android:layout_below="@+id/user_image2"
             android:layout_alignParentStart="true"
             android:id="@+id/textview1"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
             android:layout_below="@+id/edit_username_input"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -67,7 +69,8 @@
             android:layout_below="@+id/edit_firstname_input"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -90,7 +93,8 @@
             android:layout_below="@+id/edit_lastname_input"
             android:layout_alignParentStart="true"
             android:id="@+id/textview5"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -113,7 +117,8 @@
             android:layout_below="@+id/edit_email_input"
             android:layout_alignParentStart="true"
             android:id="@+id/textview7"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -135,8 +140,12 @@
         android:layout_width="374dp"
         android:id="@+id/done_editUser_button"
         android:textSize="@dimen/button_text"
-        android:layout_height="73dp"
+        android:layout_height="@dimen/large_button_box"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorGreen"
+        android:textColor="@color/colorWhite"
+        android:layout_margin="5dp" />
 
 </RelativeLayout>

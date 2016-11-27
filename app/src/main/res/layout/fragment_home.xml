@@ -12,7 +12,7 @@
         <Button
             android:text="@string/list_requested"
             android:textColor="@color/colorWhite"
-            android:textSize="15dp"
+            android:textSize="@dimen/main_text"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
@@ -22,7 +22,7 @@
         <Button
             android:text="@string/list_pending"
             android:textColor="@color/colorWhite"
-            android:textSize="15dp"
+            android:textSize="@dimen/main_text"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
@@ -32,7 +32,7 @@
         <Button
             android:text="@string/list_accepted"
             android:textColor="@color/colorWhite"
-            android:textSize="15dp"
+            android:textSize="@dimen/main_text"
             android:layout_width="0dp"
             android:layout_weight=".33"
             android:layout_height="@dimen/list_type_button"
@@ -50,16 +50,19 @@
             android:text="@string/home_request"
             android:layout_width="match_parent"
             android:textSize="@dimen/button_text"
-            android:layout_height="73dp"
+            android:layout_height="@dimen/large_button_box"
             android:id="@+id/request_button"
             style="@style/Widget.AppCompat.Button"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorGreen" />
 
         <com.google.android.gms.maps.MapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="73dp"
-            android:id="@+id/mapView" />
+            android:layout_marginBottom="@dimen/large_button_box"
+            android:id="@+id/mapView"
+            android:paddingBottom="5dp" />
 
     </FrameLayout>
 

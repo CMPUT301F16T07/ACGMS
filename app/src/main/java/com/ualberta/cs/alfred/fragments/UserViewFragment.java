@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.SendEmailActivity;
@@ -35,10 +36,9 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public UserViewFragment() {
     }
 
-    public static UserViewFragment newInstance(int position, String userID) {
+    public static UserViewFragment newInstance(int position) {
         Bundle args = new Bundle();
         args.putInt("index",position);
-        args.putString("userID", userID);
         UserViewFragment userViewFragment = new UserViewFragment();
         userViewFragment.setArguments(args);
         return userViewFragment;
@@ -50,6 +50,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
         String userName = "";
+        String otherUserID = "";
         String userMode = "";
 
         int position = 0;
@@ -62,8 +63,19 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             userName = preferences.getString("USERNAME", null);
             userMode = preferences.getString("MODE", "None");
         } else {
-            // Todo access the username of the person that click the driver profile.
-            userName = bundle.getString("userID");
+            otherUserID = bundle.getString("userID");
+            User otherUser = new User("","","",new Date(),"","");
+            try {
+                //retrieving rider's username from elasticsearch with userID
+                UserESGetController.GetUserByIdTask getUserByID = new UserESGetController.GetUserByIdTask();
+                otherUser = getUserByID.execute(otherUserID).get();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            userName = otherUser.getUserName();
             userMode = "Driver";
         }
 
@@ -87,23 +99,13 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
 
         Button editButton = (Button) view.findViewById(R.id.edit_button);
         editButton.setOnClickListener(this);
-        Button emailButton = (Button) view.findViewById(R.id.email_user_button);
-        emailButton.setOnClickListener(this);
-        Button callButton = (Button) view.findViewById(R.id.call_user_button);
-        callButton.setOnClickListener(this);
+
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
         if (position == 0) {
             textView.setText(userName + " (" + userMode + ")");
-            emailButton.setVisibility(View.GONE);
-            callButton.setVisibility(View.GONE);
             editButton.setVisibility(View.VISIBLE);
-        } else {
-            textView.setText(userName);
-            emailButton.setVisibility(View.VISIBLE);
-            callButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.GONE);
         }
 
         textView = (TextView) view.findViewById(R.id.edit_firstname_input);
@@ -123,17 +125,12 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.email_user_button:
-                //start email activity to send email
-                Intent intent = new Intent(getActivity(), SendEmailActivity.class);
-                intent.putExtra("to",emailAddress);
-                startActivity(intent);
-                break;
-            case R.id.call_user_button:
-                //start call
-                break;
             case R.id.edit_button:
                 //TODO: user edit fragment
+               /* Fragment fragment = UserEditFragment.newInstance();
+                MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                replaceFragmentwithStack(fragment);*/
+
         }
 
     }

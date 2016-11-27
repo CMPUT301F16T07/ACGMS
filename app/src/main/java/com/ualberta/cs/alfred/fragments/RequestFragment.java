@@ -20,8 +20,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.ConnectivityChecker;
 import com.ualberta.cs.alfred.GMapV2Direction;
+
+import com.ualberta.cs.alfred.GeoCoder;
+import com.ualberta.cs.alfred.MenuActivity;
+
 import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.PartialRequests;
+
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
 
@@ -38,6 +43,8 @@ import java.util.Locale;
  */
 
 public class RequestFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+
+
     // Variable for edit text view
     private EditText startInputOne;
     private EditText startInputTwo;
@@ -52,9 +59,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
     }
 
     public static RequestFragment newInstance() {
-        Bundle args = new Bundle();
         RequestFragment requestFragment = new RequestFragment();
-        requestFragment.setArguments(args);
         return requestFragment;
     }
 
@@ -109,6 +114,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                     // Check if input is null
                     if (start.matches("") || end.matches("")) {
                         // do nothing
+
                     } else {
                         //determine whether request was done using address or coordinates
                         if (radioButtonID == R.id.radioButtonAddress) {
@@ -147,6 +153,11 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         double x2 = 0;
         double y2 = 0;
 
+        String start1 = startInputOne.getText().toString();
+        String start2 = startInputTwo.getText().toString();
+        String end1 = endInputOne.getText().toString();
+        String end2 = endInputOne.getText().toString();
+
         // Get user id from the user who requested a ride
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String userID = preferences.getString("USERID", null);
@@ -159,40 +170,25 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
                 endInputTwo.getText().toString();
 
         // Check if input is null
-        if (start.matches("") || end.matches("")) {
+
+            if (start1.matches("") || start2.matches("") ||
+                    end1.matches("") || end2.matches("")){
             // do nothing
         } else {
             if (radioButtonID == R.id.radioButtonAddress) {
-                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-                // List of points returned by the address
-                List<android.location.Address> startCoordinates;
-                List<android.location.Address> endCoordinates;
-                try {
-                    startCoordinates = geocoder.getFromLocationName(start, 1);
-                    endCoordinates = geocoder.getFromLocationName(end, 1);
+                GeoCoder geoCoder = GeoCoder.getInstance();
+                geoCoder.setAddress(start);
+                geoCoder.calculateCoordinatesValue();
 
-                    int startCoordinatesSize = startCoordinates.size();
-                    int endCoordinatesSize = endCoordinates.size();
+                x1 = geoCoder.getLatitudeValue();
+                y1 = geoCoder.getLongitudeValue();
 
-                    // Check if both list are empty
-                    if (startCoordinatesSize > 0 && endCoordinatesSize > 0) {
-                        // get the coordinates of the first results for both address
-                        x1 = startCoordinates.get(0).getLatitude();
-                        y1 = startCoordinates.get(0).getLongitude();
-                        x2 = endCoordinates.get(0).getLatitude();
-                        y2 = endCoordinates.get(0).getLongitude();
+                geoCoder.setAddress(end);
+                geoCoder.calculateCoordinatesValue();
+                x2 = geoCoder.getLatitudeValue();
+                y2 = geoCoder.getLongitudeValue();
 
-                        makeRequest(Status,userID,start,end,x1,y1,x2,y2);
-                    } else {
-                        // Error messages
-                        String errorMessage = "Unable to find start and/or destination Address";
-                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                makeRequest(Status,userID,start,end,x1,y1,x2,y2);
             } else {
                 try {
                     String x1String = startInputOne.getText().toString();
@@ -311,7 +307,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
             fm.popBackStack();
         }
         // go to list
-        //MenuActivity.bottomBar.selectTabAtPosition(1,true);
+        MenuActivity.bottomBar.selectTabAtPosition(1,true);
     }
 
 }

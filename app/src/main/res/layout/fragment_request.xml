@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
 
     <Button
         android:text="@string/confirm_text"
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="@dimen/large_button_box"
         android:id="@+id/request_done_button"
         android:textSize="@dimen/button_text"
         style="@style/Widget.AppCompat.Button"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorGreen" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -22,7 +25,8 @@
         android:padding="5dp"
         android:stretchColumns="0,1"
         android:layout_gravity="center"
-        android:layout_above="@+id/request_done_button">
+        android:layout_above="@+id/request_done_button"
+        android:layout_margin="8dp">
 
 
         <TextView

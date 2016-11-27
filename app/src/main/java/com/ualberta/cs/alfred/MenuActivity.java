@@ -6,12 +6,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.view.Menu;
+import android.widget.EditText;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
@@ -82,6 +85,10 @@ public class MenuActivity extends AppCompatActivity {
         // Define a time value of 5 seconds
         Long alertTime = new GregorianCalendar().getTimeInMillis();
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MenuActivity.this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("awaitingPaymentOpen", false);
+        editor.commit();
         // Define our intention of executing AlertReceiver
         Intent alertIntent = new Intent(this, AlertReciever.class);
 

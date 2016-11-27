@@ -22,6 +22,8 @@
     <string name="user_lastname_text">Last Name:</string>
     <string name="user_email_text">Email:</string>
     <string name="user_phone_text">Phone:</string>
+    <string name="vehicle_text">Vehicle Info: </string>
+    <string name="rating_text">Rating: </string>
 
     <string name="user_username">JDoe</string>
     <string name="user_name">John Doe</string>
@@ -40,7 +42,7 @@
     <string name="search_coordinate_text">Search by Coordinates</string>
     <string name="search_keyword_text">Search by Keyword</string>
     <string name="search_address_text">Search by Address</string>
-    <string name="search_price_text"> Search by $/KM</string>
+    <string name="search_price_text"> Sort by $/KM</string>
 
     <string name="request_text">Request</string>
     <string name="address_text">Address</string>
