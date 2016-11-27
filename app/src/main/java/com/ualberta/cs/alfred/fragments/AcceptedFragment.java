@@ -58,8 +58,7 @@ public class AcceptedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         View view = getView();
-
-        //change button colors
+        // change button colors
 //        Button requestedBtn = (Button) view.findViewById(R.id.button_requested);
 //        Button pendingBtn = (Button) view.findViewById(R.id.button_pending);
 //        Button acceptedBtn = (Button) view.findViewById(R.id.button_accepted);

@@ -94,7 +94,7 @@
         android:layout_marginRight="30dp"
         android:textColor="#000000"
         android:layout_below="@+id/username_input"
-        android:layout_alignStart="@+id/logo" />
+        android:layout_alignStart="@+id/username_input" />
 
     <TextView
         android:text="Don't have an account?"
@@ -102,10 +102,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
         android:textStyle="normal|bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/main_text"
         android:layout_marginBottom="12dp"
         android:layout_above="@+id/sign_up_button"
-        android:layout_alignEnd="@+id/logo" />
+        android:layout_alignEnd="@+id/logo"
+        android:textIsSelectable="false" />
 
     <View
         android:layout_width="match_parent"

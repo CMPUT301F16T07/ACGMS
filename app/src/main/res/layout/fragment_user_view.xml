@@ -11,7 +11,8 @@
         android:id="@+id/relative_layout"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:paddingTop="30dp">
+        android:paddingTop="30dp"
+        android:layout_margin="8dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
             android:layout_below="@+id/user_image2"
             android:layout_alignParentStart="true"
             android:id="@+id/textview1"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -54,7 +56,8 @@
             android:layout_below="@+id/edit_username_input"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -77,7 +80,8 @@
             android:layout_below="@+id/edit_firstname_input"
             android:layout_alignParentStart="true"
             android:id="@+id/textview5"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -100,7 +104,8 @@
             android:layout_below="@+id/edit_email_input"
             android:layout_alignParentStart="true"
             android:id="@+id/textview7"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textSize="@dimen/main_text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -121,29 +126,12 @@
         android:layout_width="match_parent"
         android:id="@+id/edit_button"
         android:textSize="@dimen/button_text"
-        android:layout_height="73dp"
+        android:layout_height="@dimen/large_button_box"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-    <Button
-    android:text="Call"
-    android:layout_width="match_parent"
-    android:id="@+id/call_user_button"
-    android:textSize="@dimen/button_text"
-    android:layout_height="73dp"
-    android:layout_gravity="bottom"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="Email"
-        android:layout_width="match_parent"
-        android:id="@+id/email_user_button"
-        android:textSize="@dimen/button_text"
-        android:layout_height="73dp"
-        android:layout_gravity="bottom"
-        android:layout_above="@+id/call_user_button"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorGreen" />
 
 
 </RelativeLayout>

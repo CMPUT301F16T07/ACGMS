@@ -51,13 +51,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private List<Pair<String, String>> listNeeded;
     private String userID;
 
-
-
     private Button button1;
     private Button button4;
     private TableLayout tableLayout;
     private RelativeLayout.LayoutParams params;
-
 
     // Custom Check View
     private RadioButton rb1;
@@ -95,7 +92,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         super.onResume();
         View view = getView();
 
-
         userID = preferences.getString("USERID", null);
 
         ArrayList<Request> requestedList;
@@ -112,7 +108,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         //determine if there is connectivity. If there is, save the data for future use
         //if not, load from a previoiusly saved image
         if (ConnectivityChecker.isConnected(getContext())){
-
             LocalDataManager.saveRRequestList(requestedList,preferences.getString("MODE", null),getContext());
 
             requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, requestedList);
@@ -183,12 +178,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         filterInput2 = (EditText) view.findViewById(R.id.filter_input2);
         filterInput3 = (EditText) view.findViewById(R.id.filter_input3);
 
-
         // Defualt View
         filterInput2.setVisibility(View.GONE);
         filterInput3.setVisibility(View.GONE);
-
-
 
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
@@ -240,17 +232,15 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 ArrayList<Request> requestsRequested = new ArrayList<>();
                 parseInput();
 
-                //determine if there is connectivity. If there is, save the data for future use
-                //if not, load from a previoiusly saved image
-                if (ConnectivityChecker.isConnected(getContext())){
-
-                    LocalDataManager.saveRRequestList(requestsRequested,preferences.getString("MODE",null),getContext());
+                // determine if there is connectivity. If there is, save the data for future use
+                // if not, load from a previoiusly saved image
+                if (ConnectivityChecker.isConnected(getContext())) {
+                    LocalDataManager.saveRRequestList(requestsRequested,preferences.getString("MODE",null), getContext());
                     //modifyAdapter(requestsRequested);
                 }
                 else{
                     requestsRequested = LocalDataManager.loadRRequestList(preferences.getString("MODE", null), getContext());
                     //modifyAdapter(requestsRequested);
-
                 }
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("Requested", Integer.toString(requestsRequested.size()));
@@ -258,7 +248,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 requestsRequested.clear();
                 requestAdapter.addAll(requestsRequested);
                 requestAdapter.notifyDataSetChanged();
-
                 break;
         }
     }
@@ -370,7 +359,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 }
                 break;
         }
-
     }
 
     // Execute Query on the parsed input

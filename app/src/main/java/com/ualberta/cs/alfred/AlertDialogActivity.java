@@ -33,8 +33,8 @@ public class AlertDialogActivity extends Activity
         if (requestID != null && requestCost != null) {
             builder.setTitle("A rider has confirmed arrival and is awaiting payment!");
             builder.setMessage("The driver has sent the amount of " + requestCost + ", " +
-                    "would you like to accept the payment now?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    "please accept the payment.");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     RequestESSetController.SetPropertyValueTask setSelectedDriver =
@@ -48,18 +48,18 @@ public class AlertDialogActivity extends Activity
                     finish();
                 }
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    RequestESSetController.SetPropertyValueTask setRequestedStatus =
-                            new RequestESSetController.SetPropertyValueTask();
-                    setRequestedStatus.execute(requestID, "requestStatus", "string", "Accepted");
-                    dialog.cancel();
-                    editor.putBoolean("awaitingPaymentOpen", false);
-                    editor.commit();
-                    finish();
-                }
-            });
+//            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    RequestESSetController.SetPropertyValueTask setRequestedStatus =
+//                            new RequestESSetController.SetPropertyValueTask();
+//                    setRequestedStatus.execute(requestID, "requestStatus", "string", "Accepted");
+//                    dialog.cancel();
+//                    editor.putBoolean("awaitingPaymentOpen", false);
+//                    editor.commit();
+//                    finish();
+//                }
+//            });
             builder.setCancelable(Boolean.FALSE);
             android.support.v7.app.AlertDialog dialog = builder.create();
             dialog.show();

@@ -22,6 +22,8 @@
     <string name="user_lastname_text">Last Name:</string>
     <string name="user_email_text">Email:</string>
     <string name="user_phone_text">Phone:</string>
+    <string name="vehicle_text">Vehicle Info: </string>
+    <string name="rating_text">Rating: </string>
 
     <string name="user_username">JDoe</string>
     <string name="user_name">John Doe</string>
