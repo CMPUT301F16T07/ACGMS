@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ualberta.cs.alfred.fragments.UserViewFragment;
-
 
 import org.w3c.dom.Document;
 
@@ -260,18 +257,21 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         });
 
         showDetails(passedRequest);
+        //load map only if cconnected to internet
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView = (MapView) this.findViewById(R.id.mapView);
+            mapView.onCreate(savedInstanceState);
+            mapView.onResume();
 
-        mapView = (MapView) this.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
+            try {
+                MapsInitializer.initialize(this.getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        try {
-            MapsInitializer.initialize(this.getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
+            mapView.getMapAsync(this);
         }
 
-        mapView.getMapAsync(this);
     }
 
     public void upgradeStatus(String from) {
@@ -323,57 +323,60 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap mMap) {
-        googleMap = mMap;
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            googleMap = mMap;
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
 
-        double x1 = passedRequest.getSourceAddress().getLatitude();
-        double y1 = passedRequest.getSourceAddress().getLongitude();
-        double x2 = passedRequest.getDestinationAddress().getLatitude();
-        double y2 = passedRequest.getDestinationAddress().getLongitude();
+            double x1 = passedRequest.getSourceAddress().getLatitude();
+            double y1 = passedRequest.getSourceAddress().getLongitude();
+            double x2 = passedRequest.getDestinationAddress().getLatitude();
+            double y2 = passedRequest.getDestinationAddress().getLongitude();
 
 
-        LatLng startPoint = new LatLng(x1,y1);
-        LatLng endPoint = new LatLng(x2,y2);
+            LatLng startPoint = new LatLng(x1,y1);
+            LatLng endPoint = new LatLng(x2,y2);
 
-        //http://stackoverflow.com/questions/6450449/how-to-set-a-dynamic-zoom-on-google-maps-v3
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(startPoint);
-        builder.include(endPoint);
-        LatLngBounds bound = builder.build();
+            //http://stackoverflow.com/questions/6450449/how-to-set-a-dynamic-zoom-on-google-maps-v3
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(startPoint);
+            builder.include(endPoint);
+            LatLngBounds bound = builder.build();
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound,600,600,5));
-        //LatLng midPoint = calculateMidPoint(x1,y1,x2,y2);
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(midPoint,10));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bound,600,600,5));
+            //LatLng midPoint = calculateMidPoint(x1,y1,x2,y2);
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(midPoint,10));
 
-        Marker start = googleMap.addMarker(new MarkerOptions()
-                .position(startPoint)
-                .title("Start Point")
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_RED))
-        );
-        start.setTag(0);
-        Marker destination = googleMap.addMarker(new MarkerOptions()
-                .position(endPoint)
-                .title("End Point")
-                .icon(BitmapDescriptorFactory
-                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        );
-        destination.setTag(0);
+            Marker start = googleMap.addMarker(new MarkerOptions()
+                    .position(startPoint)
+                    .title("Start Point")
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            );
+            start.setTag(0);
+            Marker destination = googleMap.addMarker(new MarkerOptions()
+                    .position(endPoint)
+                    .title("End Point")
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            );
+            destination.setTag(0);
 
-        // http://stackoverflow.com/questions/14444228/android-how-to-draw-route-directions-google-maps-api-v2-from-current-location-t
-        GMapV2Direction md = new GMapV2Direction();
-        Document doc = md.getDocument(startPoint,endPoint,
-                GMapV2Direction.MODE_DRIVING);
+            // http://stackoverflow.com/questions/14444228/android-how-to-draw-route-directions-google-maps-api-v2-from-current-location-t
+            GMapV2Direction md = new GMapV2Direction();
+            Document doc = md.getDocument(startPoint,endPoint,
+                    GMapV2Direction.MODE_DRIVING);
 
-        ArrayList<LatLng> directionPoint = md.getDirection(doc);
-        PolylineOptions rectLine = new PolylineOptions().width(10).color(
-                Color.CYAN);
+            ArrayList<LatLng> directionPoint = md.getDirection(doc);
+            PolylineOptions rectLine = new PolylineOptions().width(10).color(
+                    Color.CYAN);
 
-        for (int i = 0; i < directionPoint.size(); i++) {
-            rectLine.add(directionPoint.get(i));
+            for (int i = 0; i < directionPoint.size(); i++) {
+                rectLine.add(directionPoint.get(i));
+            }
+
+            Polyline polylin = googleMap.addPolyline(rectLine);
         }
 
-        Polyline polylin = googleMap.addPolyline(rectLine);
 
 
     }
@@ -381,24 +384,30 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
-    }
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onPause();
+        }    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onDestroy();
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
-    }
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onLowMemory();
+        }    }
 }
