@@ -10,7 +10,8 @@
 <RelativeLayout
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:id="@+id/map_container">
+    android:id="@+id/map_container"
+    android:layout_margin="8dp">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -24,7 +25,8 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:id="@+id/scrollView"
-    android:layout_below="@id/map_container">
+    android:layout_below="@id/map_container"
+    android:layout_margin="8dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -81,7 +83,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estimated Price: $"
+                android:text="Estimated Price: "
                 android:textSize="15dp"
                 android:textColor="#000000"/>
 
@@ -153,6 +155,16 @@
                 android:textColor="#000000"/>
             </TableRow>
             </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Driver ID:"
+            android:id="@+id/textView6"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp" />
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -171,22 +183,27 @@
         android:layout_marginTop="10dp">
 
         <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/large_button_box">
 
         <Button
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Cancel Request"
             android:id="@+id/cancel_request_button"
-            android:backgroundTint="@color/colorAccent"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="5dp" />
         <Button
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Confirm"
             android:id="@+id/accept_pending_button"
-            android:layout_column="1"/>
+            android:layout_column="1"
+            android:background="@color/colorGreen"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="5dp" />
 
             <Button
                 android:text="Ride Complete"
@@ -194,7 +211,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ride_complete_button"
                 android:textAlignment="viewStart"
-                android:textStyle="normal|bold" />
+                android:textStyle="normal|bold"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
+                android:layout_margin="5dp" />
         </TableRow>
 
     </TableLayout>

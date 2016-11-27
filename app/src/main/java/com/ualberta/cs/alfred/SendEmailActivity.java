@@ -17,14 +17,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class SendEmailActivity extends AppCompatActivity {
 
-    private String from;
     private String to;
-    /*private Button sendButton;
-    private Button cancelButton;
-    private EditText fromEmail;
-    private EditText toEmail;
-    private EditText emailMessage;
-    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +40,15 @@ public class SendEmailActivity extends AppCompatActivity {
         myEmail = me.getEmail();
 
         final Intent intent = getIntent();
-        from = myEmail;
         to = intent.getExtras().getString("to", "None");
 
         Button sendButton = (Button) findViewById(R.id.sendEmailButton);
         Button cancelButton = (Button) findViewById(R.id.cancelEmailButton);
-        EditText fromEmail = (EditText) findViewById(R.id.fromEmail);
+        final EditText editSubject = (EditText) findViewById(R.id.subject);
         EditText toEmail = (EditText) findViewById(R.id.toEmail);
-        EditText emailMessage = (EditText) findViewById(R.id.emailMessage);
+        final EditText emailMessage = (EditText) findViewById(R.id.emailMessage);
 
-        fromEmail.setText(from);
+        editSubject.setText("A message from "+ myUsername);
         toEmail.setText(to);
         emailMessage.setText(myUsername+" sent a message to you.");
 
@@ -63,7 +56,16 @@ public class SendEmailActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-
+                String message = emailMessage.getText().toString();
+                //code from https://www.youtube.com/watch?v=V1tAL0kjjuU
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                String[] toArray = new String[]{to};
+                emailIntent.putExtra(Intent.EXTRA_EMAIL , toArray);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, editSubject.getText().toString());
+                emailIntent.putExtra(Intent.EXTRA_TEXT, emailMessage.getText().toString());
+                emailIntent.setType("message/rfc822");
+                startActivity(Intent.createChooser(emailIntent,"Email"));
+                finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -73,5 +75,7 @@ public class SendEmailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }
