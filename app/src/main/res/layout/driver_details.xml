@@ -12,23 +12,12 @@
         android:id="@+id/relative_layout2"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:paddingTop="30dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/ic_person_black_36dp"
-            android:id="@+id/user_image3"
-            android:layout_weight="1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="10dp"
-            android:layout_height="100dp" />
+        android:paddingTop="10dp">
 
         <TextView
             android:text="@string/user_username_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_image3"
             android:layout_alignParentStart="true"
             android:id="@+id/textview11"
             android:layout_marginBottom="5dp" />
@@ -116,6 +105,182 @@
             android:textSize="20dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"/>
+
+
+        <!-- new stuff -->
+        <TextView
+            android:text="@string/rating_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/driver_phone"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textView18"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4.5/5.0"
+            android:layout_below="@+id/textView18"
+            android:layout_alignParentStart="true"
+            android:id="@+id/driver_rating"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <TextView
+            android:text="@string/vehicle_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/driver_rating"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textView19"
+            android:layout_marginBottom="5dp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView19"
+            android:layout_marginBottom="5dp">
+            <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="0,1"
+            android:padding="10dp">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:text="Serial Number: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:text="0983410-1234-1234"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vehicle_serial_number"
+                    android:textColor="@android:color/black" />
+
+            </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Plate Number: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="UR2SLOW"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_plate_number"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Type: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="tricycle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_type"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Make: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="Fisher Price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_make"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Model: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="Wheelie Cool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_model"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Year: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="1995"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_year"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:text="Colour: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="Red and Yellow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_color"
+                        android:textColor="@android:color/black" />
+
+                </TableRow>
+
+
+            </TableLayout>
+        </ScrollView>
+
+
     </RelativeLayout>
 
     <Button
