@@ -137,8 +137,10 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         RequestFragmentsListController rFLC = new RequestFragmentsListController();
         rFLC.updateCounts(preferences.getString("MODE", null), context);
-        requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
-        pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
-        acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
+        if (requestedButton != null && pendingButton != null && acceptedButton != null) {
+            requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
+            pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
+            acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
+        }
     }
 }
