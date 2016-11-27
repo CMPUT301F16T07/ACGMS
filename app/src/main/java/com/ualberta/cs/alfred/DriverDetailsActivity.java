@@ -20,6 +20,14 @@ public class DriverDetailsActivity extends AppCompatActivity{
     private String fullName;
     private String emailAddress;
     private String phoneNumber;
+    private String rating;
+    private String serialNumber;
+    private String plateNumber;
+    private String type;
+    private String make;
+    private String model;
+    private String year;
+    private String color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +52,16 @@ public class DriverDetailsActivity extends AppCompatActivity{
         userName = user.getUserName();
         fullName = user.getFirstName() + " " + user.getLastName();
         emailAddress = user.getEmail();
-        phoneNumber= user.getPhoneNumber();
+        phoneNumber = user.getPhoneNumber();
+        rating = new Double(user.getDriverInfo().getDriverRating().getRating()).toString();
+        serialNumber = user.getDriverInfo().getVehicle().getSerialNumber();
+        plateNumber = user.getDriverInfo().getVehicle().getPlateNumber();
+        type = user.getDriverInfo().getVehicle().getType();
+        make = user.getDriverInfo().getVehicle().getMake();
+        model = user.getDriverInfo().getVehicle().getModel();
+        year = String.valueOf(user.getDriverInfo().getVehicle().getYear());
+        color = user.getDriverInfo().getVehicle().getColor();
+
 
         //setting the textviews to what we want to show
         TextView textView = (TextView) findViewById(R.id.driver_username);
@@ -58,6 +75,30 @@ public class DriverDetailsActivity extends AppCompatActivity{
 
         textView = (TextView) findViewById(R.id.driver_phone);
         textView.setText(phoneNumber);
+
+        textView = (TextView) findViewById(R.id.driver_rating);
+        textView.setText(rating);
+
+        textView = (TextView) findViewById(R.id.vehicle_serial_number);
+        textView.setText(serialNumber);
+
+        textView = (TextView) findViewById(R.id.vehicle_plate_number);
+        textView.setText(plateNumber);
+
+        textView = (TextView) findViewById(R.id.vehicle_type);
+        textView.setText(type);
+
+        textView = (TextView) findViewById(R.id.vehicle_make);
+        textView.setText(make);
+
+        textView = (TextView) findViewById(R.id.vehicle_model);
+        textView.setText(model);
+
+        textView = (TextView) findViewById(R.id.vehicle_year);
+        textView.setText(year);
+
+        textView = (TextView) findViewById(R.id.vehicle_color);
+        textView.setText(color);
 
         Button emailButton = (Button) findViewById(R.id.email_driver_button);;
         Button callButton = (Button) findViewById(R.id.call_driver_button);

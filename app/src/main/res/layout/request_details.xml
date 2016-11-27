@@ -194,7 +194,6 @@
             </TableRow>
             </TableLayout>
 
-
         <TextView
             android:text="Bidding Drivers (please select a driver):"
             android:layout_width="match_parent"
@@ -247,7 +246,7 @@
 
             <Button
                 android:text="Ride Complete"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ride_complete_button"
                 android:textAlignment="viewStart"
