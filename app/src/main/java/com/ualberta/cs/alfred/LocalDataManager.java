@@ -25,6 +25,38 @@ import java.util.Locale;
 public class LocalDataManager{
 
     /**
+     * Save a list of completed requests in a shared preference
+     *
+     * @param requestList the request list to be saved
+     * @param mode the mode, either Driver or Rider
+     * @param context the context to be passed in
+     */
+    public static void saveRCompleteList(ArrayList<Request> requestList, String mode, Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(requestList);
+        prefsEditor.putString("CompleteList"+mode, json);
+        prefsEditor.commit();
+    }
+
+    /**
+     * Load an existing saved Completed request list
+     * @param mode the mode, either Driver or Rider
+     * @param context the context to be passed in
+     * @return the ArrayList of requests stored on the phone
+     */
+    public static ArrayList<Request> loadRCompleteList(String mode, Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = preferences.getString("CompleteList"+mode, null);
+        ArrayList<Request> loadedRequestList = new Gson().fromJson(json, new TypeToken<List<Request>>(){}.getType());
+
+        return loadedRequestList;
+    }
+
+
+
+    /**
      * Save a request list in a shared preference
      *
      * @param requestList the request list to be saved

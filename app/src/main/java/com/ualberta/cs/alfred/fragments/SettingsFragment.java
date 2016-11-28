@@ -24,9 +24,6 @@ import com.ualberta.cs.alfred.RequestList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-
-import static com.ualberta.cs.alfred.R.id.acceptedListView;
 
 /**
  * Created by carlcastello on 08/11/16.
@@ -76,18 +73,18 @@ public class SettingsFragment extends Fragment {
         }
         //determine if there is connectivity. If there is, save the data for future use
         //if not, load from a previoiusly saved image
-//        if (ConnectivityChecker.isConnected(getContext())){
-//            LocalDataManager.saveRAcceptedList(acceptedRequestList,preferences.getString("MODE",null),getContext());
-
+        if (ConnectivityChecker.isConnected(getContext())){
+            LocalDataManager.saveRCompleteList(completedRequestList, preferences.getString("MODE",null),getContext());
             completedRequestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, completedRequestList);
             completedRequestListView.setAdapter(completedRequestAdapter);
-//        }
-//        else{
-//            acceptedRequestList = LocalDataManager.loadRAcceptedList(preferences.getString("MODE", null), getContext());
-//            requestAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_row, acceptedRequestList);
-//            acceptedListView.setAdapter(requestAdapter);
-//
-//        }
+        }
+        else{
+            completedRequestList = LocalDataManager.loadRCompleteList(preferences.getString("MODE", null),getContext());
+            completedRequestAdapter = new ArrayAdapter<Request>(view.getContext(), R.layout.custom_row, completedRequestList);
+            completedRequestListView.setAdapter(completedRequestAdapter);
+
+        }
+
 
         ListFragment.update(getContext());
 
