@@ -215,4 +215,55 @@ public class SearchingTest {
         }
     }
 
+    /**
+     * US 04.05.01 (added 2016-11-14)
+     * As a driver, I should be able to search by address or nearby an address.
+     *
+     * This search gets the Geo-coordinates of an address then pass to the function since
+     * there is not a way to search directly using an address like 8900 - 82 avenue, Edmonton.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSearchByAddress() throws Exception {
+        RequestESGetController.GetRequestByLocationTask retrievedRequest =
+                new RequestESGetController.GetRequestByLocationTask();
+
+        // Get all requests within this distance
+        String distance = "50km";
+
+        double longitude = -113.5263186;
+        String longitudeAsString = String.valueOf(longitude);
+
+        double latitude = 53.5232189;
+        String latitudeAsString = String.valueOf(latitude);
+        String coordinates = String.format("[%s, %s]", longitudeAsString, latitudeAsString);
+
+        // Get all requests within the specified distance
+        retrievedRequest.execute(
+                "match_all", "all", "{}",
+                distance, coordinates
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
