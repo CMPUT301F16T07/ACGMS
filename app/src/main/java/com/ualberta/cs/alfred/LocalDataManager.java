@@ -208,6 +208,8 @@ public class LocalDataManager{
                 setPropertyValueTask1.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
             }
         }
+        ArrayList<PartialAcceptances> offlineRequestList = new ArrayList<PartialAcceptances>();
+        savePartialAcceptances(offlineRequestList,context);
     }
 
 
