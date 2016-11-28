@@ -180,5 +180,39 @@ public class SearchingTest {
         }
     }
 
+    /**
+     * US 04.04.01 (added 2016-11-14)
+     * As a driver, I should be able to see the addresses of the requests.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSeeRequestAddress() throws Exception {
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequest =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+
+        // Get all requests
+        retrievedRequest.execute(
+                "match_all", "all", "{}"
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Location is: " + request.getSourceAddress().getLocation());
+                System.out.println("Longitude is: " + request.getSourceAddress().getLongitude());
+                System.out.println("Latitude is: " + request.getSourceAddress().getLatitude());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
