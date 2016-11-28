@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +37,7 @@ import org.w3c.dom.Document;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 
@@ -59,6 +61,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private ArrayList<String> driverIDs;
     private ArrayList<String> driverUsernameArray;
     private ArrayList<PartialAcceptances> partialAcceptancesList;
+    private String driverID;
+    private double newRating;
+    private User driver;
 
 
     @Override
@@ -111,6 +116,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         rideCompleteButton.setVisibility(View.GONE);
         Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
         final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
+        Button rateDriverButton = (Button) findViewById(R.id.rate_driver_button);
+        rateDriverButton.setVisibility(View.GONE);
 
         // the list of bidding drivers that will only show to the rider in the pending list
         biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
@@ -183,6 +190,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 selectedDriver.setText("");
             }
         } else if (from.contentEquals("Accepted") || from.contentEquals("Awaiting Payment") || from.contentEquals("Completed")) {
+            if (from.contentEquals("Completed")){
+                rateDriverButton.setVisibility(View.VISIBLE);
+            }
             UserESGetController.GetUserByIdTask getUserByIdTask = new UserESGetController.GetUserByIdTask();
             getUserByIdTask.execute(passedRequest.getDriverID());
             User driver = null;
@@ -359,6 +369,84 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+        });
+        rateDriverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get selected driver's ID
+                driver = null;
+                try {
+                    //retrieving rider's information from elasticsearch
+                    UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
+                    driver = getUser.execute(driverSelected).get();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                if (driver != null){
+                    driverID = driver.getUserID();
+                }else{
+                    Toast.makeText(RequestDetailsActivity.this,"Error retrieving selected driver!",Toast.LENGTH_LONG);
+                }
+
+                //code from http://stackoverflow.com/questions/4671428/how-can-i-add-a-third-button-to-an-android-alert-dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                builder.setTitle("Rate Driver");
+
+                builder.setItems(new CharSequence[]
+                                {"1.0", "2.0", "3.0", "4.0", "5.0"},
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                switch (which) {
+                                    case 0:
+                                        newRating = 1.0;
+                                        String newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask1 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask1.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 1.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 1:
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask2 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask2.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 2.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 2:
+                                        newRating = 3.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask3 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask3.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 3.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 3:
+                                        newRating = 4.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask4 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask4.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 4.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 4:
+                                        newRating = 5.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask5 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask5.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 5.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        });
+                builder.create().show();
+
             }
         });
 
