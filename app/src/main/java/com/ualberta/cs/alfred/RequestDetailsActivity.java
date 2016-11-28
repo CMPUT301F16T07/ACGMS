@@ -30,15 +30,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
-import com.ualberta.cs.alfred.fragments.SettingsFragment;
-import com.ualberta.cs.alfred.fragments.UserFragment;
-import com.ualberta.cs.alfred.fragments.UserViewFragment;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -61,6 +56,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private String from;
     private ArrayList<String> driverIDs;
     private ArrayList<String> driverUsernameArray;
+    private ArrayList<PartialAcceptances> partialAcceptancesList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,18 +247,32 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upgradeStatus(from);
                 String userID = preferences.getString("USERID", null);
-                if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
-                    RequestESAddController.AddItemToListTask addItemToListTask =
-                            new RequestESAddController.AddItemToListTask();
-                    addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", preferences.getString("USERID", null));
+
+                //if there is connectivity, execute the processing of accepting a request, if not, store it in a list of
+                //PartialAcceptances which is stored locally on the disk
+                if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+                    upgradeStatus(from);
+                    if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
+                        RequestESAddController.AddItemToListTask addItemToListTask =
+                                new RequestESAddController.AddItemToListTask();
+                        addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", userID);
+                    }
+                    if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
+                        RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
+                        setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
+                    }
+                    finish();
                 }
-                if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
-                    RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
-                    setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
+                else{
+                    partialAcceptancesList = LocalDataManager.loadPartialAcceptances(RequestDetailsActivity.this);
+                    if (partialAcceptancesList.isEmpty()){
+                        partialAcceptancesList = new ArrayList<PartialAcceptances>();
+                    }
+                    PartialAcceptances offlineAcceptances = new PartialAcceptances(from, userID, mode, passedRequest,driverSelected);
+                    partialAcceptancesList.add(offlineAcceptances);
+                    LocalDataManager.savePartialAcceptances(partialAcceptancesList,RequestDetailsActivity.this);
                 }
-                finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
