@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by carlcastello on 25/11/16.
+ * @author carlcastello
  */
 
 public class GeoCoder {
@@ -31,18 +31,33 @@ public class GeoCoder {
 
     }
 
+    /**
+     * static GeoCoder
+     * @return
+     */
     public static GeoCoder getInstance() {
         return instance;
     }
 
+    /**
+     * set arguments of GeoCoder
+     * @param context the context being passed in
+     */
     public void geoSetArguments(Context context) {
         this.geoCoder = new Geocoder(context, Locale.CANADA);
     }
 
+    /**
+     * set address
+     * @param address the address string being passed in
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
+    /**
+     * calculate coordinates
+     */
     public void calculateCoordinatesString(){
         try {
             addressCoordinates = geoCoder.getFromLocationName(address, 1);
@@ -55,6 +70,9 @@ public class GeoCoder {
         }
     }
 
+    /**
+     * calculate coordinates value
+     */
     public void calculateCoordinatesValue(){
         try {
             addressCoordinates = geoCoder.getFromLocationName(address, 1);
@@ -67,18 +85,34 @@ public class GeoCoder {
         }
     }
 
+    /**
+     * get latitude
+     * @return the string of the latitude
+     */
     public String getLatitudeString() {
         return latitudeString;
     }
 
+    /**
+     * get longitude
+     * @return the string of the logitude
+     */
     public String getLongitudeString() {
         return longitudeString;
     }
 
+    /**
+     * get latitude value
+     * @return the latitude Double
+     */
     public Double getLatitudeValue() {
         return latitudeValue;
     }
 
+    /**
+     * get longitude value
+     * @return the longitude Double
+     */
     public Double getLongitudeValue() {
         return longitudeValue;
     }

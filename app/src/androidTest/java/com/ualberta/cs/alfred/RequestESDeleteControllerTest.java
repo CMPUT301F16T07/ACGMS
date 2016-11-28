@@ -45,7 +45,6 @@ public class RequestESDeleteControllerTest extends ActivityInstrumentationTestCa
      * @Note: need to know the request ID.
      */
     public void testDeleteRequestTask() {
-
         RequestESDeleteController.DeleteRequestTask deleteRequest =
                 new RequestESDeleteController.DeleteRequestTask();
 

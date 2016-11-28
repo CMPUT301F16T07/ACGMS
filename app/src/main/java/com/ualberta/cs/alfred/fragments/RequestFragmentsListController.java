@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
+<<<<<<< HEAD
 * Accepted Fragment is a fragment class where all accepted listed is found.
 *
 * @author carlcastello on 09/11/16.
@@ -25,7 +26,6 @@ import java.util.concurrent.ExecutionException;
 * @author mmcote on 2016-11-17.
 * @author shltien
 */
-
 public class RequestFragmentsListController {
     public RequestList getRequestList(List<Pair<String, String>> queries) {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
@@ -48,6 +48,7 @@ public class RequestFragmentsListController {
     }
 
     /**
+<<<<<<< HEAD
      * Request flter command.
      * @param distance
      * @param coordinates
@@ -55,6 +56,15 @@ public class RequestFragmentsListController {
      * @param userID
      * @param type
      * @return
+=======
+     * get filtered RequestList
+     * @param distance the distance string being filtered
+     * @param coordinates the coordinates string being filtered
+     * @param filter the filter string
+     * @param userID the userID string being filtered
+     * @param type the type integer
+     * @return RequestList of filtered requests
+>>>>>>> 67f0a778a7f5645819700e7710aa85d0d5b04e54
      */
     public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
         RequestList requestList = new RequestList();

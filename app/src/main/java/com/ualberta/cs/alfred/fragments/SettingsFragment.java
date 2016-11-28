@@ -27,9 +27,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * This fragment stores the list of all completed requests.
  * @author carlcastello
+ *
  */
 
 public class SettingsFragment extends Fragment {

@@ -8,11 +8,20 @@ CMPUT301 final project, the University of Alberta, Fall 2016.
 
 
 ##CODE REUSE
-####OSMBonusPack
-Github repository: https://github.com/MKergall/osmbonuspack
+####Google Maps
+Github repository: https://github.com/googlemaps/
+<br><br>
+####GMAPV2DIRECTION
+Github repository: https://github.com/KAPLANDROID/Shortest-Path-Direction-on-Google-Maps-v2-for-Android/blob/master/KaplanDroidShortestPathDirection/src/com/kaplandroid/shortestpathdirection/googlemaps/GMapV2Direction.java
 <br><br>
 ####Elasticsearch Java Rest Client
 Github repository: https://github.com/searchbox-io/Jest
+<br><br>
+####Espresso
+Github repository: https://google.github.io/android-testing-support-library/docs/espresso/
+<br><br>
+####UIAutomator
+Github repository: https://google.github.io/android-testing-support-library/docs/uiautomator/
 <br><br>
 ####Roughike Bottombar
 Github Repository https://github.com/roughike/BottomBar

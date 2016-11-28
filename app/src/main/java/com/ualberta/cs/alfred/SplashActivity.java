@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
- * The type Splash activity.
+ *  Splash activity at app startup
  */
 public class SplashActivity extends AppCompatActivity {
 

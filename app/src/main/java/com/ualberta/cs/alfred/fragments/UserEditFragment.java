@@ -25,9 +25,11 @@ import com.ualberta.cs.alfred.UserESSetController;
 import java.util.concurrent.ExecutionException;
 
 /**
+<<<<<<< HEAD
  * This fragment is where user can edit there request.
  * @author carlcastello
  * @author sheltian
+ *
  */
 public class UserEditFragment extends Fragment implements View.OnClickListener {
 

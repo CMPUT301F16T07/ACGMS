@@ -53,35 +53,6 @@ public class MenuActivity extends AppCompatActivity {
                 new BottomBarFragment(SettingsFragment.newInstance(), R.drawable.ic_history_white_24dp, "History")
         );
 
-
-
-//        bottomBar.mapColorForTab(0, "#3B494C");
-//        bottomBar.mapColorForTab(1, "#00796B");
-//        bottomBar.mapColorForTab(2, "#7B1FA2");
-//        bottomBar.mapColorForTab(3, "#FF5252");
-//
-//        bottomBar.setOnItemSelectedListener(new OnTabSelectedListener() {
-//            @Override
-//            public void onItemSelected(int position) {
-//                switch (position) {
-//                    case 0:
-//                        // Item 1 Selected
-//                }
-//            }
-//        });
-        //BottomBarBadge unreadMessages = bottomBar.makeBadgeForTabAt(1, "#E91E63", 4);
-
-        // Control the badge's visibility
-        //unreadMessages.show();
-        //unreadMessages.hide();
-
-        // Change the displayed count for this badge.
-        //unreadMessages.setCount(4);
-
-        // Change the show / hide animation duration.
-        //unreadMessages.setAnimationDuration(200);
-
-
         // Define a time value of 5 seconds
         Long alertTime = new GregorianCalendar().getTimeInMillis();
 

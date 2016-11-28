@@ -244,6 +244,17 @@
                 android:textSize="@dimen/button_text"
                 android:layout_column="2"
                 android:layout_margin="5dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="rate driver"
+                android:id="@+id/rate_driver_button"
+                android:layout_column="3"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text"
+                android:layout_margin="5dp" />
         </TableRow>
 
     </TableLayout>
