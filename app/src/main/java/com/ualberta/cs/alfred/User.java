@@ -98,6 +98,25 @@ public class User {
         this.isRider = Boolean.FALSE;
     }
 
+    /**
+     * Instantiates a new User that is both a rider and a driver.
+     *
+     * @param firstName   the first name
+     * @param lastName    the last name
+     * @param userName    the user name
+     * @param dateOfBirth the date of birth
+     * @param phoneNumber the phone number
+     * @param email       the email
+     */
+    public User(String firstName, String lastName, String userName, Date dateOfBirth,
+                String phoneNumber, String email, RiderInfo riderInfo, DriverInfo driverInfo) {
+        this(firstName, lastName, userName, dateOfBirth, phoneNumber, email);
+        this.driverInfo = driverInfo;
+        this.riderInfo = riderInfo;
+        this.isDriver = Boolean.TRUE;
+        this.isRider = Boolean.TRUE;
+    }
+
 
     public DriverInfo getDriverInfo() {
         return driverInfo;
