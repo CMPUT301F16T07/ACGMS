@@ -123,11 +123,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/radioButtonAddress" />
-                        <CheckBox
+                        <RadioButton
                             android:text="@string/search_price_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/checkboxPrice" />
+                            android:id="@+id/radioButtonPrice" />
                     </TableRow>
                 </TableLayout>
         </TableRow>

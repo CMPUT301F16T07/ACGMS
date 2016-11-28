@@ -101,7 +101,7 @@ public class RequestList {
         Collections.sort(list, new Comparator<Request>() {
             @Override
             public int compare(Request r1, Request r2) {
-                return Double.compare(r1.getCost()/r1.getDistance(), r2.getCost()/r2.getDistance());
+                return Double.compare((r1.getCost()/r1.getDistance()), (r2.getCost()/r2.getDistance()));
             }
         });
         return list;

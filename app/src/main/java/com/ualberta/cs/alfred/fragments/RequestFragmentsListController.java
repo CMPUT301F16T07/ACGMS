@@ -40,6 +40,65 @@ public class RequestFragmentsListController {
         return requestedList;
     }
 
+    public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
+        RequestList requestList = new RequestList();
+
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestedKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedPendingKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByLocationTask retrievedRequestedCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+        RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+        RequestESGetController.GetRequestTask getPending =
+                new RequestESGetController.GetRequestTask();
+        RequestESGetController.GetRequestTask getRequested =
+                new RequestESGetController.GetRequestTask();
+
+        try {
+            if (type == 0) {
+                retrievedRequestedKeyword.execute(
+                        "requestStatus", "string", "Requested",
+                        "_all", "string", filter
+                );
+                retrievedPendingKeyword.execute(
+                        "requestStatus", "string", "Pending",
+                        "_all", "string", filter
+                );
+                requestList.mergeRequestList(retrievedRequestedKeyword.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+
+            } else if (type == 1) {
+                retrievedRequestedCoordinates.execute(
+                        "requestStatus", "string", "Requested",
+                        distance, coordinates
+                );
+                retrievedPendingCoordinates.execute(
+                        "requestStatus", "string", "Pending",
+                        distance, coordinates
+                );
+                requestList.mergeRequestList(retrievedRequestedCoordinates.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
+            } else if (type == 2){
+                getPending.execute("requestStatus", "Pending");
+                getRequested.execute("requestStatus", "Requested");
+                //requestList = new RequestList(getPending.get()).removeDriver(userID);
+                //getRequested.execute("requestStatus", "Requested");
+                requestList.mergeRequestList(getRequested.get());
+                requestList.mergeRequestList(new RequestList(getPending.get()).removeDriver(userID));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return requestList;
+    }
+
+
+
+
+
     public void updateCounts(String mode, Context context) {
         if (mode.contentEquals("Rider Mode")) {
             getRiderListCount(context, "Requested");
