@@ -12,6 +12,7 @@ import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestESSetController;
 import com.ualberta.cs.alfred.RiderInfo;
 import com.ualberta.cs.alfred.User;
+import com.ualberta.cs.alfred.UserESAddController;
 import com.ualberta.cs.alfred.UserESGetController;
 import com.ualberta.cs.alfred.Vehicle;
 
@@ -1070,4 +1071,188 @@ public class RequestsTest {
             }
         }
     }
+
+    /**
+     * US 1.11.01 (added 2016-11-14)
+     * As a rider, I want to rate a driver for his/her service (1-5).
+     */
+    @Test
+    public void testRateDriver() throws Exception {
+        /**
+         * Step 1: Basic driver info
+         */
+        String driverFirstName = "Eddie";
+        String driverLastName = "Santos";
+        String driverUserName = "esantos";
+
+        // Create date
+        GregorianCalendar gcDriver = new GregorianCalendar(1988, Calendar.JANUARY, 13);
+        Date driverDateOfBirth = gcDriver.getTime();
+
+        String driverPhoneNumber = "780-333-5555";
+        String driverEmail = "esantos@example.com";
+
+        /**
+         * Step 2: Create a driver licenceNumber
+         */
+        String licenceNumber = "ABB005";
+
+        /**
+         * Step 3: Create a vehicle
+         */
+        String serialNumber = "serial990088";
+        String plateNumber = "HELLO2";
+        String type = "Truck";
+        String make = "Toyota";
+        String model = "Tacoma";
+        int year = 2016;
+        String color = "Blue";
+
+        Vehicle vehicle = new Vehicle(serialNumber, plateNumber, type, make, model, year, color);
+
+        /**
+         * Step 4: Create driverInfo
+         */
+        DriverInfo driverInfo = new DriverInfo(licenceNumber, vehicle);
+
+        /**
+         * Step 5: Create driver if doesn't exist
+         */
+        UserESGetController.GetUserTask retrievedDriver =
+                new UserESGetController.GetUserTask();
+
+        // Find driver
+        retrievedDriver.execute(driverUserName);
+
+        try {
+            User user = retrievedDriver.get();
+
+            if (user == null) {
+                // Create driver
+                User driver = new User(driverFirstName, driverLastName, driverUserName,
+                        driverDateOfBirth, driverPhoneNumber, driverEmail, driverInfo);
+            } else {
+                Log.i("Error", "User already registered. Try a different username");
+                System.out.println("User already registered. Try a different username");
+            }
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Step 6: Get driver user ID with the initial username
+         */
+        String driverID = null;
+
+        UserESGetController.GetUserTask retrievedDriverForUserID =
+                new UserESGetController.GetUserTask();
+
+        // Find driver
+        retrievedDriverForUserID.execute(driverUserName);
+
+        User driver2 = null;
+
+        try {
+            driver2 = retrievedDriverForUserID.get();
+            if (driver2 != null) {
+                driverID = driver2.getUserID();
+            }
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Step 7: Basic rider info
+         */
+        String u1FirstName = "Stephen";
+        String u1LastName = "Harper";
+        String u1UserName = "sharper";
+
+        // Create date
+        GregorianCalendar gc = new GregorianCalendar(1962, Calendar.FEBRUARY, 17);
+        Date u1DateOfBirth = gc.getTime();
+
+        String u1PhoneNumber = "780-888-5555";
+        String u1Email = "sharper@example.com";
+
+        /**
+         * Step 8: Create credit card
+         */
+        String creditCard = "2222333366662222";
+
+        /**
+         * Step 9: Create Rider info
+         */
+        RiderInfo riderInfo = new RiderInfo(creditCard);
+
+        /**
+         * Step 10: Create rider if doesn't exist
+         */
+        UserESGetController.GetUserTask retrievedUser =
+                new UserESGetController.GetUserTask();
+
+        // Find user
+        retrievedUser.execute(u1UserName);
+
+        try {
+            User user = retrievedUser.get();
+
+            if (user == null) {
+                // Create user
+                User u1 = new User(u1FirstName, u1LastName, u1UserName, u1DateOfBirth, u1PhoneNumber,
+                        u1Email, riderInfo);
+            } else {
+                Log.i("Error", "Try a different username");
+                System.out.println("Try a different username");
+            }
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Step 11: Get user ID with the initial username
+         */
+        String user2ID = null;
+
+        UserESGetController.GetUserTask retrievedUserForUserID =
+                new UserESGetController.GetUserTask();
+
+        // Find user
+        retrievedUserForUserID.execute(u1UserName);
+
+        try {
+            User user2 = retrievedUserForUserID.get();
+            if (user2 != null) {
+                user2ID = user2.getUserID();
+            }
+            assert (true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * Step 12: Rate driver
+         */
+        double newRating = 4;
+        String newRatingAsString = String.valueOf(newRating);
+
+
+        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask =
+                new UserESAddController.AddNewDriverRatingTask();
+
+        addNewDriverRatingTask.execute(driverID, newRatingAsString);
+        assert (true);
+    }
+
 }
