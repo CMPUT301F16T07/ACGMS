@@ -68,7 +68,7 @@ import static org.hamcrest.Matchers.anything;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class Requests {
+public class UITesting {
     private User user;
     final String STARTADDRESS = "10127 121 ST NW";
     final String STARTCITY = "Edmonton";
