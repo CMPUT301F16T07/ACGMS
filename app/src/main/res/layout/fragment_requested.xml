@@ -166,7 +166,7 @@
             android:id="@+id/request_cancel_button"
             android:textSize="@dimen/button_text"
             style="@style/Widget.AppCompat.Button"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorGray"
             android:background="@color/accepted" />
         </LinearLayout>
     </TableLayout>

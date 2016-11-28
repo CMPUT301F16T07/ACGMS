@@ -214,7 +214,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Cancel Request"
+            android:text="Cancel"
             android:id="@+id/cancel_request_button"
             android:layout_column="0"
             android:background="@color/colorAccent"
@@ -233,12 +233,11 @@
             android:layout_margin="5dp" />
 
             <Button
-                android:text="Ride Complete"
+                android:text="Complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ride_complete_button"
                 android:textAlignment="viewStart"
-                android:textStyle="normal|bold"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/button_text"

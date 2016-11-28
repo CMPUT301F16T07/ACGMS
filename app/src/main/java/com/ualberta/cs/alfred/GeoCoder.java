@@ -44,7 +44,7 @@ public class GeoCoder {
      * @param context the context being passed in
      */
     public void geoSetArguments(Context context) {
-        this.geoCoder = new Geocoder(context, Locale.getDefault());
+        this.geoCoder = new Geocoder(context, Locale.CANADA);
     }
 
     /**
