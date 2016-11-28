@@ -43,9 +43,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * activity for showing the request details
- * @author shelltian820
- * @author mmcote
- * @author carlcastello
+ * @author shelltian820 and mmcote and carlcastello
+ *
  */
 public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -584,6 +583,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    /**
+     * on resume activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -592,6 +594,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on pause activity
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -600,6 +605,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on destroy activity
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -608,6 +616,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on low memory activity
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
