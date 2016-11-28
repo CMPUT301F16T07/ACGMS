@@ -46,7 +46,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    //http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
+    //code from http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list,container,false);
 
@@ -60,28 +60,21 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
         if (bundle != null) {
             int position = bundle.getInt("index",0);
-            //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
             switch (position) {
                 case 0:
                     fragment = RequestedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    acceptedButton.setBackground(noBorder);
                         requestedButton.setBackground(border);
-//                    pendingButton.setBackground(noBorder);
                     break;
                 case 1:
                     fragment = PendingFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    requestedButton.setBackground(noBorder);
                         pendingButton.setBackground(border);
-//                    acceptedButton.setBackground(noBorder);
                     break;
                 case 2:
                     fragment = AcceptedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    requestedButton.setBackground(border);
                         acceptedButton.setBackground(border);
-//                    pendingButton.setBackground(border);
                     break;
             }
         }

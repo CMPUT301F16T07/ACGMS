@@ -30,6 +30,7 @@ import java.util.List;
  * Created by carlcastello on 08/11/16.
  *
  * This fragment stores the list of all completed requests.
+ *
  */
 
 public class SettingsFragment extends Fragment {
