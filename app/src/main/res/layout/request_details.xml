@@ -205,6 +205,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tableView"
         android:layout_alignParentBottom="true"
+        android:stretchColumns="0,1,2"
         android:layout_marginTop="10dp">
 
         <TableRow
@@ -234,13 +235,14 @@
 
             <Button
                 android:text="Complete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/ride_complete_button"
                 android:textAlignment="viewStart"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/button_text"
+                android:layout_column="2"
                 android:layout_margin="5dp" />
         </TableRow>
 

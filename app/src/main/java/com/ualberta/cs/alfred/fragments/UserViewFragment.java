@@ -25,18 +25,27 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by carlcastello on 08/11/16.
+ * This fragment is where user can edit there request.
+ * @author carlcastello
+ * @author sheltian
  */
-
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
     private String emailAddress;
     private String phoneNumber;
 
+    /**
+     * an Empty constructor
+     */
     public UserViewFragment() {
     }
 
+    /**
+     * creates a new instance of UserViewFragment.
+     * @param position
+     * @return
+     */
     public static UserViewFragment newInstance(int position) {
         Bundle args = new Bundle();
         args.putInt("index",position);
@@ -45,6 +54,13 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         return userViewFragment;
     }
 
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,6 +122,10 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * this is where when edit_button is clicked
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -121,11 +141,20 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    /**
+     * Replace the fragment container with back stack
+     * @param fragment
+     */
     private void replaceFragmentwithStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.user_fragment_container, fragment);
         transaction.commit();
     }
+
+    /**
+     * Replace the fragment container without back stack
+     * @param fragment
+     */
     private void replaceFragmentwithoutStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.user_fragment_container, fragment);

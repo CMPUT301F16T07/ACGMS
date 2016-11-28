@@ -97,7 +97,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     /**
      * Get an instance of Requested Fragment
-     * @return RequestedFragment
+     *
+     * @return RequestedFragment requested fragment
      */
     public static RequestedFragment newInstance() {
         RequestedFragment requestedFragment = new RequestedFragment();
@@ -460,6 +461,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     }
 
+    /**
+     * Update request list.
+     */
     public void updateRequestList() {
         requestAdapter.clear();
 

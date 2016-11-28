@@ -27,9 +27,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by carlcastello on 08/11/16.
  *
  * This fragment stores the list of all completed requests.
+ * @author carlcastello
  */
 
 public class SettingsFragment extends Fragment {
@@ -40,6 +40,10 @@ public class SettingsFragment extends Fragment {
     private List<Pair<String, String>> listNeeded;
     private String userID;
 
+    /**
+     * Constructor of the Settings Fragment.
+     * Initialize fundamental variables
+     */
     public SettingsFragment() {
         this.rFLC = new RequestFragmentsListController();
         this.listNeeded = null;
@@ -49,6 +53,10 @@ public class SettingsFragment extends Fragment {
         this.userID = null;
     }
 
+    /**
+     * New instance Setting fragment
+     * @return the settings fragment view
+     */
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
@@ -103,6 +111,13 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

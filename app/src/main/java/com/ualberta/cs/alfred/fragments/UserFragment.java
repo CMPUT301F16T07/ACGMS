@@ -11,16 +11,25 @@ import android.view.ViewGroup;
 import com.ualberta.cs.alfred.R;
 
 /**
- * Created by carlcastello on 13/11/16.
+ * This fragment is where user can edit there request.
+ * @author carlcastello
+ * @author sheltian
  */
-
 public class UserFragment extends Fragment {
 
     FragmentTransaction transaction;
 
+    /**
+     * an Empty constructor
+     */
     public UserFragment() {
     }
 
+    /**
+     * Creates a new instance of UserFragment
+     * @param position
+     * @return
+     */
     public static UserFragment newInstance(int position) {
         Bundle args = new Bundle();
         args.putInt("index",position);
@@ -29,6 +38,13 @@ public class UserFragment extends Fragment {
         return userFragment;
     }
 
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +60,10 @@ public class UserFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Replace the fragment container without back stack
+     * @param fragment
+     */
     private void replaceFragmentwithoutStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.user_fragment_container, fragment);

@@ -25,9 +25,10 @@ import com.ualberta.cs.alfred.UserESSetController;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by carlcastello on 13/11/16.
+ * This fragment is where user can edit there request.
+ * @author carlcastello
+ * @author sheltian
  */
-
 public class UserEditFragment extends Fragment implements View.OnClickListener {
 
     private User user;
@@ -48,16 +49,29 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
     private SharedPreferences preferences;
     private  FragmentTransaction transaction;
 
+    /**
+     * an Empty constructor.
+     */
     public UserEditFragment() {
     }
 
+    /**
+     * get a new instance of the UserEditFragment
+     * @return
+     */
     public static UserEditFragment newInstance() {
         Bundle args = new Bundle();
         UserEditFragment userEditFragment = new UserEditFragment();
         userEditFragment.setArguments(args);
         return userEditFragment;
     }
-
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +117,9 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * When done button is click.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -215,6 +232,10 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Replace the fragment container without back stack
+     * @param fragment
+     */
     private void replaceFragmentwithoutStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.user_fragment_container, fragment);

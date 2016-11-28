@@ -57,7 +57,8 @@ public class AcceptedFragment extends Fragment {
 
     /**
      * Get an instance of Accepted Fragment
-     * @return AcceptedFragment
+     *
+     * @return AcceptedFragment accepted fragment
      */
     public static AcceptedFragment newInstance() {
         AcceptedFragment acceptedFragment = new AcceptedFragment();
@@ -119,8 +120,13 @@ public class AcceptedFragment extends Fragment {
             }
         });
     }
+
     /**
-     * onCreate function where the fragment view is created.
+     * All view functionalities are initialize.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
      */
     @Nullable
     @Override

@@ -36,10 +36,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Created by carlcastello and shelleytian on 08/11/16.
- */
 
+/**
+ * Accepted Fragment is a fragment class where all accepted listed is found.
+ *
+ * @author carlcastello
+ * @author averytan
+ * @author mmcote
+ * @author shltien
+ */
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
     private String userMode;
@@ -47,15 +52,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private GoogleMap googleMap;
     private static HomeFragment homeFragment = new HomeFragment();
 
+    /**
+     * Instantiates a new Home fragment.
+     */
     public HomeFragment() {
         System.out.println();
     }
 
+    /**
+     * New instance home fragment.
+     *
+     * @return the home fragment
+     */
     public static HomeFragment newInstance() {
 
         return homeFragment;
     }
 
+    /**
+     * All view functionalities are initialize.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +112,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         requestedButton.setOnClickListener(this);
         acceptedButton.setOnClickListener(this);
 
+
+        // Google map
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -110,19 +132,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
 
         mapView.getMapAsync(this);
-
-
-//        fragment = MapFragment.newInstance();
-//        transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.mapContainer, fragment);
-//        transaction.commit();
-
         return view;
 
 
     }
 
-
+    /**
+     * Buttons listener for buttons in the home fragment.
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         Fragment fragment;
@@ -159,6 +178,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     }
 
 
+    /**
+     * Fragment replacing function without back stack
+     * @param fragment
+     */
     private void replaceFragmentwithoutStack(Fragment fragment) {
         FragmentTransaction transaction;
         transaction = getFragmentManager().beginTransaction();
@@ -166,6 +189,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         transaction.commit();
     }
 
+    /**
+     * Fragment replacing function
+     * @param fragment
+     */
     private void replaceFragmentwithStack(Fragment fragment) {
         FragmentTransaction transaction;
         transaction = getFragmentManager().beginTransaction();
@@ -174,6 +201,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         transaction.commit();
     }
 
+    /**
+     * this is where our map is created and initialize.
+     * @param mMap
+     */
     @Override
     public void onMapReady(GoogleMap mMap) {
         googleMap = mMap;
@@ -186,58 +217,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         // List of points returned by the address
-        String start = "2369 29a Ave NW Edmonton";
-        List<android.location.Address> startCoordinates;
-        try {
-            startCoordinates = geocoder.getFromLocationName(start,1);
-
-            int startCoordinatesSize = startCoordinates.size();
-
-            // Check if both list are empty
-            if (startCoordinatesSize > 0) {
-                // get the coordinates of the first results for both address
-                double x1 = startCoordinates.get(0).getLatitude();
-                double y1 = startCoordinates.get(0).getLongitude();
-                house = new LatLng(x1,y1);
-
-            } else {
-                // Error messages
-                String errorMessage = "Unable to find start and destination Address";
-                if (startCoordinatesSize == 0) {
-                    errorMessage = "Unable to find the start address";
-                }
-                Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Marker mhouse = googleMap.addMarker(new MarkerOptions()
-                .position(house)
-        );
-        //mhouse.setTag(0);
-
     }
 
+    /**
+     * onResume functions that manages the map
+     */
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
+    /**
+     * onPause functions that manages the map
+     */
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     * onDestroy functions that manages the map
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     * onLowMemory functions that manages the map
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
