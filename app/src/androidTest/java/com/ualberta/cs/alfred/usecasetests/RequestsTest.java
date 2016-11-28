@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for Requests.
  *
  * @author ookmm
+ * @version 1.0
  */
 @RunWith(AndroidJUnit4.class)
 public class RequestsTest {

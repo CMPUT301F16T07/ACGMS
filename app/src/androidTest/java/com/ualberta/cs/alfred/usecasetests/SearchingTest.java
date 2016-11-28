@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for Searching.
  *
  * @author ookmm
+ * @version 1.0
  */
 @RunWith(AndroidJUnit4.class)
 public class SearchingTest {

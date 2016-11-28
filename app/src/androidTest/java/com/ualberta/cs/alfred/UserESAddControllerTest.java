@@ -16,10 +16,16 @@ import java.util.GregorianCalendar;
  */
 public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new User es add controller test.
+     */
     public UserESAddControllerTest() {
         super(MainActivity.class);
     }
 
+    /**
+     * Test add user.
+     */
     public void testAddUser() {
 
         String u1FirstName = "Donald";
@@ -38,6 +44,9 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
         assert(true);
     }
 
+    /**
+     * Test add rider.
+     */
     public void testAddRider() {
 
         /**
@@ -70,6 +79,9 @@ public class UserESAddControllerTest extends ActivityInstrumentationTestCase2 {
         assert(true);
     }
 
+    /**
+     * Test add driver.
+     */
     public void testAddDriver() {
 
         /**
