@@ -18,10 +18,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.ualberta.cs.alfred.GeoCoder;
@@ -62,7 +64,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private RadioButton rb3;
 
     // Sort CheckBox
-    private RadioButton rb4;
+    private TableRow tableRow;
+    private RadioButton sortPrice;
+    private RadioButton sortPriceKilometer;
+
     private boolean isSorted;
 
     // Custom Filter Input View
@@ -173,7 +178,6 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         Button button3 = (Button) view.findViewById(R.id.request_done_button);
         button3.setOnClickListener(this);
 
-
         filterInput1 = (EditText) view.findViewById(R.id.filter_input1);
         filterInput2 = (EditText) view.findViewById(R.id.filter_input2);
         filterInput3 = (EditText) view.findViewById(R.id.filter_input3);
@@ -182,15 +186,20 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         filterInput2.setVisibility(View.GONE);
         filterInput3.setVisibility(View.GONE);
 
+
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
         rb3 = (RadioButton) view.findViewById(R.id.radioButtonCoordinates);
-        rb4 = (RadioButton) view.findViewById(R.id.radioButtonPrice);
+
+        sortPrice = (RadioButton) view.findViewById(R.id.radioButtonPrice);
+        sortPriceKilometer = (RadioButton) view.findViewById(R.id.radioButtonPriceperKilo);
 
         rb1.setOnCheckedChangeListener(this);
         rb2.setOnCheckedChangeListener(this);
         rb3.setOnCheckedChangeListener(this);
-        rb4.setOnCheckedChangeListener(this);
+        sortPrice.setOnCheckedChangeListener(this);
+        sortPriceKilometer.setOnCheckedChangeListener(this);
+
 
         return view;
     }
@@ -261,8 +270,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput1.setHint(R.string.keyword_text);
                     rb2.setChecked(false);
                     rb3.setChecked(false);
-                    rb4.setChecked(false);
+                    sortPrice.setChecked(false);
+                    sortPriceKilometer.setChecked(false);
 
+                    filterInput1.setVisibility(View.VISIBLE);
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
 
@@ -274,8 +285,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput2.setHint(R.string.city_text);
                     rb1.setChecked(false);
                     rb3.setChecked(false);
-                    rb4.setChecked(false);
+                    sortPrice.setChecked(false);
+                    sortPriceKilometer.setChecked(false);
 
+                    filterInput1.setVisibility(View.VISIBLE);
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.GONE);
 
@@ -288,8 +301,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput3.setHint(R.string.distance_text);
                     rb1.setChecked(false);
                     rb2.setChecked(false);
-                    rb4.setChecked(false);
+                    sortPrice.setChecked(false);
+                    sortPriceKilometer.setChecked(false);
 
+                    filterInput1.setVisibility(View.VISIBLE);
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.VISIBLE);
 
@@ -297,16 +312,31 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     break;
 
                 case R.id.radioButtonPrice:
-                    filterInput1.setVisibility(View.VISIBLE);
-
+                    filterInput1.setVisibility(View.INVISIBLE);
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
 
-                    searchType = R.id.radioButtonPrice;
-                    this.isSorted = true;
                     rb1.setChecked(false);
                     rb2.setChecked(false);
                     rb3.setChecked(false);
+                    sortPriceKilometer.setChecked(false);
+
+                    searchType = R.id.radioButtonPrice;
+
+                    break;
+                case R.id.radioButtonPriceperKilo:
+                    filterInput1.setVisibility(View.INVISIBLE);
+                    filterInput2.setVisibility(View.GONE);
+                    filterInput3.setVisibility(View.GONE);
+
+                    rb1.setChecked(false);
+                    rb2.setChecked(false);
+                    rb3.setChecked(false);
+                    sortPrice.setChecked(false);
+
+                    searchType = R.id.radioButtonPriceperKilo;
+
+
                     break;
             }
         }
@@ -372,6 +402,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
             case R.id.radioButtonPrice:
                 executeQuery("","","",2);
                 break;
+            case R.id.radioButtonPriceperKilo:
+                executeQuery("","","",3);
+                break;
+
         }
     }
 

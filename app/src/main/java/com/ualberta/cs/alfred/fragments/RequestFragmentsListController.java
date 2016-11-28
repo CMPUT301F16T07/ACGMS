@@ -51,10 +51,7 @@ public class RequestFragmentsListController {
                 new RequestESGetController.GetRequestByLocationTask();
         RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
                 new RequestESGetController.GetRequestByLocationTask();
-        RequestESGetController.GetRequestTask getPending =
-                new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequested =
-                new RequestESGetController.GetRequestTask();
+
 
         try {
             if (type == 0) {
@@ -81,12 +78,39 @@ public class RequestFragmentsListController {
                 requestList.mergeRequestList(retrievedRequestedCoordinates.get());
                 requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
             } else if (type == 2){
-                getPending.execute("requestStatus", "Pending");
-                getRequested.execute("requestStatus", "Requested");
-                //requestList = new RequestList(getPending.get()).removeDriver(userID);
-                //getRequested.execute("requestStatus", "Requested");
-                requestList.mergeRequestList(getRequested.get());
-                requestList.mergeRequestList(new RequestList(getPending.get()).removeDriver(userID));
+                RequestESGetController.GetRequestSortedByPriceTask retrievedPendingPrice =
+                        new RequestESGetController.GetRequestSortedByPriceTask();
+                RequestESGetController.GetRequestSortedByPriceTask retrievedRequestedPrice =
+                        new RequestESGetController.GetRequestSortedByPriceTask();
+
+                String orderBy = "desc";
+                retrievedPendingPrice.execute(
+                        "requestStatus", "string", "Pending",
+                        orderBy
+                );
+                retrievedRequestedPrice.execute(
+                        "requestStatus", "string", "Request",
+                        orderBy
+                );
+                requestList.mergeRequestList(retrievedRequestedPrice.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingPrice.get()).removeDriver(userID));
+            } else if (type == 3){
+                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedPendingPriceKM =
+                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
+                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequestedPriceKM =
+                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
+
+                String orderBy = "desc";
+                retrievedPendingPriceKM.execute(
+                        "requestStatus", "string", "Pending",
+                        orderBy
+                );
+                retrievedRequestedPriceKM.execute(
+                        "requestStatus", "string", "Request",
+                        orderBy
+                );
+                requestList.mergeRequestList(retrievedRequestedPriceKM.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingPriceKM.get()).removeDriver(userID));
             }
         } catch (Exception e) {
             e.printStackTrace();
