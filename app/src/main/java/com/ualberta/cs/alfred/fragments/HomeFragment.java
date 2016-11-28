@@ -87,13 +87,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         userMode = preferences.getString("MODE", null);
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
-        requestedButton.setText("Requested\n");
+        requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
-        pendingButton.setText("Pending\n");
+        pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
-        acceptedButton.setText("Accepted\n");
+        acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
