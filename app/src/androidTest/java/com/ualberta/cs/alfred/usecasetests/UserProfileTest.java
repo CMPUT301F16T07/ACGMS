@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
  * Test cases for User profile.
  *
  * @author ookmm
+ * @version 1.0
  */
 @RunWith(AndroidJUnit4.class)
 public class UserProfileTest {
