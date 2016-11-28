@@ -27,15 +27,15 @@
                 android:background="@color/colorPrimary"
                 android:id="@+id/button_pending" />
 
-            <Button
-                android:text="@string/list_accepted"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/main_text"
-                android:layout_width="0dp"
-                android:layout_weight=".33"
-                android:layout_height="@dimen/list_type_button"
-                android:background="@color/colorPrimary"
-                android:id="@+id/button_accepted" />
+        <Button
+            android:text="@string/list_accepted"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/main_text"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_height="@dimen/list_type_button"
+            android:background="@color/colorPrimary"
+            android:id="@+id/button_accepted" />
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
