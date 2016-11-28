@@ -105,4 +105,80 @@ public class SearchingTest {
             e.printStackTrace();
         }
     }
+
+    /**
+     * US 04.03.01 (added 2016-11-14)
+     * As a driver, I should be able filter request searches by price per KM and price.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFilterSearchesByPricePerKm() throws Exception {
+        RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequest =
+                new RequestESGetController.GetRequestSortedByPricePerKmTask();
+
+        // Get all requests sorted by price per km in descending order.
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "match_all", "all", "{}", orderBy
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * US 04.03.01 (added 2016-11-14)
+     * As a driver, I should be able filter request searches by price per KM and price.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFilterSearchesByPrice() throws Exception {
+        RequestESGetController.GetRequestSortedByPriceTask retrievedRequest =
+                new RequestESGetController.GetRequestSortedByPriceTask();
+
+        // Get all requests sorted by by price in descending order.
+        String orderBy = "desc";
+        retrievedRequest.execute(
+                "match_all", "all", "{}", orderBy
+        );
+
+        try {
+            ArrayList<Request> requests = retrievedRequest.get();
+            for (Request request : requests) {
+                System.out.println("====================");
+                System.out.println("Request ID is: " + request.getRequestID());
+                System.out.println("Rider ID is: " + request.getRiderID());
+                System.out.println("Request Distance: " + request.getDistance());
+                System.out.println("Request Cost: " + request.getCost());
+                System.out.println("Request Status: " + request.getRequestStatus());
+                System.out.println("====================");
+
+                assert (true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
