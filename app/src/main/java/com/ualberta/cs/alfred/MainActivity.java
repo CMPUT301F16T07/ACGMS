@@ -125,12 +125,9 @@ public class MainActivity extends AppCompatActivity {
                                 oppositeMode = "Rider Mode";
                             }
                             builder.setMessage(
-                                    "No " + mode + " profile was found under the username of "
-                                            + userName.getText().toString() + ". Although a " + oppositeMode +
-                                            " profile was found. Would you like to add additional " + mode + " info?");
+                                    "A " + oppositeMode + " profile was found. Would you like to add additional " + mode + " info?");
                         } else {
-                            builder.setMessage("No profile was found under the username of "
-                                    + userName.getText().toString() + " Would you like to create a new profile?");
+                            builder.setMessage("Hello " + userName.getText().toString() + "! Would you like to create a new profile?");
                         }
                     } catch (ExecutionException e) {
                         e.printStackTrace();
@@ -138,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    builder.setTitle(mode + " not found");
+                    builder.setTitle("User Sign Up");
                     builder.setCancelable(Boolean.FALSE);
                     final Boolean finalIsOpposite = isOpposite;
                     final String finalOppositeMode = oppositeMode;
