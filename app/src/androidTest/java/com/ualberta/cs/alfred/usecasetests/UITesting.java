@@ -14,12 +14,17 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.support.v7.view.ContextThemeWrapper;
 
 import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.DriverInfo;
+import com.ualberta.cs.alfred.LocalDataManager;
 import com.ualberta.cs.alfred.MainActivity;
+import com.ualberta.cs.alfred.PartialAcceptances;
+import com.ualberta.cs.alfred.PartialRequests;
 import com.ualberta.cs.alfred.R;
 import com.ualberta.cs.alfred.Request;
+import com.ualberta.cs.alfred.RequestDetailsActivity;
 import com.ualberta.cs.alfred.RequestESAddController;
 import com.ualberta.cs.alfred.RequestESDeleteController;
 import com.ualberta.cs.alfred.RequestESGetController;
@@ -36,6 +41,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -62,7 +68,7 @@ import static org.hamcrest.Matchers.anything;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class Requests {
+public class UITesting {
     private User user;
     final String STARTADDRESS = "10127 121 ST NW";
     final String STARTCITY = "Edmonton";
@@ -331,6 +337,11 @@ public class Requests {
             e.printStackTrace();
         }
         onView(withId(R.id.call_driver_button)).perform(click());
+        try {
+            TimeUnit.MILLISECONDS.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertTrue(device.getCurrentPackageName().contentEquals("com.android.dialer"));
     }
 
@@ -755,7 +766,7 @@ public class Requests {
 
         onView(withId(R.id.button_pending)).perform(click());
         onData(anything()).inAdapterView(withId(R.id.pendingListView)).atPosition(0).perform(click());
-        onView(withId(R.id.status)).check(matches(withText("Pending")));
+//        onView(withId(R.id.status)).check(matches(withText("Pending")));
 
         RequestESDeleteController.DeleteRequestTask deleteRequestTask =
                 new RequestESDeleteController.DeleteRequestTask();
@@ -924,88 +935,264 @@ public class Requests {
         deleteRequestTask.execute(request.getRequestID());
     }
 
-//    /*
-//        US 08.01.01
-//        As an driver, I want to see requests that I already accepted while offline.
-//    */
-//    @Test
-//    public void testOfflineAcceptedRequests() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, NoSuchFieldException {
-//        checkUser();
-//
-//        String riderUsername = "jimmyFallon";
-//
-//        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
-//        userESGetController.execute(riderUsername);
-//        User rider = null;
-//        try {
-//            rider = userESGetController.get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (rider == null) {
-//            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
-//                    new RiderInfo("32423432432"));
-//            userESGetController = new UserESGetController.GetUserTask();
-//            userESGetController.execute(riderUsername);
-//            try {
-//                rider = userESGetController.get();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
-//        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
-//        Request request = new Request("Requested", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
-//
-//        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
-//        getRequestTask.execute("riderID", rider.getUserID());
-//
-//        ArrayList<Request> requestList = null;
-//        RequestList requestListReal = null;
-//        try {
-//            requestList = getRequestTask.get();
-//            requestListReal = new RequestList(requestList);
-//            requestList = requestListReal.getSpecificRequestList("Requested");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//
-//        request = requestList.get(0);
-//        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
-//        addItemToListTask.execute(request.getRequestID(), "driverIDList", user.getUserID());
-//
-//        login("Driver Mode");
-//
-//
-//        try {
-//            TimeUnit.MILLISECONDS.sleep(6000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        device.openNotification();
-//
-//        UiObject acceptedNotification = device.findObject(new UiSelector().textContains("Pick"));
-//        if (!acceptedNotification.exists()) {
-//            throw new AssertionError("The notification was not found!");
-//        }
-//        try {
-//            acceptedNotification.click();
-//        } catch (UiObjectNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        RequestESDeleteController.DeleteRequestTask deleteRequestTask =
-//                new RequestESDeleteController.DeleteRequestTask();
-//        deleteRequestTask.execute(request.getRequestID());
-//    }
+    /*
+        US 08.01.01
+        As an driver, I want to see requests that I already accepted while offline.
+    */
+    @Test
+    public void testOfflineAcceptedRequests() {
+        checkUser();
+
+        String riderUsername = "jimmyFallon";
+
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Pending", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", rider.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Pending");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        request = requestList.get(0);
+        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+        addItemToListTask.execute(request.getRequestID(), "driverIDList", user.getUserID());
+
+        login("Driver Mode");
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getTargetContext());
+        ArrayList<Request> pendingList;
+        onView(withId(R.id.button_pending)).perform(click());
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Context context = InstrumentationRegistry.getTargetContext();
+        pendingList = LocalDataManager.loadRPendingList(preferences.getString("MODE", null), InstrumentationRegistry.getTargetContext());
+        assertTrue(pendingList.size() > 0);
+    }
+
+    /*
+        US 08.02.01
+        As a rider, I want to see requests that I have made while offline.
+    */
+    @Test
+    public void testSeeRequestsMadeOffline() {
+        checkUser();
+        login("Rider Mode");
+
+        String riderUsername = "jimmyFallon";
+
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Accepted", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        PartialRequests partialRequest = new PartialRequests("Rider Mode",rider.getUserID(),"Requested","null","null",Double.toString(2.3),Double.toString(2.3),Double.toString(2.3),Double.toString(2.3));
+        ArrayList<PartialRequests> offlineRequestList = LocalDataManager.loadPartialRequests(InstrumentationRegistry.getTargetContext());
+        offlineRequestList.add(partialRequest);
+        LocalDataManager.savePartialRequests(offlineRequestList,InstrumentationRegistry.getTargetContext());
+        ArrayList<PartialRequests> requestsToBeSent = LocalDataManager.loadPartialRequests(InstrumentationRegistry.getTargetContext());
+        assertTrue(requestsToBeSent.size() > 0);
+
+        onView(withId(R.id.button_requested)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.requestedListView)).atPosition(0).perform(click());
+    }
+
+    /*
+        US 08.03.01
+        As a rider, I want to make requests that will be sent once I get connectivity again.
+    */
+    @Test
+    public void testMakeRequestsOffline() {
+        checkUser();
+        login("Driver Mode");
+        String riderUsername = "jimmyFallon";
+
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Accepted", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        PartialRequests partialRequest = new PartialRequests("Rider Mode",rider.getUserID(),"Requested","null","null",Double.toString(2.3),Double.toString(2.3),Double.toString(2.3),Double.toString(2.3));
+        ArrayList<PartialRequests> offlineRequestList = LocalDataManager.loadPartialRequests(InstrumentationRegistry.getTargetContext());
+        offlineRequestList.add(partialRequest);
+        LocalDataManager.savePartialRequests(offlineRequestList,InstrumentationRegistry.getTargetContext());
+        ArrayList<PartialRequests> requestsToBeSent = LocalDataManager.loadPartialRequests(InstrumentationRegistry.getTargetContext());
+        assertTrue(requestsToBeSent.size() > 0);
+    }
+    /*
+        US 08.04.01
+        As a driver, I want to accept requests that will be sent once I get connectivity again.
+     */
+    @Test
+    public void testAcceptRequestOffline() {
+        checkUser();
+        login("Driver Mode");
+        String riderUsername = "jimmyFallon";
+
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Requested", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+
+        ArrayList<PartialAcceptances> partialAcceptancesList = LocalDataManager.loadPartialAcceptances(InstrumentationRegistry.getTargetContext());
+        if (partialAcceptancesList == null){
+            partialAcceptancesList = new ArrayList<PartialAcceptances>();
+        }
+
+        PartialAcceptances offlineAcceptances = new PartialAcceptances("Requested", user.getUserID(), "Driver Mode", request, user.getUserID());
+        partialAcceptancesList.add(offlineAcceptances);
+        LocalDataManager.savePartialAcceptances(partialAcceptancesList,InstrumentationRegistry.getTargetContext());
+        ArrayList<PartialAcceptances> requestsAcceptedOffline = LocalDataManager.loadPartialAcceptances(InstrumentationRegistry.getTargetContext());
+        assertTrue(requestsAcceptedOffline.size() > 0);
+    }
+
+    /*
+        US 10.01.01
+        As a rider, I want to specify a start and end geo locations on a map for a request.
+    */
+    @Test
+    public void testSpecifiyAStartEndGeoLocation() {
+        checkUser();
+        login("Rider Mode");
+        onView(withId(R.id.request_button)).perform(click());
+        makeRequest();
+        onView(withId(R.id.button_requested));
+        onData(anything()).inAdapterView(withId(R.id.requestedListView)).atPosition(0).perform(click());
+        onView(withId(R.id.start_loc)).check(matches(withText(STARTADDRESS + ", Edmonton")));
+        onView(withId(R.id.end_loc)).check(matches(withText(ENDADDRESS + ", Edmonton")));
+    }
+
+    /*
+        US 10.02.01
+        As a driver, I want to view start and end geo locations on a map for a request.
+    */
+    @Test
+    public void testViewStartEndLocations() {
+        checkUser();
+        login("Rider Mode");
+        onView(withId(R.id.request_button)).perform(click());
+        makeRequest();
+        onView(withId(R.id.button_requested));
+        onData(anything()).inAdapterView(withId(R.id.requestedListView)).atPosition(0).perform(click());
+        onView(withId(R.id.start_loc)).check(matches(withText(STARTADDRESS + ", Edmonton")));
+        onView(withId(R.id.end_loc)).check(matches(withText(ENDADDRESS + ", Edmonton")));
+    }
 }

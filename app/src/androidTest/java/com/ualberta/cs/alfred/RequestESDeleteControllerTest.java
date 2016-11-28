@@ -3,7 +3,7 @@ package com.ualberta.cs.alfred;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
- * Test cases for deleting item from Requests
+ * Test cases for deleting item from UITesting
  *
  * @author ookmm
  * @version 1.0

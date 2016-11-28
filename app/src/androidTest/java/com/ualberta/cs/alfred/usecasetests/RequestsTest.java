@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * Test cases for Requests.
+ * Test cases for UITesting.
  *
  * @author ookmm
  * @version 1.0
