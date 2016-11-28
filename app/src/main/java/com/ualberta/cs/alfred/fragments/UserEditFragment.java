@@ -132,7 +132,7 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
                     userPropertyType1 = "string";
                     userNewValue1 = userNameEdit.getText().toString();
                     //TODO: check if username changed
-                    if (userNewValue1.contentEquals(userNewValue1) == false){//if username was changed
+                    if (userNewValue1.contentEquals(userName) == false){//if username was changed
                         //TODO: check if username exists
                         UserESGetController.GetUserTask retrievedUser = new UserESGetController.GetUserTask();
                         User user = null;
@@ -144,8 +144,8 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
                             e.printStackTrace();
                         }
 
+                        //Toast.makeText(getActivity(),user.getUserName(),Toast.LENGTH_SHORT).show();
                         if (user == null) {//if username is not taken
-                            Toast.makeText(getContext(),"Username is NOT taken. it's your lucky day!",Toast.LENGTH_LONG);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("USERNAME", userNewValue1);
                             editor.commit();
@@ -154,15 +154,15 @@ public class UserEditFragment extends Fragment implements View.OnClickListener {
                                     new UserESSetController.SetPropertyValueTask();
                             setUserNameValueTask.execute(userID, userProperty1, userPropertyType1, userNewValue1);
                         }else{ //if username is taken
-                            Toast.makeText(getContext(),"Username is taken. Try a different one.",Toast.LENGTH_LONG);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setCancelable(Boolean.TRUE);
-                            builder.setTitle("Username is taken. Try a different one.");
-                            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
+                            Toast.makeText(getActivity(),"Username is taken.",Toast.LENGTH_LONG).show();
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                            builder.setCancelable(Boolean.TRUE);
+//                            builder.setTitle("Username is taken. Try a different one.");
+//                            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                }
+//                            });
                         }
                     }
 
