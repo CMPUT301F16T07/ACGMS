@@ -406,12 +406,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         if (!from.contentEquals("Completed")) {
             status.setText(from);
             if (from.contentEquals("Accepted")){
-                status.setTextColor(0xff008000);
+                status.setBackgroundColor(getResources().getColor(R.color.lightGreen));
             }
             else if (from.contentEquals("Pending")){
-                status.setTextColor(0xffffd700);
-            }
-            else status.setTextColor(0xffff0000);
+                status.setBackgroundColor(getResources().getColor(R.color.lightYellow));            }
+            else status.setBackgroundColor(getResources().getColor(R.color.lightRed));
         } else {
             String currentStatus = request.getRequestStatus();
             status.setText(currentStatus);

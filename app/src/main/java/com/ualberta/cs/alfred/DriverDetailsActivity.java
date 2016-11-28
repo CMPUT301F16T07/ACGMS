@@ -15,6 +15,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shelley on 2016-11-26.
+ * Shows driver details when driver's username is clicked
+ * Can contact the driver by phone or email
  */
 public class DriverDetailsActivity extends AppCompatActivity{
     private String userID;
