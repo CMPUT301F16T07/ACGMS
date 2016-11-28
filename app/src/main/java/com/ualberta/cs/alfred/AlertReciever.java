@@ -103,7 +103,7 @@ public class AlertReciever extends BroadcastReceiver {
                 ArrayList<Request> awaitingPaymentList = null;
                 getAwaitingPayment.execute("requestStatus", "Awaiting Payment");
                 try {
-                    awaitingPaymentList = new RequestList(getAwaitingPayment.get()).getWithDriver(preferences.getString("USERID", null));
+                    awaitingPaymentList = new RequestList(getAwaitingPayment.get()).getWithDriverAsSelected(preferences.getString("USERID", null));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {

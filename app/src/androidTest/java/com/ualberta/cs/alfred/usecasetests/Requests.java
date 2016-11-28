@@ -1,6 +1,9 @@
 package com.ualberta.cs.alfred.usecasetests;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -33,6 +36,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -43,8 +49,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.anything;
 
@@ -69,7 +77,7 @@ public class Requests {
      */
     private void checkUser() {
         UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
-        String username = "john";
+        String username = "macarooniANDcheese";
         userESGetController.execute(username);
         try {
             user = userESGetController.get();
@@ -267,6 +275,130 @@ public class Requests {
         US 01.05.01
         As a rider, I want to be able to phone or email the driver who accepted a request.
      */
+    @Test
+    public void testPhone() {
+        checkUser();
+        User driver1 = new User("Marc", "Anthony", "billy bob", new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                new DriverInfo("343242324334", new Vehicle("2433432434", "432434","Van", "Jeep", "Cherokee", 2014, "Blue")));
+
+        UserESGetController.GetUserTask userESGetController1 = new UserESGetController.GetUserTask();
+        userESGetController1.execute(driver1.getUserName());
+
+        try {
+            driver1 = userESGetController1.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request pending = new Request("Pending", startAddress, endAddress, 34.0, 34.0, user.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", user.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Pending");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        pending = requestList.get(0);
+        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+        addItemToListTask.execute(pending.getRequestID(), "driverIDList", driver1.getUserID());
+
+        login("Rider Mode");
+        onView(withId(R.id.button_pending)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.pendingListView)).atPosition(0).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.biddingDriversListView)).atPosition(0).perform(click());
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject viewButton = device.findObject(new UiSelector().textContains("VIEW"));
+        if (!viewButton.exists()) {
+            throw new AssertionError("View with text <" + "View Button" + "> not found!");
+        }
+        try {
+            viewButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.call_driver_button)).perform(click());
+        assertTrue(device.getCurrentPackageName().contentEquals("com.android.dialer"));
+    }
+
+    @Test
+    public void testEmail() {
+        checkUser();
+        User driver1 = new User("Marc", "Anthony", "billy bob", new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                new DriverInfo("343242324334", new Vehicle("2433432434", "432434","Van", "Jeep", "Cherokee", 2014, "Blue")));
+
+        UserESGetController.GetUserTask userESGetController1 = new UserESGetController.GetUserTask();
+        userESGetController1.execute(driver1.getUserName());
+
+        try {
+            driver1 = userESGetController1.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request pending = new Request("Pending", startAddress, endAddress, 34.0, 34.0, user.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", user.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Pending");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        pending = requestList.get(0);
+        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+        addItemToListTask.execute(pending.getRequestID(), "driverIDList", driver1.getUserID());
+
+        login("Rider Mode");
+        onView(withId(R.id.button_pending)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.pendingListView)).atPosition(0).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.biddingDriversListView)).atPosition(0).perform(click());
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject viewButton = device.findObject(new UiSelector().textContains("VIEW"));
+        if (!viewButton.exists()) {
+            throw new AssertionError("View with text <" + "View Button" + "> not found!");
+        }
+        try {
+            viewButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.email_driver_button)).perform(click());
+        onView(withId(R.id.sendEmailButton)).perform(click());
+        try {
+            TimeUnit.MILLISECONDS.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String item = device.getCurrentPackageName();
+        assertTrue(device.getCurrentPackageName().contentEquals("com.android.email"));
+    }
 
     /*
         US 01.06.01
@@ -274,7 +406,13 @@ public class Requests {
     */
     @Test
     public void testGetEstimate() {
-
+        checkUser();
+        login("Rider Mode");
+        onView(withId(R.id.request_button)).perform(click());
+        makeRequest();
+        onData(anything()).inAdapterView(withId(R.id.requestedListView)).atPosition(0).perform(click());
+        onView(withId(R.id.est_price)).check(matches(isDisplayed()));
+        deleteRequest();
     }
 
     /*
@@ -483,73 +621,391 @@ public class Requests {
         US 05.01.01
         As a driver,  I want to accept a request I agree with and accept that offered payment upon
     */
+    @Test
+    public void testAcceptingPaymentUponCompletion() {
+        checkUser();
+
+        String riderUsername = "jimmyFallon";
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Accepted", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", rider.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Accepted");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        request = requestList.get(0);
+
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask1 =
+                new RequestESSetController.SetPropertyValueTask();
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask2 =
+                new RequestESSetController.SetPropertyValueTask();
+        login("Driver Mode");
+        setPropertyValueTask1.execute(request.getRequestID(), "requestStatus", "String", "Awaiting Payment");
+        setPropertyValueTask2.execute(request.getRequestID(), "driverID", "String", user.getUserID());
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(6500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject agreeButton = device.findObject(new UiSelector().textContains("Ok"));
+        if (!agreeButton.exists()) {
+            throw new AssertionError("View with text <" + "View Profile" + "> not found!");
+        }
+        try {
+            agreeButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+        US 05.02.01
+        As a driver, I want to view a list of things I have accepted that are pending, each request with its description, and locations.
+    */
+    @Test
+    public void testViewPendingListAndViewDescription() {
+        checkUser();
+        String riderUsername = "jimmyFallon";
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Pending", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", rider.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Pending");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        request = requestList.get(0);
+
+        login("Driver Mode");
+
+        onView(withId(R.id.button_pending)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.pendingListView)).atPosition(0).perform(click());
+        onView(withId(R.id.status)).check(matches(withText("Pending")));
+
+        RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                new RequestESDeleteController.DeleteRequestTask();
+        deleteRequestTask.execute(request.getRequestID());
+    }
+
+    /*
+        US 05.03.01
+        As a driver, I want to see if my acceptance was accepted.
+    */
+    @Test
+    public void testViewAcceptedList() {
+        checkUser();
+
+        String riderUsername = "jimmyFallon";
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Accepted", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", rider.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Accepted");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        request = requestList.get(0);
+
+        login("Driver Mode");
+
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask2 = new RequestESSetController.SetPropertyValueTask();
+        setPropertyValueTask2.execute(request.getRequestID(), "driverID", "String", user.getUserID());
+        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+        addItemToListTask.execute(request.getRequestID(), "driverIDList", user.getUserID());
+
+        onView(withId(R.id.button_accepted)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.acceptedListView)).atPosition(0).perform(click());
+        onView(withId(R.id.status)).check(matches(withText("Accepted")));
+
+        RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                new RequestESDeleteController.DeleteRequestTask();
+        deleteRequestTask.execute(request.getRequestID());
+    }
+
+    /*
+        US 05.04.01
+        As a driver, I want to be notified if my ride offer was accepted.
+    */
+    @Test
+    public void testDriverRequestNotification() {
+        checkUser();
+
+        String riderUsername = "jimmyFallon";
+
+        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+        userESGetController.execute(riderUsername);
+        User rider = null;
+        try {
+            rider = userESGetController.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (rider == null) {
+            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+                    new RiderInfo("32423432432"));
+            userESGetController = new UserESGetController.GetUserTask();
+            userESGetController.execute(riderUsername);
+            try {
+                rider = userESGetController.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
+        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
+        Request request = new Request("Pending", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
+
+        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+        getRequestTask.execute("riderID", rider.getUserID());
+
+        ArrayList<Request> requestList = null;
+        RequestList requestListReal = null;
+        try {
+            requestList = getRequestTask.get();
+            requestListReal = new RequestList(requestList);
+            requestList = requestListReal.getSpecificRequestList("Pending");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        request = requestList.get(0);
+        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+        addItemToListTask.execute(request.getRequestID(), "driverIDList", user.getUserID());
+
+        login("Driver Mode");
+
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
+        setPropertyValueTask.execute(request.getRequestID(), "requestStatus", "String", "Accepted");
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.openNotification();
+        try {
+            TimeUnit.MILLISECONDS.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        UiObject acceptedNotification = device.findObject(new UiSelector().textContains("Pick"));
+        if (!acceptedNotification.exists()) {
+            throw new AssertionError("The notification was not found!");
+        }
+        try {
+            acceptedNotification.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+                new RequestESDeleteController.DeleteRequestTask();
+        deleteRequestTask.execute(request.getRequestID());
+    }
+
+//    /*
+//        US 08.01.01
+//        As an driver, I want to see requests that I already accepted while offline.
+//    */
 //    @Test
-//    public void testAcceptingPaymentUponCompletion() {
+//    public void testOfflineAcceptedRequests() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, NoSuchFieldException {
 //        checkUser();
-//        String riderUsername = "marcAnthony";
-//        User rider1 = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
-//                new RiderInfo("32423432432"));
 //
-//        UserESGetController.GetUserTask userESGetController1 = new UserESGetController.GetUserTask();
-//        userESGetController1.execute(rider1.getUserName());
+//        String riderUsername = "jimmyFallon";
+//
+//        UserESGetController.GetUserTask userESGetController = new UserESGetController.GetUserTask();
+//        userESGetController.execute(riderUsername);
+//        User rider = null;
 //        try {
-//            rider1 = userESGetController1.get();
+//            rider = userESGetController.get();
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        } catch (ExecutionException e) {
 //            e.printStackTrace();
 //        }
+//
+//        if (rider == null) {
+//            rider = new User("Marc", "Anthony", riderUsername, new Date(), "1-780-901-2233", "marc@ualberta.ca",
+//                    new RiderInfo("32423432432"));
+//            userESGetController = new UserESGetController.GetUserTask();
+//            userESGetController.execute(riderUsername);
+//            try {
+//                rider = userESGetController.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
 //        Address startAddress = new Address(STARTADDRESS, 54.0, 54.0);
 //        Address endAddress = new Address(ENDADDRESS, 55.0, 55.0);
-//        Request request = new Request("Accepted", startAddress, endAddress, 34.0, 34.0, rider1.getUserID());
+//        Request request = new Request("Requested", startAddress, endAddress, 34.0, 34.0, rider.getUserID());
 //
-//        RequestESGetController.GetRequestTask getRequestTask1 = new RequestESGetController.GetRequestTask();
-//        getRequestTask1.execute("riderID", rider1.getUserID());
+//        RequestESGetController.GetRequestTask getRequestTask = new RequestESGetController.GetRequestTask();
+//        getRequestTask.execute("riderID", rider.getUserID());
 //
-//        String requestID = null;
 //        ArrayList<Request> requestList = null;
+//        RequestList requestListReal = null;
 //        try {
-//            requestList = getRequestTask1.get();
+//            requestList = getRequestTask.get();
+//            requestListReal = new RequestList(requestList);
+//            requestList = requestListReal.getSpecificRequestList("Requested");
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        } catch (ExecutionException e) {
 //            e.printStackTrace();
 //        }
-//        request = requestList.get(0);
 //
-//        RequestESSetController.SetPropertyValueTask setPropertyValueTask1 =
-//                new RequestESSetController.SetPropertyValueTask();
-//        RequestESSetController.SetPropertyValueTask setPropertyValueTask2 =
-//                new RequestESSetController.SetPropertyValueTask();
+//        request = requestList.get(0);
+//        RequestESAddController.AddItemToListTask addItemToListTask = new RequestESAddController.AddItemToListTask();
+//        addItemToListTask.execute(request.getRequestID(), "driverIDList", user.getUserID());
+//
 //        login("Driver Mode");
-//        setPropertyValueTask1.execute(request.getRequestID(), "requestStatus", "String", "Awaiting Payment");
-//        setPropertyValueTask2.execute(request.getRequestID(), "driverID", "String", user.getUserID());
 //
-//        RequestESGetController.GetRequestTask getRequestTask2 = new RequestESGetController.GetRequestTask();
-//        getRequestTask2.execute("riderID", rider1.getUserID());
 //
 //        try {
-//            requestList = getRequestTask2.get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//        request = requestList.get(0);
-//        try {
-//            TimeUnit.MILLISECONDS.sleep(6500);
+//            TimeUnit.MILLISECONDS.sleep(6000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+//
 //        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        UiObject agreeButton = device.findObject(new UiSelector().textContains("Ok"));
-//        if (!agreeButton.exists()) {
-//            throw new AssertionError("View with text <" + "View Profile" + "> not found!");
+//        device.openNotification();
+//
+//        UiObject acceptedNotification = device.findObject(new UiSelector().textContains("Pick"));
+//        if (!acceptedNotification.exists()) {
+//            throw new AssertionError("The notification was not found!");
 //        }
 //        try {
-//            agreeButton.click();
+//            acceptedNotification.click();
 //        } catch (UiObjectNotFoundException e) {
 //            e.printStackTrace();
 //        }
+//
+//        RequestESDeleteController.DeleteRequestTask deleteRequestTask =
+//                new RequestESDeleteController.DeleteRequestTask();
+//        deleteRequestTask.execute(request.getRequestID());
 //    }
 }
