@@ -298,7 +298,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         } else {
             Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
             // Notify save
-            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_LONG).show();
         }
 
 
