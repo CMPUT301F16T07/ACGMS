@@ -40,6 +40,89 @@ public class RequestFragmentsListController {
         return requestedList;
     }
 
+    public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
+        RequestList requestList = new RequestList();
+
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestedKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedPendingKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByLocationTask retrievedRequestedCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+        RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+
+
+        try {
+            if (type == 0) {
+                retrievedRequestedKeyword.execute(
+                        "requestStatus", "string", "Requested",
+                        "_all", "string", filter
+                );
+                retrievedPendingKeyword.execute(
+                        "requestStatus", "string", "Pending",
+                        "_all", "string", filter
+                );
+                requestList.mergeRequestList(retrievedRequestedKeyword.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+
+            } else if (type == 1) {
+                retrievedRequestedCoordinates.execute(
+                        "requestStatus", "string", "Requested",
+                        distance, coordinates
+                );
+                retrievedPendingCoordinates.execute(
+                        "requestStatus", "string", "Pending",
+                        distance, coordinates
+                );
+                requestList.mergeRequestList(retrievedRequestedCoordinates.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
+            } else if (type == 2){
+                RequestESGetController.GetRequestSortedByPriceTask retrievedPendingPrice =
+                        new RequestESGetController.GetRequestSortedByPriceTask();
+                RequestESGetController.GetRequestSortedByPriceTask retrievedRequestedPrice =
+                        new RequestESGetController.GetRequestSortedByPriceTask();
+
+                String orderBy = "desc";
+                retrievedPendingPrice.execute(
+                        "requestStatus", "string", "Pending",
+                        orderBy
+                );
+                retrievedRequestedPrice.execute(
+                        "requestStatus", "string", "Request",
+                        orderBy
+                );
+                requestList.mergeRequestList(retrievedRequestedPrice.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingPrice.get()).removeDriver(userID));
+            } else if (type == 3){
+                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedPendingPriceKM =
+                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
+                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequestedPriceKM =
+                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
+
+                String orderBy = "desc";
+                retrievedPendingPriceKM.execute(
+                        "requestStatus", "string", "Pending",
+                        orderBy
+                );
+                retrievedRequestedPriceKM.execute(
+                        "requestStatus", "string", "Request",
+                        orderBy
+                );
+                requestList.mergeRequestList(retrievedRequestedPriceKM.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingPriceKM.get()).removeDriver(userID));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return requestList;
+    }
+
+
+
+
+
     public void updateCounts(String mode, Context context) {
         if (mode.contentEquals("Rider Mode")) {
             getRiderListCount(context, "Requested");

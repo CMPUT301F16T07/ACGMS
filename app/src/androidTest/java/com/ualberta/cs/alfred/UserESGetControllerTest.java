@@ -68,7 +68,7 @@ public class UserESGetControllerTest extends ActivityInstrumentationTestCase2 {
                 new UserESGetController.GetUserByIdTask();
 
         // Find user
-        retrievedUser.execute("AViVCADtdE2DZPCrf9o_");
+        retrievedUser.execute("AViYHrkNdE2DZPCrf9qf");
 
         try {
             User user = retrievedUser.get();

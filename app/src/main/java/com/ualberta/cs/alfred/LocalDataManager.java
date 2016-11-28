@@ -25,6 +25,38 @@ import java.util.Locale;
 public class LocalDataManager{
 
     /**
+     * Save a list of completed requests in a shared preference
+     *
+     * @param requestList the request list to be saved
+     * @param mode the mode, either Driver or Rider
+     * @param context the context to be passed in
+     */
+    public static void saveRCompleteList(ArrayList<Request> requestList, String mode, Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(requestList);
+        prefsEditor.putString("CompleteList"+mode, json);
+        prefsEditor.commit();
+    }
+
+    /**
+     * Load an existing saved Completed request list
+     * @param mode the mode, either Driver or Rider
+     * @param context the context to be passed in
+     * @return the ArrayList of requests stored on the phone
+     */
+    public static ArrayList<Request> loadRCompleteList(String mode, Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = preferences.getString("CompleteList"+mode, null);
+        ArrayList<Request> loadedRequestList = new Gson().fromJson(json, new TypeToken<List<Request>>(){}.getType());
+
+        return loadedRequestList;
+    }
+
+
+
+    /**
      * Save a request list in a shared preference
      *
      * @param requestList the request list to be saved
@@ -38,6 +70,8 @@ public class LocalDataManager{
         String json = gson.toJson(requestList);
         prefsEditor.putString("RequestList"+mode, json);
         prefsEditor.commit();
+
+
     }
 
     /**
@@ -132,6 +166,7 @@ public class LocalDataManager{
         return offlineRequests;
     }
 
+
     /**
      * Saves an ArrayList of requests that were made while offline into the Phone's memory
      * @param offlineList The ArrayList containing PartialRequests made while offline
@@ -144,6 +179,69 @@ public class LocalDataManager{
         String json = gson.toJson(offlineList);
         prefsEditor.putString("PARTIALREQUESTS", json);
         prefsEditor.commit();
+    }
+
+
+    /**
+     * load the list of offline Acceptances
+     * @param context the context passed
+     * @return the list of PartialAcceptances
+     */
+    public static ArrayList<PartialAcceptances> loadPartialAcceptances(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = preferences.getString("PARTIALACCEPTANCES", null);
+        ArrayList<PartialAcceptances> offlineRequests = new Gson().fromJson(json, new TypeToken<List<PartialAcceptances>>(){}.getType());
+
+        return offlineRequests;
+    }
+
+
+    /**
+     * saves a list of PartialAcceptances on the local disk
+     * @param offlineList the list of PartialAcceptances
+     * @param context the context to the passed
+     */
+    public static void savePartialAcceptances(ArrayList<PartialAcceptances> offlineList, Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(offlineList);
+        prefsEditor.putString("PARTIALACCEPTANCES", json);
+        prefsEditor.commit();
+    }
+
+
+    /**
+     * process the PartialAcceptances which were made by the driver while there was no connectivity
+     * @param context
+     */
+    public static void executeOfflineAcceptances(Context context) {
+        ArrayList<PartialAcceptances> offlineAcceptances = loadPartialAcceptances(context);
+        for (int i = 0; i<offlineAcceptances.size();i++){
+            PartialAcceptances curr = offlineAcceptances.get(i);
+            String from = curr.getFrom();
+            String userID = curr.getUserID();
+            String mode = curr.getMode();
+            Request passedRequest = curr.getPassedRequest();
+            String driverSelected = curr.getDriverSelected();
+
+            RequestESSetController.SetPropertyValueTask setPropertyValueTask =new RequestESSetController.SetPropertyValueTask();
+            if (from.contentEquals("Pending")) {
+                setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Accepted");
+            } else {
+                setPropertyValueTask.execute(passedRequest.getRequestID(), "requestStatus", "String", "Pending");
+            }
+            if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
+                RequestESAddController.AddItemToListTask addItemToListTask1 =new RequestESAddController.AddItemToListTask();
+                addItemToListTask1.execute(passedRequest.getRequestID(), "driverIDList", userID);
+            }
+            if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
+                RequestESSetController.SetPropertyValueTask setPropertyValueTask1 = new RequestESSetController.SetPropertyValueTask();
+                setPropertyValueTask1.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
+            }
+        }
+        ArrayList<PartialAcceptances> offlineRequestList = new ArrayList<PartialAcceptances>();
+        savePartialAcceptances(offlineRequestList,context);
     }
 
 
@@ -254,4 +352,6 @@ public class LocalDataManager{
         Toast.makeText(context,"Ride Requested",Toast.LENGTH_SHORT).show();
 
     }
+
+
 }
