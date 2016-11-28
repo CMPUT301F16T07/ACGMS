@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +25,27 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by carlcastello on 08/11/16.
+ * This fragment is where user can edit there request.
+ * @author carlcastello
+ * @author sheltian
  */
-
 public class UserViewFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
     private String emailAddress;
     private String phoneNumber;
 
+    /**
+     * an Empty constructor
+     */
     public UserViewFragment() {
     }
 
+    /**
+     * creates a new instance of UserViewFragment.
+     * @param position
+     * @return
+     */
     public static UserViewFragment newInstance(int position) {
         Bundle args = new Bundle();
         args.putInt("index",position);
@@ -44,13 +54,19 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         return userViewFragment;
     }
 
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
         String userName = "";
-        String otherUserID = "";
         String userMode = "";
 
         int position = 0;
@@ -62,21 +78,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             userName = preferences.getString("USERNAME", null);
             userMode = preferences.getString("MODE", "None");
-        } else {
-            otherUserID = bundle.getString("userID");
-            User otherUser = new User("","","",new Date(),"","");
-            try {
-                //retrieving rider's username from elasticsearch with userID
-                UserESGetController.GetUserByIdTask getUserByID = new UserESGetController.GetUserByIdTask();
-                otherUser = getUserByID.execute(otherUserID).get();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            userName = otherUser.getUserName();
-            userMode = "Driver";
         }
 
         User user = new User("","","",new Date(),"","");
@@ -121,24 +122,43 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * this is where when edit_button is clicked
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.edit_button:
                 //TODO: user edit fragment
-               /* Fragment fragment = UserEditFragment.newInstance();
-                MenuActivity.bottomBar.selectTabAtPosition(1,true);
-                replaceFragmentwithStack(fragment);*/
+                Fragment fragment = UserEditFragment.newInstance();
+                replaceFragmentwithStack(fragment);
+
 
         }
 
     }
 
 
+    /**
+     * Replace the fragment container with back stack
+     * @param fragment
+     */
     private void replaceFragmentwithStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.user_fragment_container, fragment);
         transaction.commit();
     }
+
+    /**
+     * Replace the fragment container without back stack
+     * @param fragment
+     */
+    private void replaceFragmentwithoutStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.user_fragment_container, fragment);
+        transaction.commit();
+    }
+
 }

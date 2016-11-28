@@ -25,10 +25,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by carlcastello on 09/11/16.
- */
 
+/** Pending Fragment is a fragment class where all pending list is found.
+*
+* @author carlcastello on 09/11/16.
+* @author averytan
+* @author mmcote
+* @author shltien
+*/
 public class PendingFragment extends Fragment {
     private ArrayAdapter<Request> requestAdapter;
     private ListView pendingListView;
@@ -37,7 +41,10 @@ public class PendingFragment extends Fragment {
     private List<Pair<String, String>> listNeeded;
     private String userID;
 
-
+    /**
+     * Constructor of the Requested Fragment.
+     * Initialize fundamental variables
+     */
     public PendingFragment() {
         this.rFLC = new RequestFragmentsListController();
         this.listNeeded = null;
@@ -47,24 +54,22 @@ public class PendingFragment extends Fragment {
         this.userID = null;
     }
 
+    /**
+     * get instance of pending fragment
+     * @return
+     */
     public static PendingFragment newInstance() {
         PendingFragment pendingFragment = new PendingFragment();
         return pendingFragment;
     }
 
+    /**
+     * onResume function where the accepted listView updating is done.
+     */
     @Override
     public void onResume() {
         super.onResume();
         View view = getView();
-
-        //changed button colors
-//        Button requestedBtn = (Button) findViewById(R.id.button_requested);
-//        Button pendingBtn = (Button) view.findViewById(R.id.button_pending);
-//        Button acceptedBtn = (Button) view.findViewById(R.id.button_accepted);
-//        requestedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-//        Drawable border = getResources().getDrawable(R.drawable.button_border);
-//        pendingBtn.setBackground(border);
-//        acceptedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userID = preferences.getString("USERID", null);
@@ -116,6 +121,13 @@ public class PendingFragment extends Fragment {
 
     }
 
+    /**
+     * view functionatilies are initialize.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

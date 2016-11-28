@@ -7,6 +7,7 @@ import android.os.Bundle;
 /**
  * The type Splash activity.
  * unused
+ *  Splash activity at app startup
  * @deprecated
  */
 public class SplashActivity extends AppCompatActivity {

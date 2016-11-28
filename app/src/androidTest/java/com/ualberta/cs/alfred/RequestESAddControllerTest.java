@@ -9,12 +9,16 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Test cases for adding request item to Elasticsearch.
+ *
  * @author ookmm
  * @version 1.1
  * @see RequestESAddControllerTest
  */
 public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new Request es add controller test.
+     */
     public RequestESAddControllerTest() {
         super(MainActivity.class);
     }
@@ -106,6 +110,9 @@ public class RequestESAddControllerTest extends ActivityInstrumentationTestCase2
         assert(true);
     }
 
+    /**
+     * Test add item to list task.
+     */
     public void testAddItemToListTask() {
 
         String requestID = "AVhrkmHQdE2DZPCrf9fS";

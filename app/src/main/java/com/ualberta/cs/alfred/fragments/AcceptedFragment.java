@@ -29,10 +29,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by carlcastello on 09/11/16.
+ * Accepted Fragment is a fragment class where all accepted listed is found.
+ *
+ * @author carlcastello on 09/11/16.
  */
-
 public class AcceptedFragment extends Fragment {
+
     private ArrayAdapter<Request> requestAdapter;
     private ListView acceptedListView;
     private SharedPreferences preferences;
@@ -40,6 +42,10 @@ public class AcceptedFragment extends Fragment {
     private List<Pair<String, String>> listNeeded;
     private String userID;
 
+    /**
+     * Constructor of the Accepted Fragment.
+     * Initialize fundamental variables
+     */
     public AcceptedFragment() {
         this.rFLC = new RequestFragmentsListController();
         this.listNeeded = null;
@@ -49,29 +55,31 @@ public class AcceptedFragment extends Fragment {
         this.userID = null;
     }
 
+    /**
+     * Get an instance of Accepted Fragment
+     *
+     * @return AcceptedFragment accepted fragment
+     */
     public static AcceptedFragment newInstance() {
         AcceptedFragment acceptedFragment = new AcceptedFragment();
         return acceptedFragment;
     }
 
+
+    /**
+     * onResume function where the accepted listView updating is done.
+     */
     @Override
     public void onResume() {
         super.onResume();
         View view = getView();
-        // change button colors
-//        Button requestedBtn = (Button) view.findViewById(R.id.button_requested);
-//        Button pendingBtn = (Button) view.findViewById(R.id.button_pending);
-//        Button acceptedBtn = (Button) view.findViewById(R.id.button_accepted);
-//        requestedBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-//        Drawable border = getResources().getDrawable(R.drawable.button_border);
-//        acceptedBtn.setBackground(border);
-//        pendingBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
+        // PreferenceManager for string passing from class to class.
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         userID = preferences.getString("USERID", null);
         acceptedListView = (ListView) view.findViewById(R.id.acceptedListView);
         ArrayList<Request> acceptedRequestList;
 
+        // Separate driver's list to a rider's list
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Accepted"));
             acceptedRequestList = rFLC.getRequestList(listNeeded).getWithDriver(userID);
@@ -94,6 +102,7 @@ public class AcceptedFragment extends Fragment {
 
         }
 
+        // Change Accepted List size.
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Accepted", Integer.toString(acceptedRequestList.size()));
         editor.commit();
@@ -112,6 +121,13 @@ public class AcceptedFragment extends Fragment {
         });
     }
 
+    /**
+     * All view functionalities are initialize.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

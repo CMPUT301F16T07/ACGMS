@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
  * Test cases for Status.
  *
  * @author ookmm
+ * @version 1.0
  */
 @RunWith(AndroidJUnit4.class)
 public class StatusTest {

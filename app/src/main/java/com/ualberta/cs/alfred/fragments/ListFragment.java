@@ -16,9 +16,13 @@ import android.widget.Button;
 import com.ualberta.cs.alfred.R;
 
 /**
- * Created by carlcastello on 08/11/16.
+ * Accepted Fragment is a fragment class where all accepted listed is found.
+ *
+ * @author carlcastello
+ * @author averytan
+ * @author mmcote
+ * @author shltien
  */
-
 public class ListFragment extends Fragment implements View.OnClickListener {
 
     private FragmentTransaction transaction;
@@ -27,9 +31,18 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     private static Button acceptedButton;
 
 
+    /**
+     * Instantiates a new List fragment.
+     */
     public ListFragment() {
     }
 
+    /**
+     * New instance list fragment.
+     *
+     * @param position the position
+     * @return the list fragment
+     */
     public static ListFragment newInstance(int position) {
         Bundle args = new Bundle();
         args.putInt("index",position);
@@ -38,15 +51,27 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         return listFragment;
     }
 
+    /**
+     * OnRsume to handld update request count
+     */
     @Override
     public void onResume() {
         super.onResume();
+        // call update function
         update(getContext());
     }
 
+
+    /**
+     * onCreate function where buttons are defined and created.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
-    //http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
+    //code from http://stackoverflow.com/questions/32700818/how-to-open-a-fragment-on-button-click-from-a-fragment-in-android
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list,container,false);
 
@@ -60,28 +85,21 @@ public class ListFragment extends Fragment implements View.OnClickListener {
 
         if (bundle != null) {
             int position = bundle.getInt("index",0);
-            //Toast.makeText(getActivity(), String.valueOf(position),Toast.LENGTH_SHORT).show();
             switch (position) {
                 case 0:
                     fragment = RequestedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    acceptedButton.setBackground(noBorder);
                         requestedButton.setBackground(border);
-//                    pendingButton.setBackground(noBorder);
                     break;
                 case 1:
                     fragment = PendingFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    requestedButton.setBackground(noBorder);
                         pendingButton.setBackground(border);
-//                    acceptedButton.setBackground(noBorder);
                     break;
                 case 2:
                     fragment = AcceptedFragment.newInstance();
                     replaceFragmentwithoutStack(fragment);
-//                    requestedButton.setBackground(border);
                         acceptedButton.setBackground(border);
-//                    pendingButton.setBackground(border);
                     break;
             }
         }
@@ -94,6 +112,10 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * onClick where buttons click are read
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         Bundle bundle = this.getArguments();
@@ -127,12 +149,21 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Fragment replacing function without back stack
+     * @param fragment
+     */
     private void replaceFragmentwithoutStack(Fragment fragment) {
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.list_container, fragment);
         transaction.commit();
     }
 
+    /**
+     * Updates function that replace the button counts
+     *
+     * @param context the context
+     */
     public static void update(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         RequestFragmentsListController rFLC = new RequestFragmentsListController();

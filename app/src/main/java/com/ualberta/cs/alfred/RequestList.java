@@ -19,6 +19,11 @@ public class RequestList {
      */
     protected List<Request> requestList;
 
+    /**
+     * Return array list array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Request> returnArrayList() {
         return (ArrayList<Request>) requestList;
     };
@@ -32,6 +37,8 @@ public class RequestList {
 
     /**
      * Instantiates a new Request list (Assignment Operator)
+     *
+     * @param requestList the request list
      */
     public RequestList(ArrayList<Request> requestList) {
         this.requestList = requestList;
@@ -40,6 +47,7 @@ public class RequestList {
     /**
      * Adds list into a list
      *
+     * @param list the list
      * @return request list
      */
     public List mergeRequestList(ArrayList<Request> list) {
@@ -91,9 +99,11 @@ public class RequestList {
     }
 
     /**
-     *  Gets a request list sorted by price
+     * Gets a request list sorted by price
+     *
+     * @return the array list
      */
-    public ArrayList<Request> sortByPrice() {
+    public ArrayList<Request> sortByPricePerKM() {
 
         ArrayList<Request> list = new ArrayList<>();
         list.addAll(requestList);
@@ -102,6 +112,20 @@ public class RequestList {
             @Override
             public int compare(Request r1, Request r2) {
                 return Double.compare((r1.getCost()/r1.getDistance()), (r2.getCost()/r2.getDistance()));
+            }
+        });
+        return list;
+    }
+
+    public ArrayList<Request> sortByPrice() {
+
+        ArrayList<Request> list = new ArrayList<>();
+        list.addAll(requestList);
+
+        Collections.sort(list, new Comparator<Request>() {
+            @Override
+            public int compare(Request r1, Request r2) {
+                return Double.compare(r1.getCost(),r2.getCost());
             }
         });
         return list;
@@ -132,8 +156,7 @@ public class RequestList {
      * removes a driver
      *
      * @param userID the username of the driver
-     *
-     *
+     * @return the array list
      */
     public ArrayList<Request> removeDriver(String userID) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
@@ -152,8 +175,7 @@ public class RequestList {
      * get the requested driver
      *
      * @param userName the username of the driver
-     *
-     *
+     * @return the with driver
      */
     public ArrayList<Request> getWithDriver(String userName) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
@@ -187,6 +209,11 @@ public class RequestList {
         requestList.add(request);
     }
 
+    /**
+     * Add multiple request.
+     *
+     * @param requests the requests
+     */
     public void addMultipleRequest(List<Request> requests) {
         requestList.addAll(requests);
     }
@@ -210,6 +237,12 @@ public class RequestList {
         return requestList.size();
     }
 
+    /**
+     * Gets with driver as selected.
+     *
+     * @param userID the user id
+     * @return the with driver as selected
+     */
     public ArrayList<Request> getWithDriverAsSelected(String userID) {
         ArrayList<Request> tempRequestList = new ArrayList<>();
         for (Request request : requestList) {

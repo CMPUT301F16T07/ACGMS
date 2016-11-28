@@ -1,7 +1,5 @@
 package com.ualberta.cs.alfred;
 
-//import android.app.Fragment;
-//import android.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,11 +37,14 @@ import org.w3c.dom.Document;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 
 /**
- * activity for the request details
+ * activity for showing the request details
+ * @author shelltian820 and mmcote and carlcastello
+ *
  */
 public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -58,6 +60,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private ArrayList<String> driverIDs;
     private ArrayList<String> driverUsernameArray;
     private ArrayList<PartialAcceptances> partialAcceptancesList;
+    private String driverID;
+    private double newRating;
+    private User driver;
 
 
     @Override
@@ -110,6 +115,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         rideCompleteButton.setVisibility(View.GONE);
         Button confirmButton = (Button) findViewById(R.id.accept_pending_button);
         final Button cancelButton = (Button) findViewById(R.id.cancel_request_button);
+        Button rateDriverButton = (Button) findViewById(R.id.rate_driver_button);
+        rateDriverButton.setVisibility(View.GONE);
 
         // the list of bidding drivers that will only show to the rider in the pending list
         biddingDriversListView = (ListView) findViewById(R.id.biddingDriversListView);
@@ -182,6 +189,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 selectedDriver.setText("");
             }
         } else if (from.contentEquals("Accepted") || from.contentEquals("Awaiting Payment") || from.contentEquals("Completed")) {
+            if (from.contentEquals("Completed")){
+                rateDriverButton.setVisibility(View.VISIBLE);
+            }
             UserESGetController.GetUserByIdTask getUserByIdTask = new UserESGetController.GetUserByIdTask();
             getUserByIdTask.execute(passedRequest.getDriverID());
             User driver = null;
@@ -231,13 +241,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setNeutralButton("View Profile", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        Fragment fragment = UserFragment.newInstance(1,possibleDriver);
-//                        MenuActivity.bottomBar.selectTabAtPosition(1,true);
-//                        replaceFragmentwithStack(fragment);
                         Intent intent = new Intent(RequestDetailsActivity.this, DriverDetailsActivity.class);
                         intent.putExtra("ID",possibleDriver);
                         startActivity(intent);
-
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -364,6 +370,84 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 dialog.show();
             }
         });
+        rateDriverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get selected driver's ID
+                driver = null;
+                try {
+                    //retrieving rider's information from elasticsearch
+                    UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
+                    driver = getUser.execute(driverSelected).get();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                if (driver != null){
+                    driverID = driver.getUserID();
+                }else{
+                    Toast.makeText(RequestDetailsActivity.this,"Error retrieving selected driver!",Toast.LENGTH_LONG);
+                }
+
+                //code from http://stackoverflow.com/questions/4671428/how-can-i-add-a-third-button-to-an-android-alert-dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                builder.setTitle("Rate Driver");
+
+                builder.setItems(new CharSequence[]
+                                {"1.0", "2.0", "3.0", "4.0", "5.0"},
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                switch (which) {
+                                    case 0:
+                                        newRating = 1.0;
+                                        String newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask1 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask1.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 1.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 1:
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask2 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask2.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 2.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 2:
+                                        newRating = 3.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask3 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask3.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 3.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 3:
+                                        newRating = 4.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask4 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask4.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 4.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 4:
+                                        newRating = 5.0;
+                                        newRatingAsString = String.valueOf(newRating);
+                                        UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask5 =
+                                                new UserESAddController.AddNewDriverRatingTask();
+                                        addNewDriverRatingTask5.execute(driverID, newRatingAsString);
+                                        Toast.makeText(RequestDetailsActivity.this, "Rated 5.0", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        });
+                builder.create().show();
+
+            }
+        });
 
         showDetails(passedRequest);
         //load map only if cconnected to internet
@@ -383,6 +467,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    /**
+     * upgrades request status to different status
+     * @param from current status
+     */
     public void upgradeStatus(String from) {
         RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                 new RequestESSetController.SetPropertyValueTask();
@@ -393,16 +481,17 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * show details in the RequestDetailsActivity
+     * @param request the request that is passed in
+     */
     public void showDetails(Request request){
-        TextView requestID = (TextView) findViewById(R.id.request_ID);
         TextView status = (TextView) findViewById(R.id.status);
         TextView estPrice = (TextView) findViewById(R.id.est_price);
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView startLoc = (TextView) findViewById(R.id.start_loc);
         TextView endLoc = (TextView) findViewById(R.id.end_loc);
 
-        // get and display request ID
-        requestID.setText(request.getRequestID());
         //get and display request status
         if (!from.contentEquals("Completed")) {
             status.setText(from);
@@ -431,20 +520,14 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         endLoc.setText(request.getDestinationAddress().getLocation());
     }
 
-    private void replaceFragmentwithStack(Fragment fragment) {
-        FragmentTransaction transaction;
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.user_container, fragment); //in request details
-        transaction.commit();
-    }
-
-
+    /**
+     * sets start and end markers and show the connecting route
+     * @param mMap
+     */
     @Override
     public void onMapReady(GoogleMap mMap) {
 
         googleMap = mMap;
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
 
         double x1 = passedRequest.getSourceAddress().getLatitude();
         double y1 = passedRequest.getSourceAddress().getLongitude();
@@ -500,6 +583,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    /**
+     * on resume activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -508,6 +594,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on pause activity
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -516,6 +605,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on destroy activity
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -524,6 +616,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * on low memory activity
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();

@@ -132,6 +132,10 @@ public class DriverDetailsActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Responds to button clicks
+     * @param v the view that is passed in
+     */
     public void onClick(View v) {
         switch (v.getId()) {
 

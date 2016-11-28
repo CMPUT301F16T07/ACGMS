@@ -37,11 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by carlcastello on 09/11/16.
- * This is the fragment for making a new request
- */
-
+/* RequestFragment is a fragment class where user want to add a request.
+* @author carlcastello on 09/11/16.
+* @author averytan
+* @author mmcote
+* @author shltien
+*/
 public class RequestFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
 
@@ -63,6 +64,13 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         return requestFragment;
     }
 
+    /**
+     * view functionatilies are initialize.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +93,10 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         return view;
     }
 
+    /**
+     * when the request done butoon is clicked.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -210,6 +222,12 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         }
     }
 
+    /**
+     * check button listener.
+     * this defines the type of address input
+     * @param group
+     * @param checkedId
+     */
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         View view = getView();
@@ -264,6 +282,17 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         }
     }
 
+    /**
+     * A function that parse the input boxes to create a request
+     * @param Status
+     * @param userID
+     * @param start
+     * @param end
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     private void makeRequest(String Status, String userID, String start, String end,
                              double x1,double y1,double x2,double y2){
         // Address is defined as
@@ -298,7 +327,7 @@ public class RequestFragment extends Fragment implements View.OnClickListener, R
         } else {
             Request request = new Request(Status, startPointAddress, endPointAddress, distance, cost, userID);
             // Notify save
-            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Ride Requested",Toast.LENGTH_LONG).show();
         }
 
 

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
+import com.ualberta.cs.alfred.AppSettings;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
@@ -15,10 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by mmcote on 2016-11-17.
- */
 
+/**
+<<<<<<< HEAD
+* Accepted Fragment is a fragment class where all accepted listed is found.
+*
+* @author carlcastello on 09/11/16.
+* @author averytan
+* @author mmcote on 2016-11-17.
+* @author shltien
+*/
 public class RequestFragmentsListController {
     public RequestList getRequestList(List<Pair<String, String>> queries) {
         /* The request that should be retrieved are all requests that are currently with a requested status and those that
@@ -40,6 +47,25 @@ public class RequestFragmentsListController {
         return requestedList;
     }
 
+    /**
+<<<<<<< HEAD
+     * Request flter command.
+     * @param distance
+     * @param coordinates
+     * @param filter
+     * @param userID
+     * @param type
+     * @return
+=======
+     * get filtered RequestList
+     * @param distance the distance string being filtered
+     * @param coordinates the coordinates string being filtered
+     * @param filter the filter string
+     * @param userID the userID string being filtered
+     * @param type the type integer
+     * @return RequestList of filtered requests
+>>>>>>> 67f0a778a7f5645819700e7710aa85d0d5b04e54
+     */
     public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
         RequestList requestList = new RequestList();
 
@@ -51,19 +77,16 @@ public class RequestFragmentsListController {
                 new RequestESGetController.GetRequestByLocationTask();
         RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
                 new RequestESGetController.GetRequestByLocationTask();
-        RequestESGetController.GetRequestTask getPending =
-                new RequestESGetController.GetRequestTask();
-        RequestESGetController.GetRequestTask getRequested =
-                new RequestESGetController.GetRequestTask();
+
 
         try {
             if (type == 0) {
                 retrievedRequestedKeyword.execute(
-                        "requestStatus", "string", "Requested",
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
                         "_all", "string", filter
                 );
                 retrievedPendingKeyword.execute(
-                        "requestStatus", "string", "Pending",
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
                         "_all", "string", filter
                 );
                 requestList.mergeRequestList(retrievedRequestedKeyword.get());
@@ -71,22 +94,45 @@ public class RequestFragmentsListController {
 
             } else if (type == 1) {
                 retrievedRequestedCoordinates.execute(
-                        "requestStatus", "string", "Requested",
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
                         distance, coordinates
                 );
                 retrievedPendingCoordinates.execute(
-                        "requestStatus", "string", "Pending",
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
                         distance, coordinates
                 );
                 requestList.mergeRequestList(retrievedRequestedCoordinates.get());
                 requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
             } else if (type == 2){
-                getPending.execute("requestStatus", "Pending");
-                getRequested.execute("requestStatus", "Requested");
-                //requestList = new RequestList(getPending.get()).removeDriver(userID);
-                //getRequested.execute("requestStatus", "Requested");
-                requestList.mergeRequestList(getRequested.get());
-                requestList.mergeRequestList(new RequestList(getPending.get()).removeDriver(userID));
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
+
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
+                );
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
+                );
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPrice());
+            } else if (type == 3){
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
+
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
+                );
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
+                );
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPricePerKM());
             }
         } catch (Exception e) {
             e.printStackTrace();
