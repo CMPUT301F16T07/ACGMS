@@ -2,14 +2,13 @@ package com.ualberta.cs.alfred;
 
 //import android.app.Fragment;
 //import android.app.FragmentTransaction;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -32,16 +31,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
-import com.ualberta.cs.alfred.fragments.SettingsFragment;
-import com.ualberta.cs.alfred.fragments.UserFragment;
-import com.ualberta.cs.alfred.fragments.UserViewFragment;
-
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -64,6 +57,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private String from;
     private ArrayList<String> driverIDs;
     private ArrayList<String> driverUsernameArray;
+    private ArrayList<PartialAcceptances> partialAcceptancesList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,18 +248,32 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upgradeStatus(from);
                 String userID = preferences.getString("USERID", null);
-                if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
-                    RequestESAddController.AddItemToListTask addItemToListTask =
-                            new RequestESAddController.AddItemToListTask();
-                    addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", preferences.getString("USERID", null));
+
+                //if there is connectivity, execute the processing of accepting a request, if not, store it in a list of
+                //PartialAcceptances which is stored locally on the disk
+                if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+                    upgradeStatus(from);
+                    if (mode.contentEquals("Driver Mode") && userID != null && !passedRequest.getDriverIDList().contains(userID)) {
+                        RequestESAddController.AddItemToListTask addItemToListTask =
+                                new RequestESAddController.AddItemToListTask();
+                        addItemToListTask.execute(passedRequest.getRequestID(), "driverIDList", userID);
+                    }
+                    if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
+                        RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
+                        setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
+                    }
+                    finish();
                 }
-                if (from.contentEquals("Pending") && mode.contentEquals("Rider Mode")) {
-                    RequestESSetController.SetPropertyValueTask setPropertyValueTask = new RequestESSetController.SetPropertyValueTask();
-                    setPropertyValueTask.execute(passedRequest.getRequestID(), "driverID", "string", driverSelected);
+                else{
+                    partialAcceptancesList = LocalDataManager.loadPartialAcceptances(RequestDetailsActivity.this);
+                    if (partialAcceptancesList.isEmpty()){
+                        partialAcceptancesList = new ArrayList<PartialAcceptances>();
+                    }
+                    PartialAcceptances offlineAcceptances = new PartialAcceptances(from, userID, mode, passedRequest,driverSelected);
+                    partialAcceptancesList.add(offlineAcceptances);
+                    LocalDataManager.savePartialAcceptances(partialAcceptancesList,RequestDetailsActivity.this);
                 }
-                finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -274,10 +283,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setCancelable(Boolean.TRUE);
                 if (mode.contentEquals("Rider Mode")) {
                     if (!from.contentEquals("Requested")) {
-                        builder.setTitle("Delete or Downgrade the selected request? " +
+                        builder.setTitle("Remove or Downgrade the selected request? " +
                                 "(Downgrading the request will clear the list of bidding drivers.)");
                     } else {
-                        builder.setTitle("Delete the selected request?");
+                        builder.setTitle("Remove the selected request?");
                     }
                     builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
@@ -357,18 +366,21 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         });
 
         showDetails(passedRequest);
+        //load map only if cconnected to internet
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView = (MapView) this.findViewById(R.id.mapView);
+            mapView.onCreate(savedInstanceState);
+            mapView.onResume();
 
-        mapView = (MapView) this.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
+            try {
+                MapsInitializer.initialize(this.getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        try {
-            MapsInitializer.initialize(this.getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
+            mapView.getMapAsync(this);
         }
 
-        mapView.getMapAsync(this);
     }
 
     public void upgradeStatus(String from) {
@@ -395,12 +407,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         if (!from.contentEquals("Completed")) {
             status.setText(from);
             if (from.contentEquals("Accepted")){
-                status.setTextColor(0xff008000);
+                status.setBackgroundColor(getResources().getColor(R.color.lightGreen));
             }
             else if (from.contentEquals("Pending")){
-                status.setTextColor(0xffffd700);
-            }
-            else status.setTextColor(0xffff0000);
+                status.setBackgroundColor(getResources().getColor(R.color.lightYellow));            }
+            else status.setBackgroundColor(getResources().getColor(R.color.lightRed));
         } else {
             String currentStatus = request.getRequestStatus();
             status.setText(currentStatus);
@@ -431,6 +442,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap mMap) {
+
         googleMap = mMap;
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
 
@@ -482,7 +494,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             rectLine.add(directionPoint.get(i));
         }
 
-        Polyline polylin = googleMap.addPolyline(rectLine);
+        googleMap.addPolyline((rectLine));
+
 
 
     }
@@ -490,24 +503,33 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onPause();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onDestroy();
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+            mapView.onLowMemory();
+        }
     }
+
 }

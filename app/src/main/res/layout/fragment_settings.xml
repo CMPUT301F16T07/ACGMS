@@ -9,20 +9,22 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/completedRequestTitle"
         android:layout_alignParentStart="true"
-        android:id="@+id/completedRequestListView" />
+        android:id="@+id/completedRequestListView"
+        android:layout_margin="8dp" />
 
     <TextView
-        android:text="Past Requests: "
+        android:text=" PAST REQUESTS"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/large_button_box"
         android:id="@+id/completedRequestTitle"
-        android:textSize="36sp"
+        android:textSize="@dimen/home_text"
         android:textStyle="normal|bold"
         android:textColor="#ffffff"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical"/>
 
 </RelativeLayout>

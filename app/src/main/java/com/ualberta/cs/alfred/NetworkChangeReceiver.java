@@ -37,7 +37,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 LocalDataManager.executeOfflineRequests(context);
             }
             else if (mode.equals("Driver Mode")){
-                //process accepting requests
+                LocalDataManager.executeOfflineAcceptances(context);
             }
 
 

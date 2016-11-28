@@ -1,17 +1,22 @@
 package com.ualberta.cs.alfred;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.sql.Driver;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Shelley on 2016-11-26.
+ * Shows driver details when driver's username is clicked
+ * Can contact the driver by phone or email
  */
 public class DriverDetailsActivity extends AppCompatActivity{
     private String userID;
@@ -116,6 +121,10 @@ public class DriverDetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //start call
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + phoneNumber));
+                startActivity(callIntent);
+
 
             }
         });
@@ -124,17 +133,20 @@ public class DriverDetailsActivity extends AppCompatActivity{
     }
 
     public void onClick(View v) {
-
         switch (v.getId()) {
+
             case R.id.email_driver_button:
                 //start email activity to send email
-                Intent intent = new Intent(DriverDetailsActivity.this, SendEmailActivity.class);
-                intent.putExtra("to",emailAddress);
-                startActivity(intent);
+                Intent emailIntent = new Intent(DriverDetailsActivity.this, SendEmailActivity.class);
+                emailIntent.putExtra("to",emailAddress);
+                startActivity(emailIntent);
                 break;
             case R.id.call_driver_button:
                 //TODO: start call
-
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                String telString = "tel:"+phoneNumber;
+                callIntent.setData(Uri.parse(telString));
+                startActivity(callIntent);
                 break;
 
         }
