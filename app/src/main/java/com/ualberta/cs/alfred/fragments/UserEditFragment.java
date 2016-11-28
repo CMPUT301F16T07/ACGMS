@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by carlcastello on 13/11/16.
+ *
  */
 
 public class UserEditFragment extends Fragment implements View.OnClickListener {

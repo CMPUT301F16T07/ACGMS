@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Activity responsible for allowing users to sign up
- *
+ * @author mmcote
  *
  */
 public class SignUpActivity extends AppCompatActivity {

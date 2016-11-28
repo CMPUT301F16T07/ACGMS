@@ -1,7 +1,5 @@
 package com.ualberta.cs.alfred;
 
-//import android.app.Fragment;
-//import android.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,7 +40,10 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * activity for the request details
+ * activity for showing the request details
+ * @author shelltian820
+ * @author mmcote
+ * @author carlcastello
  */
 public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -231,13 +232,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setNeutralButton("View Profile", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        Fragment fragment = UserFragment.newInstance(1,possibleDriver);
-//                        MenuActivity.bottomBar.selectTabAtPosition(1,true);
-//                        replaceFragmentwithStack(fragment);
                         Intent intent = new Intent(RequestDetailsActivity.this, DriverDetailsActivity.class);
                         intent.putExtra("ID",possibleDriver);
                         startActivity(intent);
-
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -383,6 +380,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    /**
+     * upgrades request status to different status
+     * @param from current status
+     */
     public void upgradeStatus(String from) {
         RequestESSetController.SetPropertyValueTask setPropertyValueTask =
                 new RequestESSetController.SetPropertyValueTask();
@@ -393,6 +394,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
+    /**
+     * show details in the RequestDetailsActivity
+     * @param request the request that is passed in
+     */
     public void showDetails(Request request){
         TextView status = (TextView) findViewById(R.id.status);
         TextView estPrice = (TextView) findViewById(R.id.est_price);
@@ -428,20 +433,14 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         endLoc.setText(request.getDestinationAddress().getLocation());
     }
 
-    private void replaceFragmentwithStack(Fragment fragment) {
-        FragmentTransaction transaction;
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.user_container, fragment); //in request details
-        transaction.commit();
-    }
-
-
+    /**
+     * sets start and end markers and show the connecting route
+     * @param mMap
+     */
     @Override
     public void onMapReady(GoogleMap mMap) {
 
         googleMap = mMap;
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation,10));
 
         double x1 = passedRequest.getSourceAddress().getLatitude();
         double y1 = passedRequest.getSourceAddress().getLongitude();

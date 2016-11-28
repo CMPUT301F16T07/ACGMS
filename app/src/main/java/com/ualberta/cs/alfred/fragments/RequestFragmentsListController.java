@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by mmcote on 2016-11-17.
+ * Controller of lists that belong to the request fragments
+ * @author mmcote
  */
 
 public class RequestFragmentsListController {
@@ -40,6 +41,15 @@ public class RequestFragmentsListController {
         return requestedList;
     }
 
+    /**
+     * get filtered RequestList
+     * @param distance the distance string being filtered
+     * @param coordinates the coordinates string being filtered
+     * @param filter the filter string
+     * @param userID the userID string being filtered
+     * @param type the type integer
+     * @return RequestList of filtered requests
+     */
     public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
         RequestList requestList = new RequestList();
 
