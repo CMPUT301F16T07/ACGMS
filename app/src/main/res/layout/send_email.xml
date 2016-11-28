@@ -62,29 +62,31 @@
         android:paddingBottom="10dp"
         android:gravity="top"/>
 
-    <Button
+    <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send"
-        android:textStyle="normal|bold"
-        android:textColor="@color/colorWhite"
-        android:id="@+id/sendEmailButton"
-        android:paddingTop="20dp"
-        android:background="@color/colorPrimary"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:textSize="@dimen/button_text" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:textColor="@color/colorWhite"
-        android:id="@+id/cancelEmailButton"
-        android:background="@color/accepted"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:textSize="@dimen/button_text" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:textStyle="normal|bold"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/sendEmailButton"
+            android:background="@color/colorPrimary"
+            android:textSize="@dimen/button_text"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/colorGray"
+            android:id="@+id/cancelEmailButton"
+            android:background="@color/accepted"
+            android:textSize="@dimen/button_text"
+            android:layout_margin="5dp" />
+    </TableRow>
 
 
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
+import com.ualberta.cs.alfred.AppSettings;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
@@ -16,7 +17,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by mmcote on 2016-11-17.
+ * Controller of lists that belong to the request fragments
+ * @author mmcote
  */
 
 public class RequestFragmentsListController {
@@ -39,6 +41,94 @@ public class RequestFragmentsListController {
         }
         return requestedList;
     }
+
+    /**
+     * get filtered RequestList
+     * @param distance the distance string being filtered
+     * @param coordinates the coordinates string being filtered
+     * @param filter the filter string
+     * @param userID the userID string being filtered
+     * @param type the type integer
+     * @return RequestList of filtered requests
+     */
+    public RequestList getRequestFilter(String distance, String coordinates,String filter,String userID, int type){
+        RequestList requestList = new RequestList();
+
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestedKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedPendingKeyword =
+                new RequestESGetController.GetRequestByMultiplePreferencesTask();
+        RequestESGetController.GetRequestByLocationTask retrievedRequestedCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+        RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
+                new RequestESGetController.GetRequestByLocationTask();
+
+
+        try {
+            if (type == 0) {
+                retrievedRequestedKeyword.execute(
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
+                        "_all", "string", filter
+                );
+                retrievedPendingKeyword.execute(
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
+                        "_all", "string", filter
+                );
+                requestList.mergeRequestList(retrievedRequestedKeyword.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
+
+            } else if (type == 1) {
+                retrievedRequestedCoordinates.execute(
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
+                        distance, coordinates
+                );
+                retrievedPendingCoordinates.execute(
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
+                        distance, coordinates
+                );
+                requestList.mergeRequestList(retrievedRequestedCoordinates.get());
+                requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
+            } else if (type == 2){
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
+
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
+                );
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
+                );
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPrice());
+            } else if (type == 3){
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
+
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
+                );
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
+                );
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPricePerKM());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return requestList;
+    }
+
+
+
+
 
     public void updateCounts(String mode, Context context) {
         if (mode.contentEquals("Rider Mode")) {

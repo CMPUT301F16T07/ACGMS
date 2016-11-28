@@ -35,6 +35,13 @@ public class AlertReciever extends BroadcastReceiver {
         createNotification(context, "Times Up", "5 Seconds Has Passed", "Alert");
     }
 
+    /**
+     * creates notification in notification bar when there's request confirmation
+     * @param context the context of notification
+     * @param msg the message
+     * @param msgText the message text
+     * @param msgAlert the message alert
+     */
     public void createNotification(Context context, String msg, String msgText, String msgAlert) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         notification = new NotificationCompat.Builder(context);

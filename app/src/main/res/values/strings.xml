@@ -42,7 +42,9 @@
     <string name="search_coordinate_text">Search by Coordinates</string>
     <string name="search_keyword_text">Search by Keyword</string>
     <string name="search_address_text">Search by Address</string>
-    <string name="search_price_text"> Sort by $/KM</string>
+
+    <string name="search_price_text"> Sort by Price</string>
+    <string name="search_price_kilo_text">Sort by $/km</string>
 
     <string name="request_text">Request</string>
     <string name="address_text">Address</string>

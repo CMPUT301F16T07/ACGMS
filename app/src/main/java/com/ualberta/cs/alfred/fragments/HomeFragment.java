@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +34,7 @@ import com.ualberta.cs.alfred.R;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.
@@ -38,6 +42,7 @@ import java.util.Locale;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
+    private String userMode;
     private MapView mapView;
     private GoogleMap googleMap;
     private static HomeFragment homeFragment = new HomeFragment();
@@ -70,7 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         RequestFragmentsListController rFLC = new RequestFragmentsListController();
         rFLC.updateCounts(preferences.getString("MODE", null), getContext());
 
-        String userMode = preferences.getString("MODE", null);
+        userMode = preferences.getString("MODE", null);
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
         requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
@@ -87,18 +92,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         requestedButton.setOnClickListener(this);
         acceptedButton.setOnClickListener(this);
 
-        if (userMode.contentEquals("Rider Mode")) {
-            requestButton.setOnClickListener(this);
-        } else {
-            requestButton.clearFocus();
-            requestButton.setText("Driver Mode");
-            requestButton.setBackgroundColor(Color.WHITE);
-        }
-
-
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
+        if (userMode.contentEquals("Driver Mode")) {
+            requestButton.setText("Start Driving");
+        }
+        requestButton.setOnClickListener(this);
+
 
 
         try {
@@ -143,8 +145,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                 replaceFragmentwithoutStack(fragment);
                 break;
             case R.id.request_button:
-                fragment = RequestFragment.newInstance();
-                replaceFragmentwithStack(fragment);
+                if (userMode.contentEquals("Rider Mode")) {
+                    fragment = RequestFragment.newInstance();
+                    replaceFragmentwithStack(fragment);
+                } else {
+                    fragment = ListFragment.newInstance(0);
+                    MenuActivity.bottomBar.selectTabAtPosition(1,true);
+                    replaceFragmentwithoutStack(fragment);
+                }
                 break;
         }
 

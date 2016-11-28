@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_user_view, container, false);
 
         String userName = "";
-        String otherUserID = "";
         String userMode = "";
 
         int position = 0;
@@ -62,21 +62,6 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             userName = preferences.getString("USERNAME", null);
             userMode = preferences.getString("MODE", "None");
-        } else {
-            otherUserID = bundle.getString("userID");
-            User otherUser = new User("","","",new Date(),"","");
-            try {
-                //retrieving rider's username from elasticsearch with userID
-                UserESGetController.GetUserByIdTask getUserByID = new UserESGetController.GetUserByIdTask();
-                otherUser = getUserByID.execute(otherUserID).get();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            userName = otherUser.getUserName();
-            userMode = "Driver";
         }
 
         User user = new User("","","",new Date(),"","");
@@ -127,9 +112,9 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.edit_button:
                 //TODO: user edit fragment
-               /* Fragment fragment = UserEditFragment.newInstance();
-                MenuActivity.bottomBar.selectTabAtPosition(1,true);
-                replaceFragmentwithStack(fragment);*/
+                Fragment fragment = UserEditFragment.newInstance();
+                replaceFragmentwithStack(fragment);
+
 
         }
 
@@ -141,4 +126,10 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         transaction.replace(R.id.user_fragment_container, fragment);
         transaction.commit();
     }
+    private void replaceFragmentwithoutStack(Fragment fragment) {
+        transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.user_fragment_container, fragment);
+        transaction.commit();
+    }
+
 }

@@ -2,7 +2,7 @@ package com.ualberta.cs.alfred;
 
 /**
  * Created by carlcastello on 21/11/16.
- * http://stackoverflow.com/questions/14444228/android-how-to-draw-route-directions-google-maps-api-v2-from-current-location-t
+ * Reference: http://stackoverflow.com/questions/14444228/android-how-to-draw-route-directions-google-maps-api-v2-from-current-location-t
  */
 
 import java.io.InputStream;

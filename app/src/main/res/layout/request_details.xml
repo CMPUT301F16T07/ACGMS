@@ -26,7 +26,10 @@
     android:layout_width="match_parent"
     android:id="@+id/scrollView"
     android:layout_below="@id/map_container"
-    android:layout_margin="8dp">
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_above="@+id/tableView">
 
     <LinearLayout
     android:orientation="vertical"
@@ -80,24 +83,6 @@
             </TableRow>
 
             <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Request ID: "
-                android:textSize="15dp"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1231231"
-                android:id="@+id/request_ID"
-                android:textSize="15dp"
-                android:textColor="#000000"/>
-            </TableRow>
-
-        <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <TextView
@@ -229,11 +214,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Cancel Request"
+            android:text="Cancel"
             android:id="@+id/cancel_request_button"
             android:layout_column="0"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
+            android:textSize="@dimen/button_text"
             android:layout_margin="5dp" />
         <Button
             android:layout_width="wrap_content"
@@ -243,17 +229,29 @@
             android:layout_column="1"
             android:background="@color/colorGreen"
             android:textColor="@color/colorWhite"
+            android:textSize="@dimen/button_text"
             android:layout_margin="5dp" />
 
             <Button
-                android:text="Ride Complete"
+                android:text="Complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ride_complete_button"
                 android:textAlignment="viewStart"
-                android:textStyle="normal|bold"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text"
+                android:layout_margin="5dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="rate driver"
+                android:id="@+id/rate_driver_button"
+                android:layout_column="3"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text"
                 android:layout_margin="5dp" />
         </TableRow>
 

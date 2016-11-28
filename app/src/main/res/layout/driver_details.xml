@@ -278,32 +278,37 @@
             </LinearLayout>
         </ScrollView>
 
-    <Button
-        android:id="@+id/call_driver_button"
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/scrollView2"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorGreen"
-        android:text="Call"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/button_text"/>
+        android:layout_gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/email_driver_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/call_driver_button"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorGreen"
-        android:text="Email"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/button_text"/>
+        <Button
+            android:id="@+id/call_driver_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/scrollView2"
+            android:layout_gravity="bottom"
+            android:background="@color/colorGreen"
+            android:text="Call"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/button_text"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:id="@+id/email_driver_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/call_driver_button"
+            android:layout_gravity="bottom"
+            android:background="@color/colorGreen"
+            android:text="Email"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/button_text"
+            android:layout_margin="5dp" />
+    </TableRow>
 
 </LinearLayout>
