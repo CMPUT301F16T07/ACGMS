@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                             startActivity(intent);
                             finish();
-                        // if the user does not exist as the desired type of user or not at all
+                            // if the user does not exist as the desired type of user or not at all
                         } else if (userExist == Boolean.FALSE) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             Boolean isOpposite = Boolean.FALSE;
