@@ -31,6 +31,7 @@ import com.ualberta.cs.alfred.R;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by carlcastello and shelleytian on 08/11/16.

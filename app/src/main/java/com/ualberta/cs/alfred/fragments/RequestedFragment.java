@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.MapView;
 import com.ualberta.cs.alfred.GeoCoder;
 import com.ualberta.cs.alfred.ConnectivityChecker;
 import com.ualberta.cs.alfred.LocalDataManager;
@@ -161,10 +162,12 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         button4.setVisibility(View.GONE);
         button4.setOnClickListener(this);
 
+
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             button1.setOnClickListener(this);
         } else {
             button1.setVisibility(View.GONE);
+
         }
 
         Button button2 = (Button) view.findViewById(R.id.request_cancel_button);

@@ -50,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
                 new BottomBarFragment(HomeFragment.newInstance(), R.drawable.ic_home_white_24dp, "Home"),
                 new BottomBarFragment(ListFragment.newInstance(0), R.drawable.ic_view_list_white_24dp, "List"),
                 new BottomBarFragment(UserFragment.newInstance(0), R.drawable.ic_person_white_24dp, "User"),
-                new BottomBarFragment(SettingsFragment.newInstance(), R.drawable.ic_settings_white_24dp, "Settings")
+                new BottomBarFragment(SettingsFragment.newInstance(), R.drawable.ic_history_white_24dp, "History")
         );
 
 

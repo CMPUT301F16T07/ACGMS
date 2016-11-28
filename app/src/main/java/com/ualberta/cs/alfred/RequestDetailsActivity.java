@@ -382,15 +382,12 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     }
 
     public void showDetails(Request request){
-        TextView requestID = (TextView) findViewById(R.id.request_ID);
         TextView status = (TextView) findViewById(R.id.status);
         TextView estPrice = (TextView) findViewById(R.id.est_price);
         TextView distance = (TextView) findViewById(R.id.distance);
         TextView startLoc = (TextView) findViewById(R.id.start_loc);
         TextView endLoc = (TextView) findViewById(R.id.end_loc);
 
-        // get and display request ID
-        requestID.setText(request.getRequestID());
         //get and display request status
         if (!from.contentEquals("Completed")) {
             status.setText(from);
