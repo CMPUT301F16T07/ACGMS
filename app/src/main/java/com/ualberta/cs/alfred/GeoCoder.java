@@ -36,7 +36,7 @@ public class GeoCoder {
     }
 
     public void geoSetArguments(Context context) {
-        this.geoCoder = new Geocoder(context, Locale.getDefault());
+        this.geoCoder = new Geocoder(context, Locale.CANADA);
     }
 
     public void setAddress(String address) {

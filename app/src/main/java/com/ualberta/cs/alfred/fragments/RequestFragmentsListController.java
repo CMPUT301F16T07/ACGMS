@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
+import com.ualberta.cs.alfred.AppSettings;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESGetController;
 import com.ualberta.cs.alfred.RequestList;
@@ -56,11 +57,11 @@ public class RequestFragmentsListController {
         try {
             if (type == 0) {
                 retrievedRequestedKeyword.execute(
-                        "requestStatus", "string", "Requested",
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
                         "_all", "string", filter
                 );
                 retrievedPendingKeyword.execute(
-                        "requestStatus", "string", "Pending",
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
                         "_all", "string", filter
                 );
                 requestList.mergeRequestList(retrievedRequestedKeyword.get());
@@ -68,49 +69,45 @@ public class RequestFragmentsListController {
 
             } else if (type == 1) {
                 retrievedRequestedCoordinates.execute(
-                        "requestStatus", "string", "Requested",
+                        "requestStatus", "string", AppSettings.REQUEST_REQUESTED,
                         distance, coordinates
                 );
                 retrievedPendingCoordinates.execute(
-                        "requestStatus", "string", "Pending",
+                        "requestStatus", "string", AppSettings.REQUEST_PENDING,
                         distance, coordinates
                 );
                 requestList.mergeRequestList(retrievedRequestedCoordinates.get());
                 requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
             } else if (type == 2){
-                RequestESGetController.GetRequestSortedByPriceTask retrievedPendingPrice =
-                        new RequestESGetController.GetRequestSortedByPriceTask();
-                RequestESGetController.GetRequestSortedByPriceTask retrievedRequestedPrice =
-                        new RequestESGetController.GetRequestSortedByPriceTask();
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
 
-                String orderBy = "desc";
-                retrievedPendingPrice.execute(
-                        "requestStatus", "string", "Pending",
-                        orderBy
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
                 );
-                retrievedRequestedPrice.execute(
-                        "requestStatus", "string", "Request",
-                        orderBy
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
                 );
-                requestList.mergeRequestList(retrievedRequestedPrice.get());
-                requestList.mergeRequestList(new RequestList(retrievedPendingPrice.get()).removeDriver(userID));
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPrice());
             } else if (type == 3){
-                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedPendingPriceKM =
-                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
-                RequestESGetController.GetRequestSortedByPricePerKmTask retrievedRequestedPriceKM =
-                        new RequestESGetController.GetRequestSortedByPricePerKmTask();
+                RequestESGetController.GetRequestTask retrievedPending =
+                        new RequestESGetController.GetRequestTask() ;
+                RequestESGetController.GetRequestTask retrievedRequested=
+                        new RequestESGetController.GetRequestTask();
 
-                String orderBy = "desc";
-                retrievedPendingPriceKM.execute(
-                        "requestStatus", "string", "Pending",
-                        orderBy
+                retrievedPending.execute(
+                        "requestStatus", AppSettings.REQUEST_PENDING
                 );
-                retrievedRequestedPriceKM.execute(
-                        "requestStatus", "string", "Request",
-                        orderBy
+                retrievedRequested.execute(
+                        "requestStatus", AppSettings.REQUEST_REQUESTED
                 );
-                requestList.mergeRequestList(retrievedRequestedPriceKM.get());
-                requestList.mergeRequestList(new RequestList(retrievedPendingPriceKM.get()).removeDriver(userID));
+                requestList.mergeRequestList(retrievedRequested.get());
+                requestList.mergeRequestList(new RequestList(retrievedPending.get()).removeDriver(userID));
+                return new RequestList(requestList.sortByPricePerKM());
             }
         } catch (Exception e) {
             e.printStackTrace();

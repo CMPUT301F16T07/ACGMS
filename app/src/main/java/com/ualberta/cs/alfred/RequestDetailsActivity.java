@@ -41,9 +41,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
-/**
- * activity for the request details
- */
+
 public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;

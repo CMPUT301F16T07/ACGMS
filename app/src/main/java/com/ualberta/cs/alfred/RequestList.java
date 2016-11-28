@@ -103,7 +103,7 @@ public class RequestList {
      *
      * @return the array list
      */
-    public ArrayList<Request> sortByPrice() {
+    public ArrayList<Request> sortByPricePerKM() {
 
         ArrayList<Request> list = new ArrayList<>();
         list.addAll(requestList);
@@ -112,6 +112,20 @@ public class RequestList {
             @Override
             public int compare(Request r1, Request r2) {
                 return Double.compare((r1.getCost()/r1.getDistance()), (r2.getCost()/r2.getDistance()));
+            }
+        });
+        return list;
+    }
+
+    public ArrayList<Request> sortByPrice() {
+
+        ArrayList<Request> list = new ArrayList<>();
+        list.addAll(requestList);
+
+        Collections.sort(list, new Comparator<Request>() {
+            @Override
+            public int compare(Request r1, Request r2) {
+                return Double.compare(r1.getCost(),r2.getCost());
             }
         });
         return list;

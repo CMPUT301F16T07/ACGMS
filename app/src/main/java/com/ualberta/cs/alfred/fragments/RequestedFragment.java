@@ -43,20 +43,26 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by carlcastello on 09/11/16.
+ * Request Fragment is a fragment class where all requested list is found.
+ *
+ * @author carlcastello on 09/11/16.
  */
-
 public class RequestedFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    // List view
     private ArrayAdapter<Request> requestAdapter;
     private ListView requestedListView;
-    private SharedPreferences preferences;
     private RequestFragmentsListController rFLC;
     private List<Pair<String, String>> listNeeded;
+
+    // Shared Prefetences
+    private SharedPreferences preferences;
     private String userID;
 
+    // show filter and revert filter button
     private Button button1;
     private Button button4;
     private TableLayout tableLayout;
+
     private RelativeLayout.LayoutParams params;
 
     // Custom Check View
@@ -65,11 +71,9 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private RadioButton rb3;
 
     // Sort CheckBox
-    private TableRow tableRow;
     private RadioButton sortPrice;
     private RadioButton sortPriceKilometer;
 
-    private boolean isSorted;
 
     // Custom Filter Input View
     private EditText filterInput1;
@@ -78,6 +82,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
     private int searchType = R.id.radioButtonKeyword;
 
+    /**
+     * Constructor of the Requested Fragment.
+     * Initialize fundamental variables
+     */
     public RequestedFragment() {
         this.rFLC = new RequestFragmentsListController();
         this.listNeeded = null;
@@ -85,14 +93,20 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         this.requestedListView = null;
         this.preferences = null;
         this.userID = null;
-        this.isSorted = false;
     }
 
+    /**
+     * Get an instance of Requested Fragment
+     * @return RequestedFragment
+     */
     public static RequestedFragment newInstance() {
         RequestedFragment requestedFragment = new RequestedFragment();
         return requestedFragment;
     }
 
+    /**
+     * onResume function where the accepted listView updating is done.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -100,6 +114,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
         userID = preferences.getString("USERID", null);
 
+        // Separate driver's list to a rider's list
         ArrayList<Request> requestedList;
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             this.listNeeded = Arrays.asList(new Pair<String, String>("requestStatus", "Pending"),
@@ -126,6 +141,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         }
 
 
+        // Change Accepted List size
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Requested", Integer.toString(requestedList.size()));
         editor.commit();
@@ -150,15 +166,17 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         updateRequestList();
     }
 
+    /**
+     * onCreate function where the fragment view is created.
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_requested,container,false);
 
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         requestedListView = (ListView) view.findViewById(R.id.requestedListView);
-
         tableLayout = (TableLayout) view.findViewById(R.id.filter_table);
         tableLayout.setVisibility(View.GONE);
 
@@ -207,7 +225,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    // Handles Click
+    /**
+     * Handles click for all buttons
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -263,7 +284,11 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    // Custom Radio button
+    /**
+     * Handles click for radio buttons
+     * @param buttonView
+     * @param isChecked
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         //EditText editText = (EditText) getView().findViewById(R.id.filter_input);
@@ -315,7 +340,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     break;
 
                 case R.id.radioButtonPrice:
-                    filterInput1.setVisibility(View.INVISIBLE);
+                    filterInput1.setVisibility(View.GONE);
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
 
@@ -328,7 +353,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
                     break;
                 case R.id.radioButtonPriceperKilo:
-                    filterInput1.setVisibility(View.INVISIBLE);
+                    filterInput1.setVisibility(View.GONE);
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
 
@@ -345,9 +370,10 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
-    // Parse the user given filters
-    // Sends the input for execution
+    /**
+     * Parse the user given filters
+     * Sends the input for execution
+     */
     private void parseInput() {
         //Todo Search elastic Search by the given filter
         switch (searchType) {
@@ -412,7 +438,13 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    // Execute Query on the parsed input
+    /**
+     * Execute Query on the parsed input
+     * @param distance
+     * @param coordinates
+     * @param filter
+     * @param type
+     */
     private void executeQuery (String distance, String coordinates,String filter,int type) {
         RequestList requestList = rFLC.getRequestFilter(distance,coordinates,filter,userID,type);
         modifyAdapter(requestList);
@@ -422,11 +454,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private void modifyAdapter(RequestList list) {
         requestAdapter.clear();
         List<Request> requestList;
-        if (isSorted) {
-            requestList = list.sortByPrice();
-        } else {
-            requestList = list.getRequestList();
-        }
+        requestList = list.getRequestList();
         requestAdapter.addAll(requestList);
         requestAdapter.notifyDataSetChanged();
 
@@ -440,12 +468,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         if (preferences.getString("MODE", null).contentEquals("Driver Mode")) {
             returned = rFLC.getRequestList(Arrays.asList(listNeeded.get(0))).removeDriver(userID);
             returned.addAll(rFLC.getRequestList(Arrays.asList(listNeeded.get(1))).returnArrayList());
-            if (isSorted) {
-                requestList = new RequestList(returned);
-                requestAdapter.addAll(requestList.sortByPrice());
-            } else {
-                requestAdapter.addAll(returned);
-            }
+            requestAdapter.addAll(returned);
         } else {
             returned = rFLC.getRequestList(listNeeded).getSpecificRequestList("Requested");
             requestAdapter.addAll(returned);
