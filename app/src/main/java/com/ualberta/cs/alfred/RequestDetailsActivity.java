@@ -2,6 +2,7 @@ package com.ualberta.cs.alfred;
 
 //import android.app.Fragment;
 //import android.app.FragmentTransaction;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ualberta.cs.alfred.fragments.RequestFragmentsListController;
 
@@ -366,7 +368,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
         showDetails(passedRequest);
         //load map only if cconnected to internet
-        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+        //if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
             mapView = (MapView) this.findViewById(R.id.mapView);
             mapView.onCreate(savedInstanceState);
             mapView.onResume();
@@ -378,7 +380,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             }
 
             mapView.getMapAsync(this);
-        }
+        //}
 
     }
 
@@ -493,6 +495,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             rectLine.add(directionPoint.get(i));
         }
 
+        Polyline polylin = googleMap.addPolyline((rectLine));
+
 
 
     }
@@ -500,30 +504,38 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onResume() {
         super.onResume();
-        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
-            mapView.onResume();
-        }
+        mapView.onResume();
+//        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+//            mapView.onResume();
+//        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
-            mapView.onPause();
-        }    }
+        mapView.onPause();
+//        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+//            mapView.onPause();
+//        }
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
-            mapView.onDestroy();
-        }
+        mapView.onDestroy();
+//        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+//            mapView.onDestroy();
+//        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
-            mapView.onLowMemory();
-        }    }
+        mapView.onLowMemory();
+
+//        if (ConnectivityChecker.isConnected(RequestDetailsActivity.this)){
+//            mapView.onLowMemory();
+//        }
+    }
+
 }
