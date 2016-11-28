@@ -6,14 +6,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+/**
+ *@deprecated
+ * unused view
+ *
+ */
 
 public class MainScreenActivity extends AppCompatActivity {
 
 
-    /**
-     *@deprecated unused view
-     *
-     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
