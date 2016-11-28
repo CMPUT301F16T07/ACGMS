@@ -62,7 +62,9 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/large_button_box"
             android:id="@+id/mapView"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp"
+            />
+
 
     </FrameLayout>
 

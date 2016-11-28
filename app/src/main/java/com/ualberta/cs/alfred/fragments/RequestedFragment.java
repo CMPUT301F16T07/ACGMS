@@ -62,7 +62,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
     private RadioButton rb3;
 
     // Sort CheckBox
-    private CheckBox checkBox;
+    private RadioButton rb4;
     private boolean isSorted;
 
     // Custom Filter Input View
@@ -185,13 +185,12 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
         rb1 = (RadioButton) view.findViewById(R.id.radioButtonKeyword);
         rb2 = (RadioButton) view.findViewById(R.id.radioButtonAddress);
         rb3 = (RadioButton) view.findViewById(R.id.radioButtonCoordinates);
+        rb4 = (RadioButton) view.findViewById(R.id.radioButtonPrice);
 
         rb1.setOnCheckedChangeListener(this);
         rb2.setOnCheckedChangeListener(this);
         rb3.setOnCheckedChangeListener(this);
-
-        checkBox = (CheckBox) view.findViewById(R.id.checkboxPrice);
-        checkBox.setOnCheckedChangeListener(this);
+        rb4.setOnCheckedChangeListener(this);
 
         return view;
     }
@@ -262,6 +261,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput1.setHint(R.string.keyword_text);
                     rb2.setChecked(false);
                     rb3.setChecked(false);
+                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.GONE);
                     filterInput3.setVisibility(View.GONE);
@@ -274,6 +274,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput2.setHint(R.string.city_text);
                     rb1.setChecked(false);
                     rb3.setChecked(false);
+                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.GONE);
@@ -287,6 +288,7 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     filterInput3.setHint(R.string.distance_text);
                     rb1.setChecked(false);
                     rb2.setChecked(false);
+                    rb4.setChecked(false);
 
                     filterInput2.setVisibility(View.VISIBLE);
                     filterInput3.setVisibility(View.VISIBLE);
@@ -294,9 +296,17 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                     searchType = R.id.radioButtonCoordinates;
                     break;
 
-                case R.id.checkboxPrice:
-                    updateRequestList();
+                case R.id.radioButtonPrice:
+                    filterInput1.setVisibility(View.VISIBLE);
+
+                    filterInput2.setVisibility(View.GONE);
+                    filterInput3.setVisibility(View.GONE);
+
+                    searchType = R.id.radioButtonPrice;
                     this.isSorted = true;
+                    rb1.setChecked(false);
+                    rb2.setChecked(false);
+                    rb3.setChecked(false);
                     break;
             }
         }
@@ -323,10 +333,11 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                 String address = filterInput1.getText().toString();
                 String city = filterInput2.getText().toString();
 
-                if (address.matches("") || city.matches("")) {
+                if (address.matches("") && city.matches("")) {
                     Toast.makeText(getContext(), "Input is Empty", Toast.LENGTH_SHORT).show();
                 } else {
                     GeoCoder geoCoder = GeoCoder.getInstance();
+                    geoCoder.setAddress(address+city);
                     geoCoder.calculateCoordinatesString();
                     String coordinates = String.format("[%s, %s]",
                             geoCoder.getLongitudeString(), geoCoder.getLatitudeString());
@@ -349,8 +360,8 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
                             distance = "10km";
                         } else {
                             distance = filterInput3.getText().toString() + "km";
-                            executeQuery(distance,coordinates,"",1);
                         }
+                        executeQuery(distance,coordinates,"",1);
                     } catch (NumberFormatException e) {
                         String errorMessage = "Invalid Filter Input";
                         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -358,50 +369,15 @@ public class RequestedFragment extends Fragment implements View.OnClickListener,
 
                 }
                 break;
+            case R.id.radioButtonPrice:
+                executeQuery("","","",2);
+                break;
         }
     }
 
     // Execute Query on the parsed input
     private void executeQuery (String distance, String coordinates,String filter,int type) {
-        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedRequestedKeyword =
-                new RequestESGetController.GetRequestByMultiplePreferencesTask();
-        RequestESGetController.GetRequestByMultiplePreferencesTask retrievedPendingKeyword =
-                new RequestESGetController.GetRequestByMultiplePreferencesTask();
-        RequestESGetController.GetRequestByLocationTask retrievedRequestedCoordinates =
-                new RequestESGetController.GetRequestByLocationTask();
-        RequestESGetController.GetRequestByLocationTask retrievedPendingCoordinates =
-                new RequestESGetController.GetRequestByLocationTask();
-
-        RequestList requestList = new RequestList();
-        try {
-            if (type == 0) {
-                retrievedRequestedKeyword.execute(
-                        "requestStatus", "string", "Requested",
-                        "_all", "string", filter
-                );
-                retrievedPendingKeyword.execute(
-                        "requestStatus", "string", "Pending",
-                        "_all", "string", filter
-                );
-                requestList.mergeRequestList(retrievedRequestedKeyword.get());
-                requestList.mergeRequestList(new RequestList(retrievedPendingKeyword.get()).removeDriver(userID));
-
-            } else {
-                retrievedRequestedCoordinates.execute(
-                        "requestStatus", "string", "Requested",
-                        distance, coordinates
-                );
-                retrievedPendingCoordinates.execute(
-                        "requestStatus", "string", "Pending",
-                        distance, coordinates
-                );
-                requestList.mergeRequestList(retrievedRequestedCoordinates.get());
-                requestList.mergeRequestList(new RequestList(retrievedPendingCoordinates.get()).removeDriver(userID));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        RequestList requestList = rFLC.getRequestFilter(distance,coordinates,filter,userID,type);
         modifyAdapter(requestList);
 
     }
