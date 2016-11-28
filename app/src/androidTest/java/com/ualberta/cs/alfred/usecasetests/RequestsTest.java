@@ -7,6 +7,7 @@ import com.ualberta.cs.alfred.Address;
 import com.ualberta.cs.alfred.AppSettings;
 import com.ualberta.cs.alfred.Request;
 import com.ualberta.cs.alfred.RequestESGetController;
+import com.ualberta.cs.alfred.RequestESSetController;
 import com.ualberta.cs.alfred.RiderInfo;
 import com.ualberta.cs.alfred.User;
 import com.ualberta.cs.alfred.UserESGetController;
@@ -192,6 +193,25 @@ public class RequestsTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * US 01.03.01
+     * As a rider, I want to be notified if my request is accepted.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNotificationOnAcceptance() {
+        // this test simulates the current implementation of recieving a notification
+        // that a request has been accpeted. Currently in the system, a request is
+        // accepeted and the notication is presented during the periodic 5 second check up
+        // on the driver device
+        RequestESSetController.SetPropertyValueTask setPropertyValueTask =
+                new RequestESSetController.SetPropertyValueTask();
+
+        while (true) {
+
+        }
     }
 }

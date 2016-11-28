@@ -284,10 +284,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 builder.setCancelable(Boolean.TRUE);
                 if (mode.contentEquals("Rider Mode")) {
                     if (!from.contentEquals("Requested")) {
-                        builder.setTitle("Delete or Downgrade the selected request? " +
+                        builder.setTitle("Remove or Downgrade the selected request? " +
                                 "(Downgrading the request will clear the list of bidding drivers.)");
                     } else {
-                        builder.setTitle("Delete the selected request?");
+                        builder.setTitle("Remove the selected request?");
                     }
                     builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
