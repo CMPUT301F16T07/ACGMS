@@ -504,6 +504,8 @@ public class RequestsTest {
     /**
      * US 1.09.01 (added 2016-11-14)
      * As a rider, I should see a description of the driver's vehicle.
+     *
+     * @throws Exception
      */
     @Test
     public void testSeeVehicleDescription() throws Exception {
@@ -783,6 +785,8 @@ public class RequestsTest {
     /**
      * US 1.10.01 (added 2016-11-14)
      * As a rider, I want to see some summary rating of the drivers who accepted my offers.
+     *
+     * @throws Exception
      */
     @Test
     public void testSeeDriverSummaryRating() throws Exception {
@@ -1075,6 +1079,8 @@ public class RequestsTest {
     /**
      * US 1.11.01 (added 2016-11-14)
      * As a rider, I want to rate a driver for his/her service (1-5).
+     *
+     * @throws Exception
      */
     @Test
     public void testRateDriver() throws Exception {
