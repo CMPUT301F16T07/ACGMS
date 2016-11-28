@@ -1,8 +1,6 @@
 package com.ualberta.cs.alfred.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,10 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,16 +19,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.ualberta.cs.alfred.GeoCoder;
 import com.ualberta.cs.alfred.MenuActivity;
 import com.ualberta.cs.alfred.R;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -98,13 +87,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         userMode = preferences.getString("MODE", null);
 
         Button requestedButton = (Button) view.findViewById(R.id.button_requested);
-        requestedButton.setText("Requested\n"+preferences.getString("Requested", "Error"));
+        requestedButton.setText("Requested\n");
 
         Button pendingButton = (Button) view.findViewById(R.id.button_pending);
-        pendingButton.setText("Pending\n"+preferences.getString("Pending", "Error"));
+        pendingButton.setText("Pending\n");
 
         Button acceptedButton = (Button) view.findViewById(R.id.button_accepted);
-        acceptedButton.setText("Accepted\n"+preferences.getString("Accepted", "Error"));
+        acceptedButton.setText("Accepted\n");
 
         Button requestButton = (Button) view.findViewById(R.id.request_button);
 
