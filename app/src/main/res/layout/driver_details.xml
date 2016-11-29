@@ -277,7 +277,11 @@
                 </TableLayout>
             </LinearLayout>
         </ScrollView>
-
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="0,1">
+<TableRow>
     <Button
         android:id="@+id/call_driver_button"
         android:layout_width="match_parent"
@@ -304,5 +308,7 @@
     android:textColor="@color/colorWhite"
     android:textSize="@dimen/button_text"
     android:layout_margin="5dp" />
+</TableRow>
+    </TableLayout>
 
 </LinearLayout>
