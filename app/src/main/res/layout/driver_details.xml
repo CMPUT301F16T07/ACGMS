@@ -129,6 +129,7 @@
             android:layout_below="@+id/driver_rating"
             android:layout_marginBottom="5dp"
             android:text="@string/vehicle_text"/>
+
     <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
@@ -141,6 +142,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:orientation="vertical">
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -272,37 +274,45 @@
                             android:textColor="@android:color/black" />
 
                     </TableRow>
-
-
                 </TableLayout>
             </LinearLayout>
         </ScrollView>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="0,1">
+    <TableRow
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
     <Button
-        android:id="@+id/call_driver_button"
+        android:id="@+id/email_driver_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/scrollView2"
+        android:layout_below="@+id/call_driver_button"
         android:layout_gravity="bottom"
         android:background="@color/colorGreen"
-        android:text="Call"
+        android:text="Email"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/button_text"
         android:layout_margin="5dp" />
 
     <Button
-    android:id="@+id/email_driver_button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentStart="true"
-    android:layout_below="@+id/call_driver_button"
-    android:layout_gravity="bottom"
-    android:background="@color/colorGreen"
-    android:text="Email"
-    android:textColor="@color/colorWhite"
-    android:textSize="@dimen/button_text"
-    android:layout_margin="5dp" />
+            android:id="@+id/call_driver_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/scrollView2"
+            android:layout_gravity="bottom"
+            android:background="@color/colorGreen"
+            android:text="Call"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/button_text"
+            android:layout_margin="5dp" />
+    </TableRow>
+    </TableLayout>
+
 
 </LinearLayout>
