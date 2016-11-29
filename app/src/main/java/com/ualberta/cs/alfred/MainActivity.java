@@ -34,7 +34,8 @@ import java.util.concurrent.ExecutionException;
  */
 public class MainActivity extends AppCompatActivity {
     private Button loginButton;
-    private Button signUpButton;
+    private Button signUpDriver;
+    private Button signUpRider;
     private EditText userName;
     private RadioGroup driverRider;
     private String mode;
@@ -74,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         editor = preferences.edit();
         loginButton = (Button) findViewById(R.id.main_button);
-        signUpButton = (Button) findViewById(R.id.sign_up_button);
+        signUpDriver = (Button) findViewById(R.id.sign_up_driver_button);
+        signUpRider = (Button) findViewById(R.id.sign_up_rider_button);
         userName = (EditText) findViewById(R.id.username_input);
         driverRider = (RadioGroup) findViewById(R.id.radioGroup);
     }
@@ -85,80 +87,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                grabMode();
+                mode = "Driver Mode";
+                editor.putString("MODE", mode);
+                editor.commit();
+                signUp();
+            }
+        });
 
-                // check if the username exists in the current elastic search server
-                LoginController loginController = new LoginController(userName.getText().toString(), mode);
-                Boolean userExist = null;
-                try {
-                    userExist = loginController.checkUser();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                // if the user already exists as the desired type of user
-                if (userExist != null && userExist == Boolean.TRUE) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("The user already exists in the mode requested.");
-                    builder.setMessage("Please log in above.");
-                    builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else if (userExist == Boolean.FALSE) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    Boolean isOpposite = Boolean.FALSE;
-                    String oppositeMode = "Driver Mode";
-                    try {
-                        if (loginController.checkOpposite()) {
-                            isOpposite = Boolean.TRUE;
-                            if (mode.contentEquals("Driver Mode")) {
-                                oppositeMode = "Rider Mode";
-                            }
-                            builder.setMessage(
-                                    "A " + oppositeMode + " profile was found. Would you like to add additional " + mode + " info?");
-                        } else {
-                            builder.setMessage("Hello " + userName.getText().toString() + "! Would you like to create a new profile?");
-                        }
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    builder.setTitle("User Sign Up");
-                    builder.setCancelable(Boolean.FALSE);
-                    final Boolean finalIsOpposite = isOpposite;
-                    final String finalOppositeMode = oppositeMode;
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                            if (finalIsOpposite) {
-                                intent.putExtra("OPPOSITE", finalOppositeMode);
-                            }
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            userName.setText("");
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
+        signUpRider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mode = "Rider Mode";
+                editor.putString("MODE", mode);
+                editor.commit();
+                signUp();
             }
         });
 
@@ -268,5 +213,77 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void signUp() {
+        // check if the username exists in the current elastic search server
+        LoginController loginController = new LoginController(userName.getText().toString(), mode);
+        Boolean userExist = null;
+        try {
+            userExist = loginController.checkUser();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // if the user already exists as the desired type of user
+        if (userExist != null && userExist == Boolean.TRUE) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("The user already exists in the mode requested.");
+            builder.setMessage("Please log in above.");
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (userExist == Boolean.FALSE) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            Boolean isOpposite = Boolean.FALSE;
+            String oppositeMode = "Driver Mode";
+            try {
+                if (loginController.checkOpposite()) {
+                    isOpposite = Boolean.TRUE;
+                    if (mode.contentEquals("Driver Mode")) {
+                        oppositeMode = "Rider Mode";
+                    }
+                    builder.setMessage(
+                            "A " + oppositeMode + " profile was found. Would you like to add additional " + mode + " info?");
+                } else {
+                    builder.setMessage("Hello " + userName.getText().toString() + "! Would you like to create a new profile?");
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            builder.setTitle("User Sign Up");
+            builder.setCancelable(Boolean.FALSE);
+            final Boolean finalIsOpposite = isOpposite;
+            final String finalOppositeMode = oppositeMode;
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                    if (finalIsOpposite) {
+                        intent.putExtra("OPPOSITE", finalOppositeMode);
+                    }
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    userName.setText("");
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 }
