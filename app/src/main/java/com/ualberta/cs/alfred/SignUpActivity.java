@@ -296,13 +296,24 @@ public class SignUpActivity extends AppCompatActivity {
 
         User user = null;
         if (Mode.contentEquals("Driver Mode")) {
-            new User(firstName, lastName, finalUserName,
+            user = new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email, collectDriverInfo());
         } else {
-            new User(firstName, lastName, finalUserName,
+            user = new User(firstName, lastName, finalUserName,
                     inputDate, phoneNumber, email,
                     new RiderInfo(creditCardNumberEditText.getText().toString()));
         }
+        UserESGetController.GetUserTask getUserTask = new UserESGetController.GetUserTask();
+        getUserTask.execute(userName);
+
+        try {
+            user = getUserTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         if (user != null) {
             SharedPreferences preferences =
                     PreferenceManager.getDefaultSharedPreferences(SignUpActivity.this);

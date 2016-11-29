@@ -105,7 +105,7 @@ public class UserViewFragment extends Fragment implements View.OnClickListener {
         //setting the textviews to what we want to show
         TextView textView = (TextView) view.findViewById(R.id.edit_username_input);
         if (position == 0) {
-            textView.setText(userName + " (" + userMode + ")");
+            textView.setText(userName);
             editButton.setVisibility(View.VISIBLE);
         }
 
