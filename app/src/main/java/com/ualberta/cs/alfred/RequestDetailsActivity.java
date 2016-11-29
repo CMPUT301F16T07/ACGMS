@@ -377,8 +377,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 driver = null;
                 try {
                     //retrieving rider's information from elasticsearch
-                    UserESGetController.GetUserTask getUser = new UserESGetController.GetUserTask();
-                    driver = getUser.execute(driverSelected).get();
+                    UserESGetController.GetUserByIdTask retrievedUser =
+                            new UserESGetController.GetUserByIdTask();
+                    retrievedUser.execute(passedRequest.getDriverID());
+                    driver = retrievedUser.get();
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -408,39 +410,46 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                                         UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask1 =
                                                 new UserESAddController.AddNewDriverRatingTask();
                                         addNewDriverRatingTask1.execute(driverID, newRatingAsString);
-                                        Toast.makeText(RequestDetailsActivity.this, "Rated 1.0", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RequestDetailsActivity.this,
+                                                "New rating "+String.valueOf(driver.getDriverInfo().getDriverRating().getRating()),
+                                                Toast.LENGTH_SHORT).show();
                                         break;
                                     case 1:
+                                        newRating = 2.0;
                                         newRatingAsString = String.valueOf(newRating);
                                         UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask2 =
                                                 new UserESAddController.AddNewDriverRatingTask();
                                         addNewDriverRatingTask2.execute(driverID, newRatingAsString);
-                                        Toast.makeText(RequestDetailsActivity.this, "Rated 2.0", Toast.LENGTH_SHORT).show();
-                                        break;
+                                        Toast.makeText(RequestDetailsActivity.this,
+                                                "New rating "+String.valueOf(driver.getDriverInfo().getDriverRating().getRating()),
+                                                Toast.LENGTH_SHORT).show();                                        break;
                                     case 2:
                                         newRating = 3.0;
                                         newRatingAsString = String.valueOf(newRating);
                                         UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask3 =
                                                 new UserESAddController.AddNewDriverRatingTask();
                                         addNewDriverRatingTask3.execute(driverID, newRatingAsString);
-                                        Toast.makeText(RequestDetailsActivity.this, "Rated 3.0", Toast.LENGTH_SHORT).show();
-                                        break;
+                                        Toast.makeText(RequestDetailsActivity.this,
+                                                "New rating "+String.valueOf(driver.getDriverInfo().getDriverRating().getRating()),
+                                                Toast.LENGTH_SHORT).show();                                        break;
                                     case 3:
                                         newRating = 4.0;
                                         newRatingAsString = String.valueOf(newRating);
                                         UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask4 =
                                                 new UserESAddController.AddNewDriverRatingTask();
                                         addNewDriverRatingTask4.execute(driverID, newRatingAsString);
-                                        Toast.makeText(RequestDetailsActivity.this, "Rated 4.0", Toast.LENGTH_SHORT).show();
-                                        break;
+                                        Toast.makeText(RequestDetailsActivity.this,
+                                                "New rating "+String.valueOf(driver.getDriverInfo().getDriverRating().getRating()),
+                                                Toast.LENGTH_SHORT).show();                                        break;
                                     case 4:
                                         newRating = 5.0;
                                         newRatingAsString = String.valueOf(newRating);
                                         UserESAddController.AddNewDriverRatingTask addNewDriverRatingTask5 =
                                                 new UserESAddController.AddNewDriverRatingTask();
                                         addNewDriverRatingTask5.execute(driverID, newRatingAsString);
-                                        Toast.makeText(RequestDetailsActivity.this, "Rated 5.0", Toast.LENGTH_SHORT).show();
-                                        break;
+                                        Toast.makeText(RequestDetailsActivity.this,
+                                                "New rating "+String.valueOf(driver.getDriverInfo().getDriverRating().getRating()),
+                                                Toast.LENGTH_SHORT).show();                                        break;
                                 }
                             }
                         });
