@@ -273,7 +273,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
                 }
                 else{
                     partialAcceptancesList = LocalDataManager.loadPartialAcceptances(RequestDetailsActivity.this);
-                    if (partialAcceptancesList.isEmpty()){
+                    if (partialAcceptancesList == null){
                         partialAcceptancesList = new ArrayList<PartialAcceptances>();
                     }
                     PartialAcceptances offlineAcceptances = new PartialAcceptances(from, userID, mode, passedRequest,driverSelected);
